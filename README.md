@@ -1,4 +1,3 @@
-![]https://i2.wp.com/multarte.com.br/wp-content/uploads/2019/03/pokemon-png-logo.png?fit=2000%2C736&ssl=1
 ## Pokémon Card Game
 > Projeto para a disciplina de Paradigmas de Linguaguem de Programação 2019.2
 
