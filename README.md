@@ -1,4 +1,4 @@
-![]https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=2ahUKEwjS5obn36jkAhX7LLkGHeWmCEMQjRx6BAgBEAQ&url=https%3A%2F%2Fmultarte.com.br%2Fpokemon-png-fundo-transparente%2F&psig=AOvVaw0wJu8qaO1h1PtYVkF-nQiP&ust=1567191016266129
+
 ## Pokémon Card Game
 > Projeto para a disciplina de Paradigmas de Linguaguem de Programação 2019.2
 
