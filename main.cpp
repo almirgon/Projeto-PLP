@@ -281,6 +281,21 @@ void inicializa_cartas()
     random_shuffle(&baralho[0], &baralho[32]);
 }
 
+void banner(){
+    cout << "                                          ░░▓▓░░                                      "<<endl;
+    cout << "                               ░░░░     ░░▓▓▀▒░                                       "<<endl;
+    cout << "      ░░▒░░░░░░░░░░      ░▒░░▄▒░░░▄░▒  ░░░░░▒░▄  ░░░░░░░░▓▓░▌     ░▒▄▄                "<<endl;
+    cout << "  ░▒░▓▓▓▓▓▓▓▓▓▓▓▓▓░░    ░░░░▓▓▌░▓▓▓▓▓░░░▓▓▓▓▓▓▓░░░░▓▓▓▌░▓▓▓░░    ░░░░▓▓▓░░░░▒▒▄▄      "<<endl;
+    cout << "  ░░░▓▓▓▓▓▓▓▓░░░▓▓▓░░   ░░░░▓▓▌▓▓▓▓▀░░▓▓▌░ ░▓▓▀░░░░▓▓▓▓░▓▓▓▌░░▄▒▒▓░░░▓▓▓▌░░▓▓▓▌░░     "<<endl;
+    cout << "   ░░░░░▓▓▓▓▓░░▐░▓▌░░▒▓░▓▓░░░▓▓▓▓▌░▒ ░▓▓▌▒▓▓▒░▓░░░░▓▓▓▓▓▓▓▓▌░▓▀░▓▓▓▓░░▓▓▓░░▓▓▓░▌      "<<endl;
+    cout << "    ░░░░░▓▓▓▓▌░▄▓▀░░▓▌░░▓▓▐▓░░▓▓▓▓▓▓▓░░▀▓▓▓▓▓▓▓▓░░▓▓▓░▓▓▓▓▌░▓▓░░░░░▓░░▓▓▓▌▓▓▓░░       "<<endl;
+    cout << "       ░░░▓▓▓▓▓▀░░░▓▓▓░░░▄▓▓░░▓░░░▀▀▓▓▓░░░░░░░░░░░▓▓▌░░▀░▐░░▓▓▓▓▓▓▓▓░░▌▐▓▓▓▓▌░        "<<endl;
+    cout << "        ░░░▓▓▓▌░░░░░▓▓▓▓▓▓▓░░▓▓░░ ░░░░░▀▓▓░░   ░░░░░░░░░░░▓░░▀▓▓▓▀░░▓▓▌░▓▓▓▓░░        "<<endl;
+    cout << "         ░░░▓▓▓▌░░░░░░▀▀░░░░░▀▀░░     ░░░░░░           ░░░░░░░░░ ░░░▀▓░░▓▓▓░▌         "<<endl;
+    cout << "          ░░░▓▓▓░░                                           ░      ░░░░▓▓▌░          "<<endl;
+    cout << "           ░░░░░░                                                     ░░░░░           "<<endl;            
+}
+
 void batalha(Carta carta1, Carta carta2){
     cout << "---------------------------------------------"<< endl;
     
@@ -439,9 +454,17 @@ int verificaStatus(){
 }
 
 int main(){    
-    cout << "INICIALIZA... " << endl;
+    banner();
+    this_thread::sleep_for(chrono::milliseconds(3000));
+    system("clear");
+
     setup();
+
     select_numero_players();
+    this_thread::sleep_for(chrono::milliseconds(1000));
+
+    system("clear");
+
     while(true){
         mostraDeck(player1);
         mostraDeck(player2);
