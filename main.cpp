@@ -21,7 +21,7 @@ struct Carta
 
 Carta player1[4];   
 Carta player2[4];   
-Carta baralho[26];
+Carta baralho[34];
 int vez=2;
 bool play1;
 bool play2;
@@ -251,7 +251,7 @@ void inicializa_cartas()
     baralho[28].num=38;
 
     baralho[29].tipo = "NORMAL    ";
-    baralho[29].nome = "Snolax    ";
+    baralho[29].nome = "Snorlax   ";
     baralho[29].ataque = 40;
     baralho[29].hp = 99;
     baralho[29].condicao = true;
@@ -278,7 +278,14 @@ void inicializa_cartas()
     baralho[32].condicao = true;
     baralho[32].num=42;
 
-    random_shuffle(&baralho[0], &baralho[32]);
+    baralho[33].tipo = "BUG       ";
+    baralho[33].nome = "Venonat   ";
+    baralho[33].ataque = 30;
+    baralho[33].hp = 40;
+    baralho[33].condicao = true;
+    baralho[33].num=43;
+
+    random_shuffle(&baralho[0], &baralho[33]);
 }
 
 void banner(){
@@ -536,8 +543,8 @@ int ia(Carta player[]){
 }
 
 int selecionaCarta(bool play, Carta mao[]){
-    int numCarta = -1;
-    int iReal1 =-1;
+    int numCarta = 0;
+    int iReal1 = 0;
     if(play==true){
         cout <<"----------------------------------------------------------------------------------------"<<endl;
 
@@ -569,7 +576,6 @@ int selecionaCarta(bool play, Carta mao[]){
         vez++;
         return ia(mao);
     }
-    return 0;
 }
 
 void atk(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
@@ -1518,7 +1524,7 @@ void chamaArt(string nome){
         cout << "                                         ▐█▓█▓▀             ██████▌                   "<<endl;    
         cout << "                                           ░▀▀              ▓██████                   "<<endl;
 
-    }else if(nome=="Snolax    "){
+    }else if(nome=="Snorlax   "){
 
         cout << "                                 ▄▄░                                                  "<<endl;
         cout << "                                ▒░▓▓░░░ ░▄▄▄▄▄▄▄   ▄▒▓▓▓░░                            "<<endl;
