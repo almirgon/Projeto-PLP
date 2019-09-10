@@ -481,7 +481,6 @@ void batalha(Carta carta1, Carta carta2){
     //this_thread::sleep_for(chrono::milliseconds(2000));
 
     cout <<"-------------------------------------------VS-------------------------------------------"<<endl;
-    //this_thread::sleep_for(chrono::milliseconds(1000));
 
     cout << carta2.nome + "/ ATK:" + std::to_string(carta2.ataque) + "/ HP:" + std::to_string(carta2.hp) << endl;
 
@@ -506,42 +505,57 @@ Carta ataque(Carta carta1,Carta carta2){
     if(carta1.tipo == grass){
         if (carta2.tipo == water || carta2.tipo == eletric || carta2.tipo == ground || carta2.tipo == grass){
             atCarta1 = atCarta1 + 10; 
+            //print();
+            //this_thread::sleep_for(chrono::milliseconds(3000));
+
         }
     }else if(carta1.tipo == fire){
         if (carta2.tipo == fire || carta2.tipo == bug || carta2.tipo == grass){
             atCarta1 = atCarta1 + 10; 
+          
+
         }
     }else if(carta1.tipo == water){
         if (carta2.tipo == fire || carta2.tipo == ground || carta2.tipo == water){
             atCarta1 = atCarta1 + 10; 
+       
+
         }
     }else if(carta1.tipo == poison){
         if (carta2.tipo == fairy || carta2.tipo == grass || carta2.tipo == bug){
             atCarta1 = atCarta1 + 10; 
+
+
         }
     }else if(carta1.tipo == bug){
         if (carta2.tipo == psychic || carta2.tipo == grass || carta2.tipo == ground){
             atCarta1 = atCarta1 + 10; 
+
         }
     }else if(carta1.tipo == psychic){
         if (carta2.tipo == poison){
             atCarta1 = atCarta1 + 10; 
+
         }       
     }else if(carta1.tipo == eletric){
         if (carta2.tipo == fly || carta2.tipo == water){
             atCarta1 = atCarta1 + 10; 
+
         }
     }else if(carta1.tipo == ground){
         if (carta2.tipo == fire || carta2.tipo == normal || carta2.tipo == fly || carta2.tipo == poison || carta2.tipo == bug ){
             atCarta1 = atCarta1 + 10; 
+
         }
-    }else if(carta1.tipo == fly{
+    }else if(carta1.tipo == fly){
         if (carta2.tipo == bug || carta2.tipo == grass){
             atCarta1 = atCarta1 + 10; 
+
         }
     }else if(carta1.tipo == fairy){
         if (carta2.tipo == bug){
             atCarta1 = atCarta1 + 10; 
+
         }
     }else{
     
