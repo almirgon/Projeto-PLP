@@ -27,21 +27,26 @@ bool play1;
 bool play2;
 void chamaArt(string nome);
 
-void inicializar_player1()
-{
-   player1[0]=baralho[0];
-   player1[1]=baralho[1];
-   player1[2]=baralho[2];
-   player1[3]=baralho[3];
+void inicializar_players(){
+    srand(time(0));
+    int a = rand() % 34;
+    int b = rand() % 34;
+    int c = rand() % 34;
+    int d = rand() % 34;
+    int e = rand() % 34;
+    int f = rand() % 34;
+    int g = rand() % 34;
+    int h = rand() % 34;
 
-}
+    player1[0]=baralho[a];
+    player1[1]=baralho[b];
+    player1[2]=baralho[c];
+    player1[3]=baralho[d];
 
-void inicializar_player2()
-{
-    player2[0]=baralho[4];
-    player2[1]=baralho[5];
-    player2[2]=baralho[6];
-    player2[3]=baralho[7];
+    player2[0]=baralho[e];
+    player2[1]=baralho[f];
+    player2[2]=baralho[g];
+    player2[3]=baralho[h];
 
 }
 
@@ -285,7 +290,6 @@ void inicializa_cartas()
     baralho[33].condicao = true;
     baralho[33].num=43;
 
-    random_shuffle(&baralho[0], &baralho[33]);
 }
 
 void banner(){
@@ -523,8 +527,7 @@ void mostraDeck(int jogador, Carta p1[]){
 
 void setup(){
     inicializa_cartas();
-    inicializar_player1();
-    inicializar_player2();
+    inicializar_players();
 }
 
 int ia(Carta player[]){
@@ -585,8 +588,13 @@ void atk(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
     system("clear");
     batalha(playerX[num1], playerY[num2]);
 
-    int random = rand()%2;
-    if (random ==0){
+    srand(time(0));
+    int random = rand() % 2;
+
+    if (random == 0){
+        cout << "O POKEMON DESVIOU DO ATK" << endl;
+        this_thread::sleep_for(chrono::milliseconds(3000));
+    }else{
         Carta newCarta = ataque(playerX[num1], playerY[num2]);
         if(newCarta.hp<=0){
             newCarta.condicao = false;
@@ -594,9 +602,6 @@ void atk(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
         playerY[num2]=newCarta;
         system("clear");
         batalha(playerX[num1], playerY[num2]);
-    }else{
-        cout << "O POKEMON DESVIOU DO ATK" << endl;
-        this_thread::sleep_for(chrono::milliseconds(3000));
     }
 }
 
