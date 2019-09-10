@@ -19,8 +19,8 @@ struct Carta
     bool condicao;
 };
 
-Carta player1[4];   
-Carta player2[4];   
+Carta player1[5];   
+Carta player2[5];   
 Carta baralho[34];
 int vez=2;
 bool play1;
@@ -37,16 +37,20 @@ void inicializar_players(){
     int f = rand() % 34;
     int g = rand() % 34;
     int h = rand() % 34;
+    int i = rand() % 34;
+    int j = rand() % 34;
 
     player1[0]=baralho[a];
     player1[1]=baralho[b];
     player1[2]=baralho[c];
     player1[3]=baralho[d];
+    player1[4]=baralho[e];
 
-    player2[0]=baralho[e];
-    player2[1]=baralho[f];
-    player2[2]=baralho[g];
-    player2[3]=baralho[h];
+    player2[0]=baralho[f];
+    player2[1]=baralho[g];
+    player2[2]=baralho[h];
+    player2[3]=baralho[i];
+    player2[4]=baralho[j];
 
 }
 
@@ -504,7 +508,7 @@ void mostraDeck(int jogador, Carta p1[]){
         }
     }
     string tipoFull, nomeFull,atkFull, hpFull, layout,num;
-    for(int i = 0; i <= 3; i++){
+    for(int i = 0; i <= 4; i++){
         if(p1[i].condicao==true){
             layout+= "-----------------";
             nomeFull += "|Nome:" + p1[i].nome+"|";
@@ -533,7 +537,7 @@ void setup(){
 int ia(Carta player[]){
     int melhorATK = 0;
     int j = -1;
-    for(int i = 0; i<4; i++){
+    for(int i = 0; i<=4; i++){
         if (player[i].condicao==true){
             if (player[i].ataque>= melhorATK){
                 j= i;
@@ -549,7 +553,7 @@ int selecionaCarta(bool play, Carta mao[]){
     int numCarta = 0;
     int iReal1 = 0;
     if(play==true){
-        cout <<"----------------------------------------------------------------------------------------"<<endl;
+        cout <<"-------------------------------------------------------------------------------------------------------"<<endl;
 
         if(vez%2==0){
             cout << "PLAYER1| Selecione uma carta: " << endl;
@@ -560,7 +564,7 @@ int selecionaCarta(bool play, Carta mao[]){
         cin >> numCarta;
 
         bool var = false;
-        for(int i =0; i<4; i++){
+        for(int i =0; i<=4; i++){
             if(mao[i].num==numCarta){
                 if(mao[i].condicao==true){
                     var= true;
@@ -632,7 +636,7 @@ void select_numero_players()
 int verificaStatus(){
     int contador1 = 0;
     int contador2 = 0;
-    for(int i =0; i<4; i++){
+    for(int i =0; i<=4; i++){
         if(player1[i].condicao==false){
              contador1++;
         }
@@ -640,9 +644,9 @@ int verificaStatus(){
             contador2++;
         }
     }
-    if(contador1>=4){
+    if(contador1>=5){
         return 1;
-    }else if(contador2>=4){
+    }else if(contador2>=5){
         return 2;
     }else{
         return 0;
