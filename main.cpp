@@ -27,14 +27,15 @@ bool play1;
 bool play2;
 
 
-
 void chamaArt(string nome);
 void whoWins(int player);
 void whoAtk(int player);
 void whoDef(int player);
 void banner();
 void select_numero_players();
- void creditos();
+void creditos();
+void ataqueRealizado();
+void superEfetivo();
 
 void inicializar_players(){
     srand(time(0));
@@ -302,9 +303,7 @@ void inicializa_cartas()
     baralho[33].hp = 40;
     baralho[33].condicao = true;
     baralho[33].num=43;
-
 }
-
 
 void menu(){
     int opcao;
@@ -408,64 +407,127 @@ Carta ataque(Carta carta1,Carta carta2){
     string ground  = "GROUND    ";
     string fly     = "FLY       ";
     string fairy   = "FAIRY     ";
-
+    
+    system("clear");
     if(carta1.tipo == grass){
         if (carta2.tipo == water || carta2.tipo == eletric || carta2.tipo == ground || carta2.tipo == grass){
             atCarta1 = atCarta1 + 10; 
-            //print();
-            //this_thread::sleep_for(chrono::milliseconds(3000));
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
+
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }
     }else if(carta1.tipo == fire){
         if (carta2.tipo == fire || carta2.tipo == bug || carta2.tipo == grass){
             atCarta1 = atCarta1 + 10; 
-          
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
+
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }
     }else if(carta1.tipo == water){
         if (carta2.tipo == fire || carta2.tipo == ground || carta2.tipo == water){
             atCarta1 = atCarta1 + 10; 
-       
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
+
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }
     }else if(carta1.tipo == poison){
         if (carta2.tipo == fairy || carta2.tipo == grass || carta2.tipo == bug){
             atCarta1 = atCarta1 + 10; 
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }
     }else if(carta1.tipo == bug){
         if (carta2.tipo == psychic || carta2.tipo == grass || carta2.tipo == ground){
             atCarta1 = atCarta1 + 10; 
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
+
+
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }
     }else if(carta1.tipo == psychic){
         if (carta2.tipo == poison){
             atCarta1 = atCarta1 + 10; 
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
+
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }       
     }else if(carta1.tipo == eletric){
         if (carta2.tipo == fly || carta2.tipo == water){
             atCarta1 = atCarta1 + 10; 
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
+
+
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }
     }else if(carta1.tipo == ground){
         if (carta2.tipo == fire || carta2.tipo == normal || carta2.tipo == fly || carta2.tipo == poison || carta2.tipo == bug ){
             atCarta1 = atCarta1 + 10; 
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
+
+
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }
     }else if(carta1.tipo == fly){
         if (carta2.tipo == bug || carta2.tipo == grass){
             atCarta1 = atCarta1 + 10; 
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
+
+
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }
     }else if(carta1.tipo == fairy){
         if (carta2.tipo == bug){
             atCarta1 = atCarta1 + 10; 
+            superEfetivo();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
+
+
+        }else{
+            ataqueRealizado();
+                    this_thread::sleep_for(chrono::milliseconds(2000));
 
         }
     }else{
-    
+        ataqueRealizado();
+                this_thread::sleep_for(chrono::milliseconds(2000));
+
     }      
     carta2.hp = carta2.hp - atCarta1;
     if(carta2.hp<=0){
@@ -495,7 +557,6 @@ void mostraDeck(int jogador, Carta p1[]){
             num+= "|NUM: "+ std::to_string(p1[i].num)+"        "+"|";
         }
     }
-
     cout << "         " + layout << endl;
     cout << "         " + nomeFull<< endl;
     cout << "         " + tipoFull<< endl;
@@ -593,6 +654,7 @@ void select_numero_players()
     cout << " [2] - MULTPLAYER  " << endl;
     cout << "-------------------" << endl;
     int opcao;
+    cout << "Opcao: ";
     cin >> opcao;
     switch (opcao)
     {
@@ -606,8 +668,9 @@ void select_numero_players()
         break;
     default:
         cout << "OPCAO INVALIDA! TENTE NOVAMENTE." << endl  ;
-        cin.clear();
-        cin.ignore();
+        this_thread::sleep_for(chrono::milliseconds(2000));
+
+        system("clear");
         select_numero_players();
         break;
     }
@@ -638,16 +701,12 @@ int main(){
     banner();
     this_thread::sleep_for(chrono::milliseconds(3000));
     system("clear");
-
     setup();
-
     menu();
     this_thread::sleep_for(chrono::milliseconds(1000));
-
     system("clear");
 
-    while(true){
-        
+    while(true){ 
         layout();
         this_thread::sleep_for(chrono::milliseconds(3000));
         system("clear");
@@ -669,9 +728,7 @@ int main(){
     mostraDeck(2, player2);
     this_thread::sleep_for(chrono::milliseconds(3000));
 
-
     system("clear");
-
     if(verificaStatus()==1){
         if(play2==true){
             whoWins(2);
@@ -682,6 +739,45 @@ int main(){
             whoWins(1);
     }
     return 0;
+}
+void superEfetivo(){
+        cout << "                  █████╗ ████████╗ █████╗  ██████╗ ██╗   ██╗███████╗                 "<<endl;
+        cout << "                 ██╔══██╗╚══██╔══╝██╔══██╗██╔═══██╗██║   ██║██╔════╝                 "<<endl;
+        cout << "                 ███████║   ██║   ███████║██║   ██║██║   ██║█████╗                   "<<endl;
+        cout << "                 ██╔══██║   ██║   ██╔══██║██║▄▄ ██║██║   ██║██╔══╝                   "<<endl;
+        cout << "                 ██║  ██║   ██║   ██║  ██║╚██████╔╝╚██████╔╝███████╗                 "<<endl;
+        cout << "                 ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚══▀▀═╝  ╚═════╝ ╚══════╝                 "<<endl;
+        cout << "                                                                                     "<<endl;
+        cout << "                      ███████╗██╗   ██╗██████╗ ███████╗██████╗                       "<<endl;
+        cout << "                      ██╔════╝██║   ██║██╔══██╗██╔════╝██╔══██╗                      "<<endl;
+        cout << "                      ███████╗██║   ██║██████╔╝█████╗  ██████╔╝                      "<<endl;
+        cout << "                      ╚════██║██║   ██║██╔═══╝ ██╔══╝  ██╔══██╗                      "<<endl;
+        cout << "                      ███████║╚██████╔╝██║     ███████╗██║  ██║                      "<<endl;
+        cout << "                      ╚══════╝ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═╝                      "<<endl;
+        cout << "                                                                                     "<<endl;
+        cout << "                 ███████╗███████╗███████╗████████╗██╗██╗   ██╗ ██████╗               "<<endl;
+        cout << "                 ██╔════╝██╔════╝██╔════╝╚══██╔══╝██║██║   ██║██╔═══██╗              "<<endl;
+        cout << "                 █████╗  █████╗  █████╗     ██║   ██║██║   ██║██║   ██║              "<<endl;
+        cout << "                 ██╔══╝  ██╔══╝  ██╔══╝     ██║   ██║╚██╗ ██╔╝██║   ██║              "<<endl;
+        cout << "                 ███████╗██║     ███████╗   ██║   ██║ ╚████╔╝ ╚██████╔╝              "<<endl;
+        cout << "                 ╚══════╝╚═╝     ╚══════╝   ╚═╝   ╚═╝  ╚═══╝   ╚═════╝               "<<endl;                                            
+}
+
+void ataqueRealizado(){
+        cout << "                █████╗ ████████╗ █████╗  ██████╗ ██╗   ██╗███████╗                   "<<endl;
+        cout << "               ██╔══██╗╚══██╔══╝██╔══██╗██╔═══██╗██║   ██║██╔════╝                   "<<endl;
+        cout << "               ███████║   ██║   ███████║██║   ██║██║   ██║█████╗                     "<<endl;
+        cout << "               ██╔══██║   ██║   ██╔══██║██║▄▄ ██║██║   ██║██╔══╝                     "<<endl;
+        cout << "               ██║  ██║   ██║   ██║  ██║╚██████╔╝╚██████╔╝███████╗                   "<<endl;
+        cout << "               ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚══▀▀═╝  ╚═════╝ ╚══════╝                   "<<endl;
+        cout << "                                                                                     "<<endl;
+        cout << "        ██████╗ ███████╗ █████╗ ██╗     ██╗███████╗ █████╗ ██████╗  ██████╗            "<<endl;
+        cout << "        ██╔══██╗██╔════╝██╔══██╗██║     ██║╚══███╔╝██╔══██╗██╔══██╗██╔═══██╗           "<<endl;
+        cout << "        ██████╔╝█████╗  ███████║██║     ██║  ███╔╝ ███████║██║  ██║██║   ██║           "<<endl;
+        cout << "        ██╔══██╗██╔══╝  ██╔══██║██║     ██║ ███╔╝  ██╔══██║██║  ██║██║   ██║           "<<endl;
+        cout << "        ██║  ██║███████╗██║  ██║███████╗██║███████╗██║  ██║██████╔╝╚██████╔╝           "<<endl;
+        cout << "        ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝            "<<endl;
+                                                                   
 }
 
 void banner(){
