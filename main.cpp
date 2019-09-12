@@ -25,10 +25,16 @@ Carta baralho[34];
 int vez=2;
 bool play1;
 bool play2;
+
+
+
 void chamaArt(string nome);
-void whoWins(bool player);
-void whoAtk(bool player);
-void whoDef(bool player);
+void whoWins(int player);
+void whoAtk(int player);
+void whoDef(int player);
+void banner();
+void select_numero_players();
+ void creditos();
 
 void inicializar_players(){
     srand(time(0));
@@ -299,23 +305,76 @@ void inicializa_cartas()
 
 }
 
+
+void menu(){
+    int opcao;
+    cout << "OPCOES DE JOGO:    " << endl;
+    cout << "[1] - INICIAR JOGO " << endl;
+    cout << "[2] - MODO DE JOGO " << endl;
+    cout << "[3] - INSTRUCOES   " << endl;
+    cout << "[4] - CREDITOS     " << endl;
+
+    cout << "Opcao: ";
+    cin >> opcao;
+    if(opcao==1){
+        play1 = true;
+        play2 = false;
+    }else if(opcao==2){
+        system("clear");
+        select_numero_players();
+    }else if(opcao==3){
+        string volta;
+        cout << "CADA JOGADOR INICIA COM 5 CARTAS" << endl;
+        cout << "ESSAS CARTAS SAO ESCOLHIDAS ALEATORIAMENTE DE UM BARALHO COM 34 CARTAS DIFERENTES" << endl;
+        cout << "APOS A FORMACAO DOS BRALAHOS DE CADA JOGADOR, TEM INICIO O JOGO ONDE O PLAYER 1 " << endl;
+        cout << "SELECIONA UMA CARTA DISPONIVEL EM SUA MAO A PARTIR DO [NUM] PARA ATACAR O PLAYER 2 " << endl;
+        cout << "QUE POR SUA VEZ FAZ O MESMO PROCESSO ESCOLHENDO A CARTA PARA RECEBER O ATAQUE. DANDO INICIO A BATTLE FASE," << endl;
+        cout << "CADA CARTA TEM UM [TIPO] ASSOCIADO QUE INTERFERE DIRETAMENTE NO ATAQUE, UMA VEZ QUE" << endl;
+        cout << "CERTOS TIPOS TEM VANTAGENS SOBRE OUTROS, FAZENDO COM QUE O [ATK] DA CARTA AUMENTE TEMPORARIAMENTE" << endl;
+        cout << "ALEM DAS CARTAS O ATAQUE PARA SER EFETIVADO DEPENDE DA SORTE DE CADA JOGADOR, O POKEMON A RECEBER" << endl;
+        cout << "O ATAQUE TEM 50% DE CHANCE DE DESVIAR. NO FINAL DA BATTLE FASE SE A CARTA TIVER SOFRIDO DANO QUE " << endl;
+        cout << "REDUSA SEU [HP] A 0, A CARTA É REMOVIDA DO JOGO. GANHA QUEM ELEMINAR TODAS AS CARTAS DE SEU OPONENTE" << endl;
+        cin >> volta;
+        system("clear");
+        menu();
+    }else if(opcao==4){
+        system("clear");
+        creditos();
+        this_thread::sleep_for(chrono::milliseconds(3000));
+
+        system("clear");
+        menu();
+    }else{
+        cout << "OPCAO INVALIDA, TENTE NOVAMENTE..." << endl;
+        this_thread::sleep_for(chrono::milliseconds(1500));
+        system("clear");
+        menu();
+    }
+}
+
+void creditos()
+{
+    cout << endl << "DESENVOLVIDO POR: " << endl << "Pablwo Araujo" << endl <<"Natan Ataide" << endl << "Luiz Boas" << endl << "Almir Crispiniano" << endl;
+}
+
+
 void layout(){
     if(vez%2==0){
-        whoAtk(play1);
+        whoAtk(1);
         cout <<"\n-------------------------------------------VS-------------------------------------------\n"<<endl;
         if(play2==1){
-            whoDef(play2);
+            whoDef(2);
         }else{
-            whoDef;
+            whoDef(0);
         }
     }else{
         if(play2==1){
-            whoAtk(play2);
+            whoAtk(2);
         }else{
-            whoAtk;
+            whoAtk(0);
         }
         cout <<"\n-------------------------------------------VS-------------------------------------------\n"<<endl;
-        whoDef(play1);
+        whoDef(1);
     }
 }
 
@@ -472,9 +531,9 @@ int selecionaCarta(bool play, Carta mao[]){
         cout <<"-------------------------------------------------------------------------------------------------------"<<endl;
 
         if(vez%2==0){
-            cout << "PLAYER1| Selecione uma carta: " << endl;
+            cout << "PLAYER1| [NUM] Selecione uma carta: " << endl;
         }else{
-            cout << "PLAYER2| Selecione uma carta: " << endl;
+            cout << "PLAYER2| [NUM] Selecione uma carta: " << endl;
         }
         vez++;
         cin >> numCarta;
@@ -490,7 +549,7 @@ int selecionaCarta(bool play, Carta mao[]){
         }
         if(var==false){
             vez++;
-            cout << "CARTA INVALIDA, TENTE NOVAMENTE " << endl;
+            cout << "[NUM] INVALIDO, TENTE NOVAMENTE! " << endl;
             selecionaCarta(play, mao);
         }else{
             return iReal1;
@@ -577,7 +636,7 @@ int main(){
 
     setup();
 
-    select_numero_players();
+    menu();
     this_thread::sleep_for(chrono::milliseconds(1000));
 
     system("clear");
@@ -610,33 +669,33 @@ int main(){
 
     if(verificaStatus()==1){
         if(play2==true){
-            whoWins(play2);
+            whoWins(2);
         }else{
-            whoWins;
+            whoWins(0);
         }
     }else{
-            whoWins(play1);
+            whoWins(1);
     }
     return 0;
 }
 
 void banner(){
-    cout << "                                          ░░▓▓░░                                      "<<endl;
-    cout << "                               ░░░░     ░░▓▓▀▒░                                       "<<endl;
-    cout << "      ░░▒░░░░░░░░░░      ░▒░░▄▒░░░▄░▒  ░░░░░▒░▄  ░░░░░░░░▓▓░▌     ░▒▄▄                "<<endl;
-    cout << "  ░▒░▓▓▓▓▓▓▓▓▓▓▓▓▓░░    ░░░░▓▓▌░▓▓▓▓▓░░░▓▓▓▓▓▓▓░░░░▓▓▓▌░▓▓▓░░    ░░░░▓▓▓░░░░▒▒▄▄      "<<endl;
-    cout << "  ░░░▓▓▓▓▓▓▓▓░░░▓▓▓░░   ░░░░▓▓▌▓▓▓▓▀░░▓▓▌░ ░▓▓▀░░░░▓▓▓▓░▓▓▓▌░░▄▒▒▓░░░▓▓▓▌░░▓▓▓▌░░     "<<endl;
-    cout << "   ░░░░░▓▓▓▓▓░░▐░▓▌░░▒▓░▓▓░░░▓▓▓▓▌░▒ ░▓▓▌▒▓▓▒░▓░░░░▓▓▓▓▓▓▓▓▌░▓▀░▓▓▓▓░░▓▓▓░░▓▓▓░▌      "<<endl;
-    cout << "    ░░░░░▓▓▓▓▌░▄▓▀░░▓▌░░▓▓▐▓░░▓▓▓▓▓▓▓░░▀▓▓▓▓▓▓▓▓░░▓▓▓░▓▓▓▓▌░▓▓░░░░░▓░░▓▓▓▌▓▓▓░░       "<<endl;
-    cout << "       ░░░▓▓▓▓▓▀░░░▓▓▓░░░▄▓▓░░▓░░░▀▀▓▓▓░░░░░░░░░░░▓▓▌░░▀░▐░░▓▓▓▓▓▓▓▓░░▌▐▓▓▓▓▌░        "<<endl;
-    cout << "        ░░░▓▓▓▌░░░░░▓▓▓▓▓▓▓░░▓▓░░ ░░░░░▀▓▓░░   ░░░░░░░░░░░▓░░▀▓▓▓▀░░▓▓▌░▓▓▓▓░░        "<<endl;
-    cout << "         ░░░▓▓▓▌░░░░░░▀▀░░░░░▀▀░░     ░░░░░░           ░░░░░░░░░ ░░░▀▓░░▓▓▓░▌         "<<endl;
-    cout << "          ░░░▓▓▓░░                                           ░      ░░░░▓▓▌░          "<<endl;
-    cout << "           ░░░░░░                                                     ░░░░░           "<<endl;            
+        cout << "                                          ░░▓▓░░                                      "<<endl;
+        cout << "                               ░░░░     ░░▓▓▀▒░                                       "<<endl;
+        cout << "      ░░▒░░░░░░░░░░      ░▒░░▄▒░░░▄░▒  ░░░░░▒░▄  ░░░░░░░░▓▓░▌     ░▒▄▄                "<<endl;
+        cout << "  ░▒░▓▓▓▓▓▓▓▓▓▓▓▓▓░░    ░░░░▓▓▌░▓▓▓▓▓░░░▓▓▓▓▓▓▓░░░░▓▓▓▌░▓▓▓░░    ░░░░▓▓▓░░░░▒▒▄▄      "<<endl;
+        cout << "  ░░░▓▓▓▓▓▓▓▓░░░▓▓▓░░   ░░░░▓▓▌▓▓▓▓▀░░▓▓▌░ ░▓▓▀░░░░▓▓▓▓░▓▓▓▌░░▄▒▒▓░░░▓▓▓▌░░▓▓▓▌░░     "<<endl;
+        cout << "   ░░░░░▓▓▓▓▓░░▐░▓▌░░▒▓░▓▓░░░▓▓▓▓▌░▒ ░▓▓▌▒▓▓▒░▓░░░░▓▓▓▓▓▓▓▓▌░▓▀░▓▓▓▓░░▓▓▓░░▓▓▓░▌      "<<endl;
+        cout << "    ░░░░░▓▓▓▓▌░▄▓▀░░▓▌░░▓▓▐▓░░▓▓▓▓▓▓▓░░▀▓▓▓▓▓▓▓▓░░▓▓▓░▓▓▓▓▌░▓▓░░░░░▓░░▓▓▓▌▓▓▓░░       "<<endl;
+        cout << "       ░░░▓▓▓▓▓▀░░░▓▓▓░░░▄▓▓░░▓░░░▀▀▓▓▓░░░░░░░░░░░▓▓▌░░▀░▐░░▓▓▓▓▓▓▓▓░░▌▐▓▓▓▓▌░        "<<endl;
+        cout << "        ░░░▓▓▓▌░░░░░▓▓▓▓▓▓▓░░▓▓░░ ░░░░░▀▓▓░░   ░░░░░░░░░░░▓░░▀▓▓▓▀░░▓▓▌░▓▓▓▓░░        "<<endl;
+        cout << "         ░░░▓▓▓▌░░░░░░▀▀░░░░░▀▀░░     ░░░░░░           ░░░░░░░░░ ░░░▀▓░░▓▓▓░▌         "<<endl;
+        cout << "          ░░░▓▓▓░░                                           ░      ░░░░▓▓▌░          "<<endl;
+        cout << "           ░░░░░░                                                     ░░░░░           "<<endl;            
 }
 
-void whoWins(bool player){
-    if(player == play1){
+void whoWins(int player){
+    if(player == 1){
         cout << "               ██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗      ██╗              "<<endl;
         cout << "               ██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗    ███║              "<<endl;
         cout << "               ██████╔╝██║     ███████║ ╚████╔╝ █████╗  ██████╔╝    ╚██║              "<<endl;
@@ -650,7 +709,7 @@ void whoWins(bool player){
         cout << "                          ██║███╗██║██║██║╚██╗██║╚════██║                             "<<endl;
         cout << "                          ╚███╔███╔╝██║██║ ╚████║███████║                             "<<endl;
         cout << "                           ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚══════╝                             "<<endl;
-    }else if(player == play2){
+    }else if(player == 2){
         cout << "              ██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗     ██████╗            "<<endl;
         cout << "              ██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗    ╚════██╗           "<<endl;
         cout << "              ██████╔╝██║     ███████║ ╚████╔╝ █████╗  ██████╔╝     █████╔╝           "<<endl;
@@ -681,8 +740,8 @@ void whoWins(bool player){
     }
 }
 
-void whoAtk(bool player){
-    if(player == play1){
+void whoAtk(int player){
+    if(player == 1){
         cout << "               ██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗      ██╗              "<<endl;
         cout << "               ██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗    ███║              "<<endl;
         cout << "               ██████╔╝██║     ███████║ ╚████╔╝ █████╗  ██████╔╝    ╚██║              "<<endl;
@@ -696,7 +755,7 @@ void whoAtk(bool player){
         cout << "                 ██╔══██║   ██║   ██╔══██║██║▄▄ ██║██║   ██║██╔══╝                    "<<endl;
         cout << "                 ██║  ██║   ██║   ██║  ██║╚██████╔╝╚██████╔╝███████╗                  "<<endl;
         cout << "                 ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚══▀▀═╝  ╚═════╝ ╚══════╝                  "<<endl;
-    }else if(player == play2){
+    }else if(player == 2){
         cout << "              ██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗     ██████╗            "<<endl;
         cout << "              ██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗    ╚════██╗           "<<endl;
         cout << "              ██████╔╝██║     ███████║ ╚████╔╝ █████╗  ██████╔╝     █████╔╝           "<<endl;
@@ -727,8 +786,8 @@ void whoAtk(bool player){
     }
 }
 
-void whoDef(bool player){
-    if(player == play1){
+void whoDef(int player){
+    if(player == 1){
         cout << "               ██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗      ██╗              "<<endl;
         cout << "               ██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗    ███║              "<<endl;
         cout << "               ██████╔╝██║     ███████║ ╚████╔╝ █████╗  ██████╔╝    ╚██║              "<<endl;
@@ -742,7 +801,7 @@ void whoDef(bool player){
         cout << "               ██║  ██║██╔══╝  ██╔══╝  ██╔══╝  ██║╚██╗██║██║  ██║██╔══╝               "<<endl;
         cout << "               ██████╔╝███████╗██║     ███████╗██║ ╚████║██████╔╝███████╗             "<<endl;
         cout << "               ╚═════╝ ╚══════╝╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝             "<<endl;
-    }else if(player == play2){
+    }else if(player == 2){
         cout << "              ██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗     ██████╗            "<<endl;
         cout << "              ██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗    ╚════██╗           "<<endl;
         cout << "              ██████╔╝██║     ███████║ ╚████╔╝ █████╗  ██████╔╝     █████╔╝           "<<endl;
