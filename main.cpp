@@ -308,11 +308,14 @@ void inicializa_cartas()
 
 void menu(){
     int opcao;
-    cout << "OPCOES DE JOGO:    " << endl;
+    cout << "-------------------" << endl;
+    cout << "  OPCOES DE JOGO:  " << endl;
+    cout << "-------------------" << endl;
     cout << "[1] - INICIAR JOGO " << endl;
     cout << "[2] - MODO DE JOGO " << endl;
     cout << "[3] - INSTRUCOES   " << endl;
     cout << "[4] - CREDITOS     " << endl;
+    cout << "-------------------" << endl;
 
     cout << "Opcao: ";
     cin >> opcao;
@@ -585,7 +588,10 @@ void atk(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
 
 void select_numero_players()
 {
-    cout << "SELECIONE O NÚMERO DE JOGADORES (1 ou 2): " ;
+    cout << "-------------------" << endl;
+    cout << " [1] - SINGLEPLAY  " << endl;
+    cout << " [2] - MULTPLAYER  " << endl;
+    cout << "-------------------" << endl;
     int opcao;
     cin >> opcao;
     switch (opcao)
