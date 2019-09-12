@@ -574,16 +574,19 @@ void setup(){
 }
 
 int ia(Carta player[]){
-    int melhorATK = 0;
+    int melhorCarta = 0;
     int j = -1;
     for(int i = 0; i<=4; i++){
-        if (player[i].condicao==true){
-            if (player[i].ataque>= melhorATK){
-                j= i;
-                melhorATK= player[i].ataque;
+        if (player[i].condicao == true){
+            if (player[i].ataque>= melhorCarta && vez%2 == 1){
+                j = i;
+                melhorCarta= player[i].ataque;
+            }
+            if (player[i].hp >= melhorCarta && vez%2 == 0){
+                j = i;
+                melhorCarta= player[i].hp;
             }
         }
-        
     }
     return j;
 }
