@@ -308,14 +308,13 @@ void inicializa_cartas()
 
 void menu(){
     int opcao;
-    cout << "-------------------" << endl;
-    cout << "  OPCOES DE JOGO:  " << endl;
-    cout << "-------------------" << endl;
+    banner();
+    cout << "----------------------------------------------------------------------------------" << endl;
     cout << "[1] - INICIAR JOGO " << endl;
     cout << "[2] - MODO DE JOGO " << endl;
     cout << "[3] - INSTRUCOES   " << endl;
     cout << "[4] - CREDITOS     " << endl;
-    cout << "-------------------" << endl;
+    cout << "----------------------------------------------------------------------------------" << endl;
 
     cout << "Opcao: ";
     cin >> opcao;
@@ -331,15 +330,15 @@ void menu(){
         cout << "INSTRUÇOES:                                                                                           " << endl;
         cout << "                                                                                                      " << endl;
         cout << "CADA JOGADOR INICIA COM 5 CARTAS, ESSAS CARTAS SAO ESCOLHIDAS ALEATORIAMENTE DE UM DECK COM 34 CARTAS " << endl;
-        cout << "DIFERENTES, APOS A FORMACAO DOS DERKS DE CADA JOGADOR, O JOGO E INICIADO E O PLAYER 1 SELECIONA " << endl;
-        cout << "UMA CARTA DISPONIVEL EM SUA MAO A PARTIR DO [NUM] PARA ATACAR O OPONENTE, QUE PODE SER O PLAYER 2 OU O COMP" << endl;
-        cout << "QUE POR SUA VEZ FAZ O MESMO PROCESSO ESCOLHENDO A CARTA PARA RECEBER O ATAQUE. DANDO INICIO " << endl;
-        cout << "A BATTLE FASE, CADA POKEMON TEM UM [TIPO] ASSOCIADO QUE INTERFERE DIRETAMENTE NO ATAQUE, UMA VEZ QUE" << endl;
-        cout << "CERTOS TIPOS TEM VANTAGENS SOBRE OUTROS, FAZENDO COM QUE O [ATK] DA CARTA TENHA UM BUFFER ADCIONAL," << endl;
-        cout << "ALEM DAS CARTAS O ATAQUE PARA SER EFETIVADO DEPENDE DA SORTE DE CADA JOGADOR, O POKEMON A RECEBER" << endl;
-        cout << "O ATAQUE TEM 50% DE CHANCE DE DESVIAR. NO FINAL DA BATTLE FASE SE A CARTA TIVER SOFRIDO UM DANO QUE " << endl;
-        cout << "REDUZA SEU HP A 0, A CARTA É REMOVIDA DO JOGO. GANHA QUEM ELEMINAR TODAS AS CARTAS DE SEU OPONENTE." << endl;
-        cout << "                                                                                                     " << endl;
+        cout << "DIFERENTES, APOS A FORMACAO DOS DERKS DE CADA JOGADOR, O JOGO E INICIADO E O PLAYER 1 SELECIONA       " << endl;
+        cout << "UMA CARTA DISPONIVEL EM SUA MAO A PARTIR DO [NUM] PARA ATACAR O OPONENTE, QUE PODE SER O PLAYER 2 OU  " << endl;
+        cout << "O COMP QUE POR SUA VEZ FAZ O MESMO PROCESSO ESCOLHENDO A CARTA PARA RECEBER O ATAQUE. DANDO INICIO    " << endl;
+        cout << "A BATTLE FASE, CADA POKEMON TEM UM [TIPO] ASSOCIADO QUE INTERFERE DIRETAMENTE NO ATAQUE, UMA VEZ QUE  " << endl;
+        cout << "CERTOS TIPOS TEM VANTAGENS SOBRE OUTROS, FAZENDO COM QUE O [ATK] DA CARTA TENHA UM BUFFER ADCIONAL,   " << endl;
+        cout << "ALEM DAS CARTAS O ATAQUE PARA SER EFETIVADO DEPENDE DA SORTE DE CADA JOGADOR, O POKEMON A RECEBER     " << endl;
+        cout << "O ATAQUE TEM 50% DE CHANCE DE DESVIAR. NO FINAL DA BATTLE FASE SE A CARTA TIVER SOFRIDO UM DANO QUE   " << endl;
+        cout << "REDUZA SEU HP A 0, A CARTA É REMOVIDA DO JOGO. GANHA QUEM ELEMINAR TODAS AS CARTAS DE SEU OPONENTE.   " << endl;
+        cout << "                                                                                                      " << endl;
         cout << "|----------------------------------------------------------------------------------------------------|" << endl;
         cout << "|                                    VANTAGENS D0 TIPO D0 POKEMON:                                   |"<< endl;
         cout << "|----------------------------------------------------------------------------------------------------|" << endl;
@@ -647,9 +646,7 @@ int selecionaCarta(bool play, Carta mao[]){
 
 void atk(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
     int num1 = selecionaCarta(x,playerX);
-    vez++;
     int num2 = selecionaCarta(y,playerY);
-    vez++;
     system("clear");
     batalha(playerX[num1], playerY[num2]);
 
