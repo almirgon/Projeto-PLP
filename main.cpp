@@ -379,7 +379,7 @@ void menu(){
 
 void creditos()
 {
-    cout << endl << "DESENVOLVIDO POR: " << endl << "Pablwo Araujo" << endl <<"Natan Ataide" << endl << "Luiz Boas" << endl << "Almir Crispiniano" << endl;
+    cout << endl << "DESENVOLVIDO POR: " << endl << "Pablwo Araujo" << endl <<"Natan Ataide" << endl << "Luiz Boas" << endl << "Almir Crispiniano" << endl << "Walisson Farias" << end1;
 }
 
 
@@ -553,6 +553,8 @@ Carta ataque(Carta carta1,Carta carta2){
     carta2.hp = carta2.hp - atCarta1;
     if(carta2.hp<=0){
         carta2.hp=0;
+        morreu();
+                this_thread::sleep_for(chrono::milliseconds(2000));
     }
     return carta2;
 }
@@ -830,6 +832,22 @@ void banner(){
         cout << "         ░░░▓▓▓▌░░░░░░▀▀░░░░░▀▀░░     ░░░░░░           ░░░░░░░░░ ░░░▀▓░░▓▓▓░▌         "<<endl;
         cout << "          ░░░▓▓▓░░                                           ░      ░░░░▓▓▌░          "<<endl;
         cout << "           ░░░░░░                                                     ░░░░░           "<<endl;            
+}
+
+void morreu(){
+    cout << "      ██████╗     ██████╗  ██████╗ ██╗  ██╗███████╗███╗   ███╗ ██████╗ ███╗   ██╗     "<<endl;
+    cout << "     ██╔═══██╗    ██╔══██╗██╔═══██╗██║ ██╔╝██╔════╝████╗ ████║██╔═══██╗████╗  ██║     "<<endl;
+    cout << "     ██║   ██║    ██████╔╝██║   ██║█████╔╝ █████╗  ██╔████╔██║██║   ██║██╔██╗ ██║     "<<endl;
+    cout << "     ██║   ██║    ██╔═══╝ ██║   ██║██╔═██╗ ██╔══╝  ██║╚██╔╝██║██║   ██║██║╚██╗██║     "<<endl;
+    cout << "     ╚██████╔╝    ██║     ╚██████╔╝██║  ██╗███████╗██║ ╚═╝ ██║╚██████╔╝██║ ╚████║     "<<endl;
+    cout << "      ╚═════╝     ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝     "<<endl;
+    cout << "                                                                                      "<<endl;
+    cout << "               ███╗   ███╗ ██████╗ ██████╗ ██████╗ ███████╗██╗   ██╗                  "<<end1;
+    cout << "               ████╗ ████║██╔═══██╗██╔══██╗██╔══██╗██╔════╝██║   ██║                  "<<end1;
+    cout << "               ██╔████╔██║██║   ██║██████╔╝██████╔╝█████╗  ██║   ██║                  "<<end1;
+    cout << "               ██║╚██╔╝██║██║   ██║██╔══██╗██╔══██╗██╔══╝  ██║   ██║                  "<<end1;
+    cout << "               ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║  ██║███████╗╚██████╔╝                  "<<end1;
+    cout << "               ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝                   "<<end1;
 }
 
 void whoWins(int player){
