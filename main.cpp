@@ -602,7 +602,6 @@ int selecionaCarta(bool play, Carta mao[]){
         }else{
             cout << "PLAYER2| [NUM] Selecione uma carta: " << endl;
         }
-        vez++;
         cin >> numCarta;
 
         bool var = false;
@@ -615,22 +614,21 @@ int selecionaCarta(bool play, Carta mao[]){
             }
         }
         if(var==false){
-            vez++;
             cout << "[NUM] INVALIDO, TENTE NOVAMENTE! " << endl;
             selecionaCarta(play, mao);
         }else{
             return iReal1;
         }
     }else{
-        vez++;
         return ia(mao);
     }
 }
 
 void atk(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
     int num1 = selecionaCarta(x,playerX);
+    vez++;
     int num2 = selecionaCarta(y,playerY);
-
+    vez++;
     system("clear");
     batalha(playerX[num1], playerY[num2]);
 
