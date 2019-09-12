@@ -97,14 +97,14 @@ void inicializa_cartas()
 
     baralho[4].tipo = "WATER     ";
     baralho[4].nome = "Squirtle  ";
-    baralho[4].ataque = 48;
-    baralho[4].hp = 58;
+    baralho[4].ataque = 38;
+    baralho[4].hp = 56;
     baralho[4].condicao = true;
     baralho[4].num=14;
 
     baralho[5].tipo = "WATER     ";
     baralho[5].nome = "Blastoise ";
-    baralho[5].ataque = 38;
+    baralho[5].ataque = 50;
     baralho[5].hp = 80;
     baralho[5].condicao = true;
     baralho[5].num=15;
@@ -112,28 +112,28 @@ void inicializa_cartas()
     baralho[6].tipo = "BUG       ";
     baralho[6].nome = "Caterpie  ";
     baralho[6].ataque = 30;
-    baralho[6].hp = 60;
+    baralho[6].hp = 40;
     baralho[6].condicao = true;
     baralho[6].num=16;
 
     baralho[7].tipo = "BUG       ";
     baralho[7].nome = "Weedle    ";
     baralho[7].ataque = 35;
-    baralho[7].hp = 50;
+    baralho[7].hp = 45;
     baralho[7].condicao = true;
     baralho[7].num=17;
 
     baralho[8].tipo = "FLY       ";
     baralho[8].nome = "Pidgey    ";
-    baralho[8].ataque = 35;
-    baralho[8].hp = 50;
+    baralho[8].ataque = 40;
+    baralho[8].hp = 45;
     baralho[8].condicao = true;
     baralho[8].num=18;
 
     baralho[9].tipo = "NORMAL    ";
     baralho[9].nome = "Ratata    ";
-    baralho[9].ataque = 20;
-    baralho[9].hp = 50;
+    baralho[9].ataque = 25;
+    baralho[9].hp = 40;
     baralho[9].condicao = true;
     baralho[9].num=19;
 
@@ -209,8 +209,8 @@ void inicializa_cartas()
 
     baralho[20].tipo = "FIRE      ";
     baralho[20].nome = "Growlithe ";
-    baralho[20].ataque = 50;
-    baralho[20].hp = 53;
+    baralho[20].ataque = 60;
+    baralho[20].hp = 45;
     baralho[20].condicao = true;
     baralho[20].num=30;
 
@@ -251,8 +251,8 @@ void inicializa_cartas()
 
     baralho[26].tipo = "ELECTRIC  ";
     baralho[26].nome = "Voltorb   ";
-    baralho[26].ataque = 30;
-    baralho[26].hp = 60;
+    baralho[26].ataque = 20;
+    baralho[26].hp = 70;
     baralho[26].condicao = true;
     baralho[26].num=36;
 
@@ -272,7 +272,7 @@ void inicializa_cartas()
 
     baralho[29].tipo = "NORMAL    ";
     baralho[29].nome = "Snorlax   ";
-    baralho[29].ataque = 40;
+    baralho[29].ataque = 35;
     baralho[29].hp = 99;
     baralho[29].condicao = true;
     baralho[29].num=39;
@@ -286,8 +286,8 @@ void inicializa_cartas()
 
     baralho[31].tipo = "NORMAL    ";
     baralho[31].nome = "Eevee     ";
-    baralho[31].ataque = 65;
-    baralho[31].hp = 55;
+    baralho[31].ataque = 70;
+    baralho[31].hp = 40;
     baralho[31].condicao = true;
     baralho[31].num=41;
 
