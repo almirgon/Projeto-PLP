@@ -26,7 +26,6 @@ int vez=2;
 bool play1;
 bool play2;
 
-
 void chamaArt(string nome);
 void whoWins(int player);
 void whoAtk(int player);
@@ -34,10 +33,12 @@ void whoDef(int player);
 void banner();
 void select_numero_players();
 void creditos();
+void desvio();
 void ataqueRealizado();
 void superEfetivo();
 
 void inicializar_players(){
+    
     srand(time(0));
     int a = rand() % 34;
     int b = rand() % 34;
@@ -318,6 +319,7 @@ void menu(){
 
     cout << "Opcao: ";
     cin >> opcao;
+    
     if(opcao==1){
         play1 = true;
         play2 = false;
@@ -634,8 +636,9 @@ void atk(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
     int random = rand() % 2;
 
     if (random == 0){
-        cout << "O POKEMON DESVIOU DO ATK" << endl;
-        this_thread::sleep_for(chrono::milliseconds(3000));
+        system("clear");
+        desvio();
+        this_thread::sleep_for(chrono::milliseconds(2000));
     }else{
         Carta newCarta = ataque(playerX[num1], playerY[num2]);
         if(newCarta.hp<=0){
@@ -778,6 +781,22 @@ void ataqueRealizado(){
         cout << "        ██║  ██║███████╗██║  ██║███████╗██║███████╗██║  ██║██████╔╝╚██████╔╝           "<<endl;
         cout << "        ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝            "<<endl;
                                                                    
+}
+
+void desvio(){
+        cout << "      ██████╗     ██████╗  ██████╗ ██╗  ██╗███████╗███╗   ███╗ ██████╗ ███╗   ██╗     "<<endl;
+        cout << "     ██╔═══██╗    ██╔══██╗██╔═══██╗██║ ██╔╝██╔════╝████╗ ████║██╔═══██╗████╗  ██║     "<<endl;
+        cout << "     ██║   ██║    ██████╔╝██║   ██║█████╔╝ █████╗  ██╔████╔██║██║   ██║██╔██╗ ██║     "<<endl;
+        cout << "     ██║   ██║    ██╔═══╝ ██║   ██║██╔═██╗ ██╔══╝  ██║╚██╔╝██║██║   ██║██║╚██╗██║     "<<endl;
+        cout << "     ╚██████╔╝    ██║     ╚██████╔╝██║  ██╗███████╗██║ ╚═╝ ██║╚██████╔╝██║ ╚████║     "<<endl;
+        cout << "      ╚═════╝     ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝     "<<endl;
+        cout << "                                                                                      "<<endl; 
+        cout << "                ██████╗ ███████╗███████╗██╗   ██╗██╗ ██████╗ ██╗   ██╗                "<<endl; 
+        cout << "                ██╔══██╗██╔════╝██╔════╝██║   ██║██║██╔═══██╗██║   ██║                "<<endl;
+        cout << "                ██║  ██║█████╗  ███████╗██║   ██║██║██║   ██║██║   ██║                "<<endl;
+        cout << "                ██║  ██║██╔══╝  ╚════██║╚██╗ ██╔╝██║██║   ██║██║   ██║                "<<endl;
+        cout << "                ██████╔╝███████╗███████║ ╚████╔╝ ██║╚██████╔╝╚██████╔╝                "<<endl;
+        cout << "                ╚═════╝ ╚══════╝╚══════╝  ╚═══╝  ╚═╝ ╚═════╝  ╚═════╝                 "<<endl;
 }
 
 void banner(){
