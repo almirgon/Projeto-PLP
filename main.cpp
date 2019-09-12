@@ -327,7 +327,7 @@ void menu(){
         system("clear");
         select_numero_players();
     }else if(opcao==3){
-        string volta;
+        string a;
         cout << "CADA JOGADOR INICIA COM 5 CARTAS, ESSAS CARTAS SAO ESCOLHIDAS ALEATORIAMENTE DE UM BARALHO COM  34 CARTAS " << endl;
         cout << "DIFERENTES, APOS A FORMACAO DOS BARALHOS DE CADA JOGADOR, O JOGO E INICIADO E O PLAYER 1 SELECIONA " << endl;
         cout << "UMA CARTA DISPONIVEL EM SUA MAO A PARTIR DO [NUM] PARA ATACAR O OPONENTE, QUE PODE SER O PLAYER 2 OU O COMP" << endl;
@@ -337,7 +337,9 @@ void menu(){
         cout << "ALEM DAS CARTAS O ATAQUE PARA SER EFETIVADO DEPENDE DA SORTE DE CADA JOGADOR, O POKEMON A RECEBER" << endl;
         cout << "O ATAQUE TEM 50% DE CHANCE DE DESVIAR. NO FINAL DA BATTLE FASE SE A CARTA TIVER SOFRIDO UM DANO QUE " << endl;
         cout << "REDUSA SEU [HP] A 0, A CARTA É REMOVIDA DO JOGO. GANHA QUEM ELEMINAR TODAS AS CARTAS DE SEU OPONENTE." << endl;
-        cin >> volta;
+        cout << "----------------------------------------------------------------------------------------------------------" << endl;
+        cout <<"type something to go back: ";
+        cin >> a;
         system("clear");
         menu();
     }else if(opcao==4){
@@ -386,12 +388,9 @@ void batalha(Carta carta1, Carta carta2){
     system("clear");
     cout << carta1.nome + "/ ATK:" + std::to_string(carta1.ataque) + "/ HP:" + std::to_string(carta1.hp) << endl;
     chamaArt(carta1.nome);
-    //this_thread::sleep_for(chrono::milliseconds(2000));
-
     cout <<"-------------------------------------------VS-------------------------------------------"<<endl;
 
     cout << carta2.nome + "/ ATK:" + std::to_string(carta2.ataque) + "/ HP:" + std::to_string(carta2.hp) << endl;
-
     chamaArt(carta2.nome);
     this_thread::sleep_for(chrono::milliseconds(5000));
 }
@@ -767,19 +766,19 @@ void superEfetivo(){
 }
 
 void ataqueRealizado(){
-        cout << "                █████╗ ████████╗ █████╗  ██████╗ ██╗   ██╗███████╗                   "<<endl;
-        cout << "               ██╔══██╗╚══██╔══╝██╔══██╗██╔═══██╗██║   ██║██╔════╝                   "<<endl;
-        cout << "               ███████║   ██║   ███████║██║   ██║██║   ██║█████╗                     "<<endl;
-        cout << "               ██╔══██║   ██║   ██╔══██║██║▄▄ ██║██║   ██║██╔══╝                     "<<endl;
-        cout << "               ██║  ██║   ██║   ██║  ██║╚██████╔╝╚██████╔╝███████╗                   "<<endl;
-        cout << "               ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚══▀▀═╝  ╚═════╝ ╚══════╝                   "<<endl;
-        cout << "                                                                                     "<<endl;
-        cout << "        ██████╗ ███████╗ █████╗ ██╗     ██╗███████╗ █████╗ ██████╗  ██████╗            "<<endl;
-        cout << "        ██╔══██╗██╔════╝██╔══██╗██║     ██║╚══███╔╝██╔══██╗██╔══██╗██╔═══██╗           "<<endl;
-        cout << "        ██████╔╝█████╗  ███████║██║     ██║  ███╔╝ ███████║██║  ██║██║   ██║           "<<endl;
-        cout << "        ██╔══██╗██╔══╝  ██╔══██║██║     ██║ ███╔╝  ██╔══██║██║  ██║██║   ██║           "<<endl;
-        cout << "        ██║  ██║███████╗██║  ██║███████╗██║███████╗██║  ██║██████╔╝╚██████╔╝           "<<endl;
-        cout << "        ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝            "<<endl;
+        cout << "                 █████╗ ████████╗ █████╗  ██████╗ ██╗   ██╗███████╗                   "<<endl;
+        cout << "                ██╔══██╗╚══██╔══╝██╔══██╗██╔═══██╗██║   ██║██╔════╝                   "<<endl;
+        cout << "                ███████║   ██║   ███████║██║   ██║██║   ██║█████╗                     "<<endl;
+        cout << "                ██╔══██║   ██║   ██╔══██║██║▄▄ ██║██║   ██║██╔══╝                     "<<endl;
+        cout << "                ██║  ██║   ██║   ██║  ██║╚██████╔╝╚██████╔╝███████╗                   "<<endl;
+        cout << "                ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚══▀▀═╝  ╚═════╝ ╚══════╝                   "<<endl;
+        cout << "                                                                                      "<<endl;
+        cout << "        ██████╗ ███████╗ █████╗ ██╗     ██╗███████╗ █████╗ ██████╗  ██████╗           "<<endl;
+        cout << "        ██╔══██╗██╔════╝██╔══██╗██║     ██║╚══███╔╝██╔══██╗██╔══██╗██╔═══██╗          "<<endl;
+        cout << "        ██████╔╝█████╗  ███████║██║     ██║  ███╔╝ ███████║██║  ██║██║   ██║          "<<endl;
+        cout << "        ██╔══██╗██╔══╝  ██╔══██║██║     ██║ ███╔╝  ██╔══██║██║  ██║██║   ██║          "<<endl;
+        cout << "        ██║  ██║███████╗██║  ██║███████╗██║███████╗██║  ██║██████╔╝╚██████╔╝          "<<endl;
+        cout << "        ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝           "<<endl;
                                                                    
 }
 
