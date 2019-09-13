@@ -36,6 +36,7 @@ void creditos();
 void desvio();
 void ataqueRealizado();
 void superEfetivo();
+void foraDeCombate();
 
 void inicializar_players(){
     
@@ -131,7 +132,7 @@ void inicializa_cartas()
     baralho[8].num=18;
 
     baralho[9].tipo = "NORMAL    ";
-    baralho[9].nome = "Ratata    ";
+    baralho[9].nome = "Rattata   ";
     baralho[9].ataque = 25;
     baralho[9].hp = 40;
     baralho[9].condicao = true;
@@ -379,9 +380,8 @@ void menu(){
 
 void creditos()
 {
-    cout << endl << "DESENVOLVIDO POR: " << endl << "Pablwo Araujo" << endl <<"Natan Ataide" << endl << "Luiz Boas" << endl << "Almir Crispiniano" << endl << "Walisson Farias" << end1;
+    cout << endl << "DESENVOLVIDO POR: " << endl << "Pablwo Araujo" << endl <<"Natan Ataide" << endl << "Luiz Boas" << endl << "Almir Crispiniano" << endl << "Walisson Farias" << endl;
 }
-
 
 void layout(){
     if(vez%2==0){
@@ -402,7 +402,6 @@ void layout(){
         whoDef(1);
     }
 }
-
 
 void batalha(Carta carta1, Carta carta2){    
     system("clear");
@@ -434,127 +433,82 @@ Carta ataque(Carta carta1,Carta carta2){
         if (carta2.tipo == water || carta2.tipo == eletric || carta2.tipo == ground || carta2.tipo == grass){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }
     }else if(carta1.tipo == fire){
         if (carta2.tipo == fire || carta2.tipo == bug || carta2.tipo == grass){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }
     }else if(carta1.tipo == water){
         if (carta2.tipo == fire || carta2.tipo == ground || carta2.tipo == water){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }
     }else if(carta1.tipo == poison){
         if (carta2.tipo == fairy || carta2.tipo == grass || carta2.tipo == bug){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }
     }else if(carta1.tipo == bug){
         if (carta2.tipo == psychic || carta2.tipo == grass || carta2.tipo == ground){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }
     }else if(carta1.tipo == psychic){
         if (carta2.tipo == poison){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }       
     }else if(carta1.tipo == eletric){
         if (carta2.tipo == fly || carta2.tipo == water){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }
     }else if(carta1.tipo == ground){
         if (carta2.tipo == fire || carta2.tipo == normal || carta2.tipo == fly || carta2.tipo == poison || carta2.tipo == bug ){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }
     }else if(carta1.tipo == fly){
         if (carta2.tipo == bug || carta2.tipo == grass){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }
     }else if(carta1.tipo == fairy){
         if (carta2.tipo == bug){
             atCarta1 = atCarta1 + 10; 
             superEfetivo();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
-
         }else{
             ataqueRealizado();
-                    this_thread::sleep_for(chrono::milliseconds(2000));
-
         }
     }else{
         ataqueRealizado();
-                this_thread::sleep_for(chrono::milliseconds(2000));
-
     }      
+    this_thread::sleep_for(chrono::milliseconds(2000));
+
     carta2.hp = carta2.hp - atCarta1;
     if(carta2.hp<=0){
         carta2.hp=0;
-        morreu();
-                this_thread::sleep_for(chrono::milliseconds(2000));
+        foraDeCombate();
+        this_thread::sleep_for(chrono::milliseconds(3000));
     }
     return carta2;
 }
@@ -620,9 +574,14 @@ int selecionaCarta(bool play, Carta mao[]){
         cout <<"-------------------------------------------------------------------------------------------------------"<<endl;
 
         if(vez%2==0){
-            cout << "PLAYER1| [NUM] Selecione uma carta: " << endl;
+            cout << "PLAYER| [NUM] Selecione uma carta: " << endl;
         }else{
-            cout << "PLAYER2| [NUM] Selecione uma carta: " << endl;
+            if(play2==true){
+                cout << "PLAYER| [NUM] Selecione uma carta: " << endl;
+            }else{
+                cout << "PLAYER| [NUM] Selecione uma carta: " << endl;
+
+            }
         }
         cin >> numCarta;
 
@@ -646,7 +605,7 @@ int selecionaCarta(bool play, Carta mao[]){
     }
 }
 
-void atk(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
+void atacar(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
     int num1 = selecionaCarta(x,playerX);
     int num2 = selecionaCarta(y,playerY);
     system("clear");
@@ -737,9 +696,9 @@ int main(){
         mostraDeck(2, player2);
 
         if(vez%2==0){
-            atk(play1, player1, play2, player2);
+            atacar(play1, player1, play2, player2);
         }else{
-            atk(play2, player2, play1, player1);
+            atacar(play2, player2, play1, player1);
         }
         vez++;
         if (verificaStatus()!= 0){
@@ -747,9 +706,10 @@ int main(){
         }
         system("clear");
     }
+    system("clear");
     mostraDeck(1, player1);
     mostraDeck(2, player2);
-    this_thread::sleep_for(chrono::milliseconds(3000));
+    this_thread::sleep_for(chrono::milliseconds(2000));
 
     system("clear");
     if(verificaStatus()==1){
@@ -763,6 +723,7 @@ int main(){
     }
     return 0;
 }
+
 void superEfetivo(){
         cout << "                  █████╗ ████████╗ █████╗  ██████╗ ██╗   ██╗███████╗                 "<<endl;
         cout << "                 ██╔══██╗╚══██╔══╝██╔══██╗██╔═══██╗██║   ██║██╔════╝                 "<<endl;
@@ -834,20 +795,28 @@ void banner(){
         cout << "           ░░░░░░                                                     ░░░░░           "<<endl;            
 }
 
-void morreu(){
-    cout << "      ██████╗     ██████╗  ██████╗ ██╗  ██╗███████╗███╗   ███╗ ██████╗ ███╗   ██╗     "<<endl;
-    cout << "     ██╔═══██╗    ██╔══██╗██╔═══██╗██║ ██╔╝██╔════╝████╗ ████║██╔═══██╗████╗  ██║     "<<endl;
-    cout << "     ██║   ██║    ██████╔╝██║   ██║█████╔╝ █████╗  ██╔████╔██║██║   ██║██╔██╗ ██║     "<<endl;
-    cout << "     ██║   ██║    ██╔═══╝ ██║   ██║██╔═██╗ ██╔══╝  ██║╚██╔╝██║██║   ██║██║╚██╗██║     "<<endl;
-    cout << "     ╚██████╔╝    ██║     ╚██████╔╝██║  ██╗███████╗██║ ╚═╝ ██║╚██████╔╝██║ ╚████║     "<<endl;
-    cout << "      ╚═════╝     ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝     "<<endl;
-    cout << "                                                                                      "<<endl;
-    cout << "               ███╗   ███╗ ██████╗ ██████╗ ██████╗ ███████╗██╗   ██╗                  "<<end1;
-    cout << "               ████╗ ████║██╔═══██╗██╔══██╗██╔══██╗██╔════╝██║   ██║                  "<<end1;
-    cout << "               ██╔████╔██║██║   ██║██████╔╝██████╔╝█████╗  ██║   ██║                  "<<end1;
-    cout << "               ██║╚██╔╝██║██║   ██║██╔══██╗██╔══██╗██╔══╝  ██║   ██║                  "<<end1;
-    cout << "               ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║  ██║███████╗╚██████╔╝                  "<<end1;
-    cout << "               ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝                   "<<end1;
+void foraDeCombate(){
+        cout << "                                                                                      "<<endl;
+        cout << "           ██████╗  ██████╗ ██╗  ██╗███████╗███╗   ███╗ ██████╗ ███╗   ██╗            "<<endl;
+        cout << "           ██╔══██╗██╔═══██╗██║ ██╔╝██╔════╝████╗ ████║██╔═══██╗████╗  ██║            "<<endl;
+        cout << "           ██████╔╝██║   ██║█████╔╝ █████╗  ██╔████╔██║██║   ██║██╔██╗ ██║            "<<endl;
+        cout << "           ██╔═══╝ ██║   ██║██╔═██╗ ██╔══╝  ██║╚██╔╝██║██║   ██║██║╚██╗██║            "<<endl;
+        cout << "           ██║     ╚██████╔╝██║  ██╗███████╗██║ ╚═╝ ██║╚██████╔╝██║ ╚████║            "<<endl;
+        cout << "           ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝            "<<endl;
+        cout << "                                                                                      "<<endl;
+        cout << "               ███████╗ ██████╗ ██████╗  █████╗     ██████╗ ███████╗                  "<<endl;
+        cout << "               ██╔════╝██╔═══██╗██╔══██╗██╔══██╗    ██╔══██╗██╔════╝                  "<<endl;
+        cout << "               █████╗  ██║   ██║██████╔╝███████║    ██║  ██║█████╗                    "<<endl;
+        cout << "               ██╔══╝  ██║   ██║██╔══██╗██╔══██║    ██║  ██║██╔══╝                    "<<endl;
+        cout << "               ██║     ╚██████╔╝██║  ██║██║  ██║    ██████╔╝███████╗                  "<<endl;
+        cout << "               ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝    ╚═════╝ ╚══════╝                  "<<endl;
+        cout << "                                                                                      "<<endl;
+        cout << "            ██████╗ ██████╗ ███╗   ███╗██████╗  █████╗ ████████╗███████╗              "<<endl;
+        cout << "           ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██╔══██╗╚══██╔══╝██╔════╝              "<<endl;
+        cout << "           ██║     ██║   ██║██╔████╔██║██████╔╝███████║   ██║   █████╗                "<<endl;
+        cout << "           ██║     ██║   ██║██║╚██╔╝██║██╔══██╗██╔══██║   ██║   ██╔══╝                "<<endl;
+        cout << "           ╚██████╗╚██████╔╝██║ ╚═╝ ██║██████╔╝██║  ██║   ██║   ███████╗              "<<endl;
+        cout << "            ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝              "<<endl;
 }
 
 void whoWins(int player){
@@ -2029,6 +1998,5 @@ void chamaArt(string nome){
         cout << "                                 ▓███             ▓▓▓▌                                "<<endl;           
         cout << "                                ███▌            ▄▓▓▓▓▓▒                               "<<endl;           
         cout << "                               ▓██▓            ▐▓▓▓▐▓▓▓▓▒▄                            "<<endl; 
-
     }
 }
