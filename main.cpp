@@ -359,7 +359,7 @@ void menu(){
         cout << "|----------------------------------------------------------------------------------------------------|" << endl;
         cout << "                                                                                                      " << endl;
         cout << "                                                                                                      " << endl;
-        cout << " DIGITE 'EXIT' PARA VOLTAR A TELA INICIAL :                                                           " << endl;
+        cout << " DIGITE ALGO PARA VOLTAR A TELA INICIAL :                                                             " << endl;
         cin >> a;
         system("clear");
         menu();
@@ -567,21 +567,17 @@ int ia(Carta player[]){
     return j;
 }
 
-int selecionaCarta(bool play, Carta mao[]){
+int selecionaCartaATK(bool play, Carta mao[]){
     int numCarta = 0;
     int iReal1 = 0;
     if(play==true){
         cout <<"-------------------------------------------------------------------------------------------------------"<<endl;
 
         if(vez%2==0){
-            cout << "PLAYER| [NUM] Selecione uma carta: " << endl;
+            cout << "PLAYER 1| [NUM] Selecione uma carta: " << endl;
         }else{
-            if(play2==true){
-                cout << "PLAYER| [NUM] Selecione uma carta: " << endl;
-            }else{
-                cout << "PLAYER| [NUM] Selecione uma carta: " << endl;
-
-            }
+            cout << "PLAYER 2| [NUM] Selecione uma carta: " << endl;
+            
         }
         cin >> numCarta;
 
@@ -596,7 +592,7 @@ int selecionaCarta(bool play, Carta mao[]){
         }
         if(var==false){
             cout << "[NUM] INVALIDO, TENTE NOVAMENTE! " << endl;
-            selecionaCarta(play, mao);
+            selecionaCartaATK(play, mao);
         }else{
             return iReal1;
         }
@@ -604,10 +600,42 @@ int selecionaCarta(bool play, Carta mao[]){
         return ia(mao);
     }
 }
+int selecionaCartaDEF(bool play, Carta mao[]){
+    int numCarta = 0;
+    int iReal1 = 0;
+    if(play==true){
+        cout <<"-------------------------------------------------------------------------------------------------------"<<endl;
 
+        if(vez%2==0){
+            cout << "PLAYER 2| [NUM] Selecione uma carta: " << endl;
+        }else{
+            cout << "PLAYER 1| [NUM] Selecione uma carta: " << endl;
+            
+        }
+        cin >> numCarta;
+
+        bool var = false;
+        for(int i =0; i<=4; i++){
+            if(mao[i].num==numCarta){
+                if(mao[i].condicao==true){
+                    var= true;
+                    iReal1 = i;
+                }
+            }
+        }
+        if(var==false){
+            cout << "[NUM] INVALIDO, TENTE NOVAMENTE! " << endl;
+            selecionaCartaDEF(play, mao);
+        }else{
+            return iReal1;
+        }
+    }else{
+        return ia(mao);
+    }
+}
 void atacar(bool x ,Carta playerX[] ,bool y ,Carta playerY[]){
-    int num1 = selecionaCarta(x,playerX);
-    int num2 = selecionaCarta(y,playerY);
+    int num1 = selecionaCartaATK(x,playerX);
+    int num2 = selecionaCartaDEF(y,playerY);
     system("clear");
     batalha(playerX[num1], playerY[num2]);
 
