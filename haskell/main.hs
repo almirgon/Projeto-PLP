@@ -4,9 +4,9 @@ import System.Console.ANSI
 --METODO CRIADO SO PRA TESTE, PODE APAGAR
 criaCarta::Cards.Carta
 criaCarta = Cards.Carta{
-    Cards.nome = "pikachu",
-    Cards.tipo = "eletrico",
-    Cards.ataque = 150,
+    Cards.nome = "pikachu   ",
+    Cards.tipo = "ELECTRIC  ",
+    Cards.ataque = 90,
     Cards.vida = 100,
     Cards.num= 1}
 
@@ -73,17 +73,49 @@ selectCarta nome (a:as) = do
 --com a vida alterada
 ataque:: Cards.Carta -> Cards.Carta -> Cards.Carta 
 ataque carta1 carta2= Cards.Carta{
-    Cards.nome = Cards.nome carta1,
-    Cards.tipo = Cards.tipo carta1,
-    Cards.ataque = Cards.ataque carta1,
-    Cards.vida = validaAtaque (Cards.vida carta1) (Cards.ataque carta2)}
+    Cards.nome = Cards.nome carta2,
+    Cards.tipo = Cards.tipo carta2,
+    Cards.ataque = Cards.ataque carta2,
+    Cards.vida = validaAtaque (Cards.vida carta2) (Cards.ataque carta1) (vantagem (Cards.tipo carta1) (Cards.tipo carta2)), 
+    Cards.num = Cards.num carta2}
 
+vantagem:: String -> String -> Bool
+vantagem carta1 carta2= do
+    if(carta1 =="GRASS     ")&&(carta2=="WATER     " || carta2=="ELECTRIC  " || carta2=="GRASS     " || carta2=="GROUND    ") then
+        True
+    else if(carta1 =="FIRE      ")&&(carta2=="FIRE      " || carta2=="BUG       " || carta2=="GRASS     ") then
+        True
+    else if(carta1 =="WATER     ")&&(carta2=="FIRE      " || carta2=="GROUND    " || carta2=="WATER     ") then
+        True
+    else if(carta1 =="POISON    ")&&(carta2=="FAIRY     " || carta2=="GRASS     " || carta2=="BUG       ") then
+        True
+    else if(carta1 =="BUG       ")&&(carta2=="PSYCHIC   " || carta2=="GRASS     " || carta2=="GROUND    ") then
+        True
+    else if(carta1 =="PSYCHIC   ")&&(carta2=="POISON    ") then
+        True
+    else if(carta1 =="ELECTRIC  ")&&(carta2=="FLY       " || carta2=="WATER     ")then
+        True
+    else if(carta1 =="GROUND    ")&&(carta2=="FIRE      " || carta2=="NORMAL    " || carta2=="FLY       " || carta2=="POISON    " || carta2=="BUG       ") then
+        True
+    else if(carta1 =="FLY       ")&&(carta2=="GRASS     " || carta2=="BUG       ") then
+        True
+    else if(carta1 =="FAIRY     ")&&(carta2=="BUG       ") then
+        True
+    else
+        False
+        
 --Impede que a carta atacada tenha pontos de vida negativos ao sofrer um ataque maior que sua defesa
-validaAtaque:: Int -> Int -> Int
-validaAtaque a b
-    |c < 0 = 0
-    |otherwise = c
-    where c = a-b
+validaAtaque:: Int -> Int -> Bool -> Int 
+validaAtaque a b c = do
+    if(c)then
+        if(a-b-10<0)then
+            0
+        else 
+            a-b-10
+    else if(a-b<0) then
+            0
+        else
+            a-b
 
 --Recebe uma carta e um array de cartas, esse metodo retorna o array com a carta modificada
 atualizaArray:: Cards.Carta -> [Cards.Carta] -> [Cards.Carta]
