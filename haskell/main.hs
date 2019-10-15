@@ -139,6 +139,37 @@ atualizaArray carta (a:as) = do
     else do
         [a] ++ atualizaArray carta as
 
+-- Funcao que exibe o modo de jogo, se o usuario digita 1 = singleplayer, se 2 = multiplayer
+
+exibe_modo_jogo :: Bool -> Bool -> IO((Bool, Bool))
+exibe_modo_jogo pl pl2 = do
+    putStrLn("-------------------");
+    putStrLn(" [1] - SINGLEPLAYER  ");
+    putStrLn(" [2] - MULTIPLAYER  ");
+    putStrLn("-------------------");
+    putStrLn("Escolha uma opcao: ");
+    opcao <- readLn :: IO Int
+    if opcao/=1 && opcao /=2 then
+        -- print "OPCAO INVALIDA! TENTE NOVAMENTE."
+        return (False, False)
+    else
+        -- print (select_numero_players pl pl2 opcao)
+        return (select_numero_players pl pl2 opcao)
+
+-- Essa funcao altera os valores boleanos de player1 e player2 dependendo da opcao informada pelo usuario
+
+select_numero_players :: Bool -> Bool -> Int -> (Bool, Bool)
+select_numero_players pl pl2 op
+    |op==1 = (True, False)
+    |op==2 = (True, True)
+    |otherwise = (False, False)
+
+-- Testando os 2 metodos
+teste pl pl2 = do
+    tupla <- (exibe_modo_jogo True False)
+    pl = fst tupla
+    pl2 = snd tupla
+
 -- funcao princial, executa o loop do jogo até que um jogador perca suas cartas
 jogo:: [Cards.Carta] -> [Cards.Carta] -> Int -> IO()
 jogo [] b c = do
