@@ -53,21 +53,35 @@ remove (a:as) = do
 
 -- Verifica se a carta existe dentro do Array, 
 --MODIFICAR ESSE METODO, ELE FUNCIONA COM O NOME DA CARTA MAS DEVE FUNCIONAR COM O (NUM)
-aCartaExiste:: String -> [Cards.Carta] -> Bool
-aCartaExiste nome [] = False
-aCartaExiste nome (a:as) = do
-    if (Cards.nome a)==nome then
-        True
-    else
-        aCartaExiste nome as
+--aCartaExiste:: String -> [Cards.Carta] -> Bool
+--aCartaExiste nome [] = False
+--aCartaExiste nome (a:as) = do
+    --if (Cards.nome a)==nome then
+        --True
+    --else
+        --aCartaExiste nome as
+
+-- Metodo responsavel por retorno um bool ao comparar se o num do carta existe dentro do array(uso de compressão para pegar apenas os numeros) de cartas 
+cartaExiste:: Int -> [Cards.Carta] -> Bool
+cartaExiste num lista = num `elem` [x.num | x <- lista]
 
 --Este metodo utiliza o nome da carta (string) mas deve receber o id da carta (NUM) porfavor alterar
-selectCarta:: String -> [Cards.Carta] -> Cards.Carta
-selectCarta nome (a:as) = do
-    if(Cards.nome a)==nome then
-        a
-    else
-        selectCarta nome as
+--selectCarta:: String -> [Cards.Carta] -> Cards.Carta
+--selectCarta nome (a:as) = do
+    --if(Cards.nome a)==nome then
+       -- a
+    --else
+      --  selectCarta nome as
+
+-- Metodo que primeiro verifica se a carta existe, se sim, retorna o primeiro elemento da lista(Função head) contendo a carta
+-- Se não retorna a função null(deve haver um tratamento no refatoramento do código para o susuario escolher outra carta ao tentar selecionar uma que n existe)
+select:: Int -> [Cards.carta] -> Cards.carta
+select numero lista
+ |cartaExiste numero lista = saida
+ |otherwise = null
+ where saida = head ([x| x <- lista, x.num = numero])
+
+
 
 --Recebe duas cartas, uma carta recebera o ataque e a outra vai realizar o ataque, retornando a nova carta
 --com a vida alterada
