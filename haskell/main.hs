@@ -1,3 +1,4 @@
+import System.IO
 import qualified Cards as Cards
 import System.Console.ANSI
 
@@ -17,6 +18,7 @@ main = do
     let mao2 = mao
     putStrLn (imprimeCartas mao1 0)
     jogo mao mao 0
+    
  
 
 --METODO CRIADO SO PRA TESTE, PODE APAGAR 
@@ -207,3 +209,89 @@ jogo a b c = do
         cartaDefende <- getLine
         jogo (remove a) b (c+1)
         -- FAZER TODO O PROCESSO DO IF AQUI DENTRO
+
+main::IO()
+main = do 
+    menuOpcao 
+    creditos
+    let play1 = bool
+    let play2 = bool 
+
+creditos:: IO()
+creditos = do
+    putStrLn "DESENVOLVIDO POR: " 
+    putStrLn "Pablwo Araujo" 
+    putStrLn "Natan Ataide" 
+    putStrLn "Luiz Boas" 
+    putStrLn "Almir Crispiniano" 
+    putStrLn "Walisson Farias" 
+
+
+menuOpcao:: IO()
+menuOpcao = do
+    --Chamar o banner do pixelArt aqui
+    putStrLn "----------------------------------------------------------------------------------" 
+    putStrLn "[1] - INICIAR JOGO " 
+    putStrLn "[2] - MODO DE JOGO " 
+    putStrLn "[3] - INSTRUCOES   " 
+    putStrLn "[4] - CREDITOS     " 
+    putStrLn "----------------------------------------------------------------------------------" 
+    opcao <- getLine
+    if (read opcao) == 4 then {creditos} else do opcaoEscolhida (read opcao)
+
+opcaoEscolhida :: Int -> IO()
+opcaoEscolhida opcao
+    | opcao == 1 = do {menuOpcaoUm}
+    | opcao == 2 = do {MenuOpcaoDois}
+    | opcao == 3 = do {MenuOpcaoTres}
+    | otherwise =  do {putStrLn "OPCAO INVALIDA, TENTE NOVAMENTE..." ; menuOpcao}
+
+menuOpcaoUm :: IO()
+menuOpcaoUm = do
+    play1 = true
+    play2 = false
+
+menuOpcaoDois :: IO()
+menuOpcaoDois = do
+    --clear
+    select_numero_players
+
+menuOpcaoTres :: IO()
+menuOpcaoTres = do
+    putStrLn "INSTRUÇOES:                                                                                           " 
+    putStrLn "                                                                                                      " 
+    putStrLn "CADA JOGADOR INICIA COM 5 CARTAS, ESSAS CARTAS SAO ESCOLHIDAS ALEATORIAMENTE DE UM DECK COM 34 CARTAS " 
+    putStrLn "DIFERENTES, APOS A FORMACAO DOS DERKS DE CADA JOGADOR, O JOGO E INICIADO E O PLAYER 1 SELECIONA       " 
+    putStrLn "UMA CARTA DISPONIVEL EM SUA MAO A PARTIR DO [NUM] PARA ATACAR O OPONENTE, QUE PODE SER O PLAYER 2 OU  " 
+    putStrLn "O COMP QUE POR SUA VEZ FAZ O MESMO PROCESSO ESCOLHENDO A CARTA PARA RECEBER O ATAQUE. DANDO INICIO    " 
+    putStrLn "A BATTLE FASE, CADA POKEMON TEM UM [TIPO] ASSOCIADO QUE INTERFERE DIRETAMENTE NO ATAQUE, UMA VEZ QUE  " 
+    putStrLn "CERTOS TIPOS TEM VANTAGENS SOBRE OUTROS, FAZENDO COM QUE O [ATK] DA CARTA TENHA UM BUFFER ADCIONAL,   " 
+    putStrLn "ALEM DAS CARTAS O ATAQUE PARA SER EFETIVADO DEPENDE DA SORTE DE CADA JOGADOR, O POKEMON A RECEBER     " 
+    putStrLn "O ATAQUE TEM 50% DE CHANCE DE DESVIAR. NO FINAL DA BATTLE FASE SE A CARTA TIVER SOFRIDO UM DANO QUE   " 
+    putStrLn "REDUZA SEU HP A 0, A CARTA É REMOVIDA DO JOGO. GANHA QUEM ELEMINAR TODAS AS CARTAS DE SEU OPONENTE.   " 
+    putStrLn "                                                                                                      " 
+    putStrLn "|----------------------------------------------------------------------------------------------------|" 
+    putStrLn "|                                    VANTAGENS D0 TIPO D0 POKEMON:                                   |"
+    putStrLn "|----------------------------------------------------------------------------------------------------|" 
+    putStrLn "|                  TIPO                          |                       VANTAGENS                   |" 
+    putStrLn "|------------------------------------------------|---------------------------------------------------|" 
+    putStrLn "|                 GRASS                          |            WATER, ELETRIC, GROUND, GRASS          |" 
+    putStrLn "|                 WATER                          |                  FIRE, GROND, WATER               |" 
+    putStrLn "|                 FAIRY                          |                         BUG                       |" 
+    putStrLn "|                 POISON                         |                  FAIRY, GRASS, BUG                |" 
+    putStrLn "|                 BUG                            |                PSYCHIC, GRASS, GROUND             |" 
+    putStrLn "|                 PSYCHIC                        |                        POISON                     |" 
+    putStrLn "|                 ELETRIC                        |                      FLY, WATER                   |" 
+    putStrLn "|                 GROUND                         |            FIRE, NORMAL, FLY, POISON, BUG         |" 
+    putStrLn "|                 FLY                            |                       BUG, GRASS                  |" 
+    putStrLn "|                 FIRE                           |                    FIRE, BUG, GRASS               |" 
+    putStrLn "|                 NORMAL                         |                    NENHUMA VANTAGEM               |" 
+    putStrLn "|----------------------------------------------------------------------------------------------------|" 
+    putStrLn "                                                                                                      " 
+    putStrLn "                                                                                                      " 
+    putStrLn " DIGITE {1} PARA VOLTAR A TELA INICIAL :                                                              " 
+
+    opcao <- getLine
+    if (read opcao) == 1 then do {menuOpcao}
+
+
