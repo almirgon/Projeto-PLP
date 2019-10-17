@@ -17,7 +17,7 @@ setup True = do
     let lista_1 = take 5 embaralhadas
     let lista_2 = take 5 (reverse embaralhadas)
     putStrLn "a";
-    --MODO SINGLEPLAY
+    jogo lista_1 lista_2 0 False
 setup False = do
     let cartas = Utils.iniciarCartas
     embaralhadas <- shuffleM cartas
@@ -186,8 +186,7 @@ jogo a b c False = do
         cartaAtaca <- getLine
         let num1 = (read cartaAtaca:: Int)
         putStrLn $ ("COMP| [NUM] Selecione uma carta: ")
-        --cartaDefende <- getLine
-        --let num2 = (read cartaDefende:: Int)
+        let num2 = iaDefende b 0 0
         if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
             let carta1 = selectCarta num1 a
             let carta2 = selectCarta num2 b
@@ -202,8 +201,7 @@ jogo a b c False = do
     else do
         putStrLn $ ("Comp ATK / Player 1 DEF")
         putStrLn $ ("COMP| [NUM] Selecione uma carta: ")
-        --cartaAtaca <- getLine
-        --let num1 = (read cartaAtaca:: Int)
+        let num1 = iaAtaque b 0 0
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaDefende <- getLine
         let num2 = (read cartaDefende:: Int)
@@ -220,10 +218,22 @@ jogo a b c False = do
             w <- getLine
             jogo (remove a) b (c) False
 
---Modo 1 = ATK / Modo 2 = DEF
-ia:: [Cards.Carta] -> Bool -> String
-ia cartas True = do
-    
+iaAtaque:: [Cards.Carta] -> Int -> Int -> Int
+iaAtaque [] ataque num = num
+iaAtaque (a:as) ataque num = do
+    if(Cards.ataque a)> ataque then do
+        iaAtaque as (Cards.ataque a) (Cards.num a)
+    else 
+        iaAtaque as ataque num
+
+iaDefende:: [Cards.Carta] -> Int -> Int -> Int
+iaDefende [] vida num = num
+iaDefende (a:as) vida num = do
+    if(Cards.vida a)> vida then do
+        iaDefende as (Cards.vida a) (Cards.num a)
+    else 
+        iaDefende as vida num
+
 
 creditos:: IO()
 creditos = do

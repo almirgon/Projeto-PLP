@@ -1,14 +1,4 @@
-main::IO()
-main = do
-    superEfetivo 
-    ataqueRealizado
-    desvio
-    banner
-    foraDeCombate
-    whoWins 6
-    whoDef 3
-    whoAtk 2
-    chamaArt "Squirtle  "
+module PikelArt where
 
 superEfetivo :: IO()
 superEfetivo = do

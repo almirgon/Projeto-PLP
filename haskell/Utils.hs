@@ -24,3 +24,4 @@ mapeiaCarta indexPokemon lista =
   Cards.ataque = read((lista) !! 2),
   Cards.vida = read((lista) !! 3),
   Cards.num =  read((lista) !! 4)}
+  
