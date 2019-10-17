@@ -124,6 +124,13 @@ atualizaArray carta (a:as) = do
     else do
         [a] ++ atualizaArray carta as
 
+imprimePokemon:: Cards.Carta -> Cards.Carta -> IO()
+imprimePokemon a b = do
+    putStrLn ((Cards.nome a)++ "/ATK: " ++ show(Cards.ataque a) ++ " /VIDA: " ++ show(Cards.vida a))
+    Utils.chamaArt (Cards.nome a)
+    putStrLn ((Cards.nome b)++ "/ATK: " ++ show(Cards.ataque b) ++ " /VIDA: " ++ show(Cards.vida b))
+    Utils.chamaArt (Cards.nome b)
+
 jogo:: [Cards.Carta] -> [Cards.Carta] -> Int -> Bool -> IO()
 jogo [] b c True = do
     Utils.whoWins 2
@@ -152,6 +159,9 @@ jogo a b c True = do
         if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
             let carta1 = selectCarta num1 a
             let carta2 = selectCarta num2 b
+            imprimePokemon carta1 carta2
+            threadDelay 2000000
+            clearScreen
             let ataq = ataque carta1 carta2
             let array = atualizaArray ataq b
             jogo a (remove array) (c+1) True
