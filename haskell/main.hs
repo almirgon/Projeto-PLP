@@ -23,7 +23,7 @@ setup False = do
     embaralhadas <- shuffleM cartas
     let lista_1 = take 5 embaralhadas
     let lista_2 = take 5 (reverse embaralhadas)
-    jogo lista_1 lista_2 0
+    jogo lista_1 lista_2 0 True
 
 
 imprimeCartas:: [Cards.Carta] -> Int -> String
@@ -124,12 +124,12 @@ atualizaArray carta (a:as) = do
     else do
         [a] ++ atualizaArray carta as
 
-jogo:: [Cards.Carta] -> [Cards.Carta] -> Int -> IO()
-jogo [] b c = do
+jogo:: [Cards.Carta] -> [Cards.Carta] -> Int -> Bool -> IO()
+jogo [] b c d = do
     putStrLn ("JOGADOR 2 venceu")
-jogo a [] c = do
+jogo a [] c d = do
     putStrLn ("JOGADOR 1 venceu")
-jogo a b c = do
+jogo a b c True = do
     clearScreen
     putStrLn("PLAYER 1")
     putStrLn(imprimeCartas a 0)
@@ -148,12 +148,12 @@ jogo a b c = do
             let carta2 = selectCarta num2 b
             let ataq = ataque carta1 carta2
             let array = atualizaArray ataq b
-            jogo a (remove array) (c+1)
+            jogo a (remove array) (c+1) True
         else do
             clearScreen
             putStrLn("Erro ao selecionar a carta, tente novamente")
             w <- getLine
-            jogo a (remove b) (c)
+            jogo a (remove b) (c) True
     else do
         putStrLn $ ("Player 2 ATK / Player 1 DEF")
         putStrLn $ ("PLAYER 2| [NUM] Selecione uma carta: ")
@@ -168,12 +168,62 @@ jogo a b c = do
             let carta2 = selectCarta num2 a
             let ataq = ataque carta1 carta2
             let array = atualizaArray ataq a
-            jogo (remove array) b (c+1)
+            jogo (remove array) b (c+1) True
         else do
             clearScreen
             putStrLn("Erro ao selecionar a carta, tente novamente")
             w <- getLine
-            jogo (remove a) b (c)
+            jogo (remove a) b (c) True
+jogo a b c False = do
+    clearScreen
+    putStrLn("PLAYER 1")
+    putStrLn(imprimeCartas a 0)
+    putStrLn("COMP")
+    putStrLn(imprimeCartas b 0)
+    if (mod c 2 ==0) then do
+        putStrLn $ ("Player 1 ATK / Comp 2 DEF")
+        putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
+        cartaAtaca <- getLine
+        let num1 = (read cartaAtaca:: Int)
+        putStrLn $ ("COMP| [NUM] Selecione uma carta: ")
+        --cartaDefende <- getLine
+        --let num2 = (read cartaDefende:: Int)
+        if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
+            let carta1 = selectCarta num1 a
+            let carta2 = selectCarta num2 b
+            let ataq = ataque carta1 carta2
+            let array = atualizaArray ataq b
+            jogo a (remove array) (c+1) False
+        else do
+            clearScreen
+            putStrLn("Erro ao selecionar a carta, tente novamente")
+            w <- getLine
+            jogo a (remove b) (c) False
+    else do
+        putStrLn $ ("Comp ATK / Player 1 DEF")
+        putStrLn $ ("COMP| [NUM] Selecione uma carta: ")
+        --cartaAtaca <- getLine
+        --let num1 = (read cartaAtaca:: Int)
+        putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
+        cartaDefende <- getLine
+        let num2 = (read cartaDefende:: Int)
+        
+        if(aCartaExiste num1 b)&&(aCartaExiste num2 a) then do
+            let carta1 = selectCarta num1 b
+            let carta2 = selectCarta num2 a
+            let ataq = ataque carta1 carta2
+            let array = atualizaArray ataq a
+            jogo (remove array) b (c+1) False
+        else do
+            clearScreen
+            putStrLn("Erro ao selecionar a carta, tente novamente")
+            w <- getLine
+            jogo (remove a) b (c) False
+
+--Modo 1 = ATK / Modo 2 = DEF
+ia:: [Cards.Carta] -> Bool -> String
+ia cartas True = do
+    
 
 creditos:: IO()
 creditos = do
