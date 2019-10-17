@@ -1,59 +1,57 @@
-import System.IO
 import qualified Cards as Cards
-import System.Console.ANSI
-import Control.Concurrent
+import qualified Utils as Utils
 
---METODO CRIADO SO PRA TESTE, PODE APAGAR
-criaCarta::Cards.Carta
-criaCarta = Cards.Carta{
-    Cards.nome = "pikachu   ",
-    Cards.tipo = "ELECTRIC  ",
-    Cards.ataque = 90,
-    Cards.vida = 100,
-    Cards.num= 1}
+import Control.Concurrent
+import System.Console.ANSI
+import System.Random.Shuffle
+import System.IO
 
 main::IO()
 main = do
-    menuOpcao "0" 
-    let mao1 = mao
-    let mao2 = mao
-    jogo mao mao 0
+    menuOpcao "0"
+
+    let cartas = Utils.iniciarCartas
+    embaralhadas <- shuffleM cartas
+
+    let lista_1 = take 5 embaralhadas
+    let lista_2 = take 5 (reverse embaralhadas)
+    jogo lista_1 lista_2 0
     
 setup:: Bool ->IO()
 setup True = do
-    let mao1 = mao 
-    let mao2 = mao
+    let cartas = Utils.iniciarCartas
+    embaralhadas <- shuffleM cartas
+
+    let lista_1 = take 5 embaralhadas
+    let lista_2 = take 5 (reverse embaralhadas)
     putStrLn "a"
     threadDelay 2000000
     putStrLn "a"
 setup False = do
-    let mao1 = mao 
-    let mao2 = mao
+    let cartas = Utils.iniciarCartas
+    embaralhadas <- shuffleM cartas
+
+    let lista_1 = take 5 embaralhadas
+    let lista_2 = take 5 (reverse embaralhadas)
     putStrLn "b"
     threadDelay 2000000
     putStrLn "b"
 
---METODO CRIADO SO PRA TESTE, PODE APAGAR 
-mao:: [Cards.Carta]
-mao = [criaCarta, criaCarta , criaCarta, criaCarta, criaCarta]
-
---Imprime as cartas do jogador, 
---AJEITAR FORMATACAO DA FUNCAO
 imprimeCartas:: [Cards.Carta] -> Int -> String
 imprimeCartas [] b = ""
-imprimeCartas (a:as) 0 = imprimeAtributos (a:as) 0 ++ "\n" ++ imprimeCartas(a:as) 1
-imprimeCartas (a:as) 1 = imprimeAtributos (a:as) 1 ++ "\n" ++ imprimeCartas(a:as) 2
-imprimeCartas (a:as) 2 = imprimeAtributos (a:as) 2 ++ "\n" ++ imprimeCartas(a:as) 3
-imprimeCartas (a:as) 3 = imprimeAtributos (a:as) 3 ++ "\n" ++ imprimeCartas(a:as) 4
-imprimeCartas (a:as) 4 = imprimeAtributos (a:as) 4 
+imprimeCartas (a:as) 0 = imprimeAtributos (a:as) 0 ++ "|" ++ "\n" ++ imprimeCartas(a:as) 1 
+imprimeCartas (a:as) 1 = imprimeAtributos (a:as) 1 ++ "|" ++"\n" ++ imprimeCartas(a:as) 2
+imprimeCartas (a:as) 2 = imprimeAtributos (a:as) 2 ++ "|" ++"\n" ++ imprimeCartas(a:as) 3
+imprimeCartas (a:as) 3 = imprimeAtributos (a:as) 3 ++ "|" ++"\n" ++ imprimeCartas(a:as) 4
+imprimeCartas (a:as) 4 = imprimeAtributos (a:as) 4 ++ "|" 
 
 imprimeAtributos:: [Cards.Carta] -> Int -> String
 imprimeAtributos [] b = ""
-imprimeAtributos (a:as) 0 = Cards.nome a ++ imprimeAtributos as 0
-imprimeAtributos (a:as) 1 = Cards.tipo a ++ imprimeAtributos as 1
-imprimeAtributos (a:as) 2 = show(Cards.ataque a) ++ imprimeAtributos as 2
-imprimeAtributos (a:as) 3 = show(Cards.vida a) ++ imprimeAtributos as 3
-imprimeAtributos (a:as) 4 = show(Cards.num a) ++ imprimeAtributos as 4
+imprimeAtributos (a:as) 0 = "|Nome: " ++ Cards.nome a ++ imprimeAtributos as 0
+imprimeAtributos (a:as) 1 = "|Tipo: " ++ Cards.tipo a ++ imprimeAtributos as 1
+imprimeAtributos (a:as) 2 = "|ATK : " ++ show(Cards.ataque a) ++ "        " ++ imprimeAtributos as 2
+imprimeAtributos (a:as) 3 = "|VIDA: " ++ show(Cards.vida a) ++ "        " ++ imprimeAtributos as 3
+imprimeAtributos (a:as) 4 = "|NUM : " ++ show(Cards.num a) ++ "        " ++ imprimeAtributos as 4
 
 --Recebe um array de cartas e elimina do array a carta que tiver com 0 de vida
 remove:: [Cards.Carta] -> [Cards.Carta]
@@ -184,10 +182,22 @@ jogo a b c = do
         putStrLn $ ("Player 2 ATK / Player 1 DEF")
         putStrLn $ ("PLAYER 2| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
+        let num1 = (read cartaAtaca:: Int)
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaDefende <- getLine
-        jogo (remove a) b (c+1)
-        -- FAZER TODO O PROCESSO DO IF AQUI DENTRO
+        let num2 = (read cartaDefende:: Int)
+        
+        if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
+            let carta1 = selectCarta num1 a
+            let carta2 = selectCarta num2 b
+            let ataq = ataque carta1 carta2
+            let array = atualizaArray ataq b
+            jogo a (remove array) (c+1)
+        else do
+            clearScreen
+            putStrLn("Erro ao selecionar a carta, tente novamente")
+            w <- getLine
+            jogo a (remove b) (c)
 
 creditos:: IO()
 creditos = do
