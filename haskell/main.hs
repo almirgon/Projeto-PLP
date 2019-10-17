@@ -3,12 +3,14 @@ import qualified Utils as Utils
 
 import Control.Concurrent
 import System.Console.ANSI
-import System.Random
 import System.Random.Shuffle
 import System.IO
+import System.Random
 
 main::IO()
 main = do
+    Utils.banner
+    threadDelay 2000000
     menuOpcao "0"
 
 setup:: Bool ->IO()
@@ -17,7 +19,6 @@ setup True = do
     embaralhadas <- shuffleM cartas
     let lista_1 = take 5 embaralhadas
     let lista_2 = take 5 (reverse embaralhadas)
-    putStrLn "a";
     jogo lista_1 lista_2 0 False
 setup False = do
     let cartas = Utils.iniciarCartas
@@ -29,19 +30,23 @@ setup False = do
 
 imprimeCartas:: [Cards.Carta] -> Int -> String
 imprimeCartas [] b = ""
-imprimeCartas (a:as) 0 = imprimeAtributos (a:as) 0 ++ "|" ++ "\n" ++ imprimeCartas(a:as) 1 
-imprimeCartas (a:as) 1 = imprimeAtributos (a:as) 1 ++ "|" ++"\n" ++ imprimeCartas(a:as) 2
-imprimeCartas (a:as) 2 = imprimeAtributos (a:as) 2 ++ "|" ++"\n" ++ imprimeCartas(a:as) 3
-imprimeCartas (a:as) 3 = imprimeAtributos (a:as) 3 ++ "|" ++"\n" ++ imprimeCartas(a:as) 4
-imprimeCartas (a:as) 4 = imprimeAtributos (a:as) 4 ++ "|" 
+imprimeCartas (a:as) 0 = "         " ++ imprimeAtributos (a:as) 0 ++ "-" ++ "\n" ++ imprimeCartas(a:as) 1
+imprimeCartas (a:as) 1 = "         " ++ imprimeAtributos (a:as) 1 ++ "|" ++ "\n" ++ imprimeCartas(a:as) 2 
+imprimeCartas (a:as) 2 = "         " ++ imprimeAtributos (a:as) 2 ++ "|" ++"\n" ++ imprimeCartas(a:as) 3
+imprimeCartas (a:as) 3 = "         " ++ imprimeAtributos (a:as) 3 ++ "|" ++"\n" ++ imprimeCartas(a:as) 4
+imprimeCartas (a:as) 4 = "         " ++ imprimeAtributos (a:as) 4 ++ "|" ++"\n" ++ imprimeCartas(a:as) 5
+imprimeCartas (a:as) 5 = "         " ++ imprimeAtributos (a:as) 5 ++ "|" ++"\n" ++ imprimeCartas(a:as) 6
+imprimeCartas (a:as) 6 = "         " ++ imprimeAtributos (a:as) 6 ++ "-"
 
 imprimeAtributos:: [Cards.Carta] -> Int -> String
 imprimeAtributos [] b = ""
-imprimeAtributos (a:as) 0 = "|Nome: " ++ Cards.nome a ++ imprimeAtributos as 0
-imprimeAtributos (a:as) 1 = "|Tipo: " ++ Cards.tipo a ++ imprimeAtributos as 1
-imprimeAtributos (a:as) 2 = "|ATK : " ++ show(Cards.ataque a) ++ ajuste (Cards.ataque a) ++ imprimeAtributos as 2
-imprimeAtributos (a:as) 3 = "|VIDA: " ++ show(Cards.vida a) ++ ajuste (Cards.vida a) ++ imprimeAtributos as 3
-imprimeAtributos (a:as) 4 = "|NUM : " ++ show(Cards.num a) ++ ajuste (Cards.num a) ++ imprimeAtributos as 4
+imprimeAtributos (a:as) 0 = "-----------------" ++ imprimeAtributos as 0
+imprimeAtributos (a:as) 1 = "|Nome: " ++ Cards.nome a ++ imprimeAtributos as 1
+imprimeAtributos (a:as) 2 = "|Tipo: " ++ Cards.tipo a ++ imprimeAtributos as 2
+imprimeAtributos (a:as) 3 = "|ATK : " ++ show(Cards.ataque a) ++ ajuste (Cards.ataque a) ++ imprimeAtributos as 3
+imprimeAtributos (a:as) 4 = "|VIDA: " ++ show(Cards.vida a) ++ ajuste (Cards.vida a) ++ imprimeAtributos as 4
+imprimeAtributos (a:as) 5 = "|NUM : " ++ show(Cards.num a) ++ ajuste (Cards.num a) ++ imprimeAtributos as 5
+imprimeAtributos (a:as) 6 = "-----------------" ++ imprimeAtributos as 6
 
 ajuste:: Int-> String
 ajuste n = do
@@ -74,7 +79,8 @@ selectCarta num (a:as) = do
         selectCarta num as
 
 ataque:: Cards.Carta -> Cards.Carta -> Cards.Carta 
-ataque carta1 carta2= Cards.Carta{
+ataque carta1 carta2= do
+    Cards.Carta{
     Cards.nome = Cards.nome carta2,
     Cards.tipo = Cards.tipo carta2,
     Cards.ataque = Cards.ataque carta2,
@@ -109,7 +115,7 @@ vantagem carta1 carta2= do
 validaAtaque:: Int -> Int -> Bool -> Int 
 validaAtaque a b c = do
     if(c)then
-        if(a-b-10<0)then
+        if(a-b-10<0)then do
             0
         else 
             a-b-10
@@ -129,8 +135,12 @@ imprimePokemon:: Cards.Carta -> Cards.Carta -> IO()
 imprimePokemon a b = do
     putStrLn ((Cards.nome a)++ "/ATK: " ++ show(Cards.ataque a) ++ " /VIDA: " ++ show(Cards.vida a))
     Utils.chamaArt (Cards.nome a)
+    putStrLn "\n -------------------------------------------VS------------------------------------------- \n"
     putStrLn ((Cards.nome b)++ "/ATK: " ++ show(Cards.ataque b) ++ " /VIDA: " ++ show(Cards.vida b))
     Utils.chamaArt (Cards.nome b)
+
+moeda:: IO Int
+moeda = randomRIO(0,1)
 
 jogo:: [Cards.Carta] -> [Cards.Carta] -> Int -> Bool -> IO()
 jogo [] b c True = do
@@ -143,6 +153,7 @@ jogo a b c True = do
     if (mod c 2 ==0) then do
         clearScreen
         Utils.whoAtk 1
+        putStrLn "\n -------------------------------------------VS------------------------------------------- \n"
         Utils.whoDef 2
         threadDelay 2000000
         clearScreen
@@ -163,20 +174,43 @@ jogo a b c True = do
             imprimePokemon carta1 carta2
             threadDelay 2000000
             clearScreen
-            let ataq = ataque carta1 carta2
-            imprimePokemon carta1 ataq
-            threadDelay 2000000
-            clearScreen
-            let array = atualizaArray ataq b
-            jogo a (remove array) (c+1) True
+            sorte <- moeda
+            if(sorte==0) then do
+                let ataq = ataque carta1 carta2
+                if(vantagem (Cards.tipo carta1) (Cards.tipo carta2)) then do
+                    Utils.superEfetivo
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                else do
+                    Utils.ataqueRealizado
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                imprimePokemon carta1 ataq
+                threadDelay 2000000
+                clearScreen
+                let array = atualizaArray ataq b
+                if (Cards.vida ataq)==0 then do
+                    Utils.foraDeCombate
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                else do
+                    putStrLn ""
+
+                jogo a (remove array) (c+1) True
+            else do
+                Utils.desvio
+                threadDelay 2000000
+                jogo a b (c+1) True
         else do
-            clearScreen
-            putStrLn("Erro ao selecionar a carta, tente novamente")
-            w <- getLine
+            tenteNovamente
             jogo a (remove b) (c) True
     else do
         clearScreen
         Utils.whoAtk 2
+        putStrLn "\n -------------------------------------------VS------------------------------------------- \n"
         Utils.whoDef 1
         threadDelay 2000000
         clearScreen
@@ -197,21 +231,45 @@ jogo a b c True = do
             imprimePokemon carta1 carta2
             threadDelay 2000000
             clearScreen
-            let ataq = ataque carta1 carta2
-            imprimePokemon carta1 ataq
-            threadDelay 2000000
-            clearScreen
-            let array = atualizaArray ataq a
-            jogo (remove array) b (c+1) True
+            sorte <- moeda
+            if(sorte==0) then do
+                let ataq = ataque carta1 carta2
+                if(vantagem (Cards.tipo carta1) (Cards.tipo carta2)) then do
+                    Utils.superEfetivo
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                else do
+                    Utils.ataqueRealizado
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                imprimePokemon carta1 ataq
+                threadDelay 2000000
+                clearScreen
+                let array = atualizaArray ataq a
+                if (Cards.vida ataq)==0 then do
+                    Utils.foraDeCombate
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                else do
+                    putStrLn ""
+                jogo (remove array) b (c+1) True
+
+            else do
+                Utils.desvio
+                threadDelay 2000000
+                jogo a b (c+1) True
+
         else do
-            clearScreen
-            putStrLn("Erro ao selecionar a carta, tente novamente")
-            w <- getLine
+            tenteNovamente
             jogo (remove a) b (c) True
 jogo a b c False = do
     if (mod c 2 ==0) then do
         clearScreen
         Utils.whoAtk 1
+        putStrLn "\n -------------------------------------------VS------------------------------------------- \n"
         Utils.whoDef 4
         threadDelay 2000000
         clearScreen
@@ -223,7 +281,6 @@ jogo a b c False = do
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
         let num1 = (read cartaAtaca:: Int)
-        putStrLn $ ("COMP| [NUM] Selecione uma carta: ")
         let num2 = iaDefende b 0 0
         if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
             let carta1 = selectCarta num1 a
@@ -231,20 +288,43 @@ jogo a b c False = do
             imprimePokemon carta1 carta2
             threadDelay 2000000
             clearScreen
-            let ataq = ataque carta1 carta2
-            imprimePokemon carta1 ataq
-            threadDelay 2000000
-            clearScreen
-            let array = atualizaArray ataq b
-            jogo a (remove array) (c+1) False
+            sorte <- moeda
+            if(sorte==0) then do
+                let ataq = ataque carta1 carta2
+                if(vantagem (Cards.tipo carta1) (Cards.tipo carta2)) then do
+                    Utils.superEfetivo
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                else do
+                    Utils.ataqueRealizado
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                imprimePokemon carta1 ataq
+                threadDelay 2000000
+                clearScreen
+                let array = atualizaArray ataq b
+                if (Cards.vida ataq)==0 then do
+                    Utils.foraDeCombate
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                else do
+                    putStrLn ""
+
+                jogo a (remove array) (c+1) False
+            else do
+                Utils.desvio
+                threadDelay 2000000
+                jogo a b (c+1) False
         else do
-            clearScreen
-            putStrLn("Erro ao selecionar a carta, tente novamente")
-            w <- getLine
+            tenteNovamente
             jogo a (remove b) (c) False
     else do
         clearScreen
         Utils.whoAtk 4
+        putStrLn "\n -------------------------------------------VS------------------------------------------- \n"
         Utils.whoDef 1
         threadDelay 2000000
         clearScreen
@@ -253,7 +333,6 @@ jogo a b c False = do
         putStrLn("COMP")
         putStrLn(imprimeCartas b 0) 
         putStrLn $ ("Comp ATK / Player 1 DEF")
-        putStrLn $ ("COMP| [NUM] Selecione uma carta: ")
         let num1 = iaAtaque b 0 0
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaDefende <- getLine
@@ -265,17 +344,45 @@ jogo a b c False = do
             imprimePokemon carta1 carta2
             threadDelay 2000000
             clearScreen
-            let ataq = ataque carta1 carta2
-            imprimePokemon carta1 ataq
-            threadDelay 2000000
-            clearScreen
-            let array = atualizaArray ataq a
-            jogo (remove array) b (c+1) False
+            sorte <- moeda
+            if(sorte==0) then do
+                let ataq = ataque carta1 carta2
+                if(vantagem (Cards.tipo carta1) (Cards.tipo carta2)) then do
+                    Utils.superEfetivo
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                else do
+                    Utils.ataqueRealizado
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                imprimePokemon carta1 ataq
+                threadDelay 2000000
+                clearScreen
+                let array = atualizaArray ataq a
+                if (Cards.vida ataq)==0 then do
+                    Utils.foraDeCombate
+                    threadDelay 2000000
+                    clearScreen
+                    putStrLn ""
+                else do
+                    putStrLn ""
+                jogo (remove array) b (c+1) False
+            else do
+                Utils.desvio
+                threadDelay 2000000
+                jogo a b (c+1) False
+
         else do
-            clearScreen
-            putStrLn("Erro ao selecionar a carta, tente novamente")
-            w <- getLine
+            tenteNovamente
             jogo (remove a) b (c) False
+
+tenteNovamente:: IO()
+tenteNovamente = do
+    clearScreen
+    putStrLn("Erro ao selecionar a carta, tente novamente")
+    threadDelay 2000000
 
 iaAtaque:: [Cards.Carta] -> Int -> Int -> Int
 iaAtaque [] ataque num = num
@@ -315,6 +422,7 @@ voltar = do
     menuOpcao "0"
 
 menuOpcao:: String-> IO()
+menuOpcao "1" = setup True
 menuOpcao "2" = selecionaModo 
 menuOpcao "3" = instrucoes
 menuOpcao "4" = creditos
@@ -379,7 +487,3 @@ instrucoes = do
     putStrLn "|                 NORMAL                         |                    NENHUMA VANTAGEM               |" 
     putStrLn "|----------------------------------------------------------------------------------------------------|" 
     voltar
-
--- Função que gera um número aleatório entre 1 e 10000
-myRandom :: IO Int
-myRandom = randomRIO (fromInteger(1),fromInteger(10000))
