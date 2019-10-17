@@ -3,6 +3,7 @@ import qualified Utils as Utils
 
 import Control.Concurrent
 import System.Console.ANSI
+import System.Random
 import System.Random.Shuffle
 import System.IO
 
@@ -378,3 +379,7 @@ instrucoes = do
     putStrLn "|                 NORMAL                         |                    NENHUMA VANTAGEM               |" 
     putStrLn "|----------------------------------------------------------------------------------------------------|" 
     voltar
+
+-- Função que gera um número aleatório entre 1 e 10000
+myRandom :: IO Int
+myRandom = randomRIO (fromInteger(1),fromInteger(10000))
