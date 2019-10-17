@@ -191,6 +191,9 @@ jogo a b c True = do
         if(aCartaExiste num1 b)&&(aCartaExiste num2 a) then do
             let carta1 = selectCarta num1 b
             let carta2 = selectCarta num2 a
+            imprimePokemon carta1 carta2
+            threadDelay 2000000
+            clearScreen
             let ataq = ataque carta1 carta2
             let array = atualizaArray ataq a
             jogo (remove array) b (c+1) True
@@ -219,6 +222,9 @@ jogo a b c False = do
         if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
             let carta1 = selectCarta num1 a
             let carta2 = selectCarta num2 b
+            imprimePokemon carta1 carta2
+            threadDelay 2000000
+            clearScreen
             let ataq = ataque carta1 carta2
             let array = atualizaArray ataq b
             jogo a (remove array) (c+1) False
@@ -247,6 +253,9 @@ jogo a b c False = do
         if(aCartaExiste num1 b)&&(aCartaExiste num2 a) then do
             let carta1 = selectCarta num1 b
             let carta2 = selectCarta num2 a
+            imprimePokemon carta1 carta2
+            threadDelay 2000000
+            clearScreen
             let ataq = ataque carta1 carta2
             let array = atualizaArray ataq a
             jogo (remove array) b (c+1) False
