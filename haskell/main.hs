@@ -125,21 +125,23 @@ atualizaArray carta (a:as) = do
         [a] ++ atualizaArray carta as
 
 jogo:: [Cards.Carta] -> [Cards.Carta] -> Int -> Bool -> IO()
-jogo [] b c d = do
-    Utils.WhoWins 2
+jogo [] b c True = do
+    Utils.whoWins 2
+jogo [] b c False = do
+    Utils.whoWins 3
 jogo a [] c d = do
-    Utils.WhoWins 1
+    Utils.whoWins 1
 jogo a b c True = do
-    clearScreen
-    putStrLn("PLAYER 1")
-    putStrLn(imprimeCartas a 0)
-    putStrLn("PLAYER 2")
-    putStrLn(imprimeCartas b 0)
     if (mod c 2 ==0) then do
+        clearScreen
         Utils.whoAtk 1
         Utils.whoDef 2
         threadDelay 2000000
-        clearScreen 
+        clearScreen
+        putStrLn("PLAYER 1")
+        putStrLn(imprimeCartas a 0)
+        putStrLn("PLAYER 2")
+        putStrLn(imprimeCartas b 0)
         putStrLn $ ("Player 1 ATK / Player 2 DEF")
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
@@ -159,10 +161,15 @@ jogo a b c True = do
             w <- getLine
             jogo a (remove b) (c) True
     else do
+        clearScreen
         Utils.whoAtk 2
         Utils.whoDef 1
         threadDelay 2000000
-        clearScreen 
+        clearScreen
+        putStrLn("PLAYER 1")
+        putStrLn(imprimeCartas a 0)
+        putStrLn("PLAYER 2")
+        putStrLn(imprimeCartas b 0)
         putStrLn $ ("Player 2 ATK / Player 1 DEF")
         putStrLn $ ("PLAYER 2| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
@@ -183,22 +190,22 @@ jogo a b c True = do
             w <- getLine
             jogo (remove a) b (c) True
 jogo a b c False = do
-    clearScreen
-    putStrLn("PLAYER 1")
-    putStrLn(imprimeCartas a 0)
-    putStrLn("COMP")
-    putStrLn(imprimeCartas b 0)
     if (mod c 2 ==0) then do
+        clearScreen
         Utils.whoAtk 1
         Utils.whoDef 4
         threadDelay 2000000
-        clearScreen 
+        clearScreen
+        putStrLn("PLAYER 1")
+        putStrLn(imprimeCartas a 0)
+        putStrLn("COMP")
+        putStrLn(imprimeCartas b 0)
         putStrLn $ ("Player 1 ATK / Comp 2 DEF")
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
         let num1 = (read cartaAtaca:: Int)
         putStrLn $ ("COMP| [NUM] Selecione uma carta: ")
-        let num2 = iaDefende b 0 0mai
+        let num2 = iaDefende b 0 0
         if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
             let carta1 = selectCarta num1 a
             let carta2 = selectCarta num2 b
@@ -211,10 +218,15 @@ jogo a b c False = do
             w <- getLine
             jogo a (remove b) (c) False
     else do
+        clearScreen
         Utils.whoAtk 4
         Utils.whoDef 1
         threadDelay 2000000
-        clearScreen 
+        clearScreen
+        putStrLn("PLAYER 1")
+        putStrLn(imprimeCartas a 0)
+        putStrLn("COMP")
+        putStrLn(imprimeCartas b 0) 
         putStrLn $ ("Comp ATK / Player 1 DEF")
         putStrLn $ ("COMP| [NUM] Selecione uma carta: ")
         let num1 = iaAtaque b 0 0
