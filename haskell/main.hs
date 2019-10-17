@@ -1,6 +1,7 @@
 import System.IO
 import qualified Cards as Cards
 import System.Console.ANSI
+import Control.Concurrent
 
 --METODO CRIADO SO PRA TESTE, PODE APAGAR
 criaCarta::Cards.Carta
@@ -13,13 +14,24 @@ criaCarta = Cards.Carta{
 
 main::IO()
 main = do
-    putStrLn("OI")
+    menuOpcao "0" 
     let mao1 = mao
     let mao2 = mao
-    putStrLn (imprimeCartas mao1 0)
     jogo mao mao 0
     
- 
+setup:: Bool ->IO()
+setup True = do
+    let mao1 = mao 
+    let mao2 = mao
+    putStrLn "a"
+    threadDelay 2000000
+    putStrLn "a"
+setup False = do
+    let mao1 = mao 
+    let mao2 = mao
+    putStrLn "b"
+    threadDelay 2000000
+    putStrLn "b"
 
 --METODO CRIADO SO PRA TESTE, PODE APAGAR 
 mao:: [Cards.Carta]
@@ -43,7 +55,6 @@ imprimeAtributos (a:as) 2 = show(Cards.ataque a) ++ imprimeAtributos as 2
 imprimeAtributos (a:as) 3 = show(Cards.vida a) ++ imprimeAtributos as 3
 imprimeAtributos (a:as) 4 = show(Cards.num a) ++ imprimeAtributos as 4
 
-
 --Recebe um array de cartas e elimina do array a carta que tiver com 0 de vida
 remove:: [Cards.Carta] -> [Cards.Carta]
 remove [] = []
@@ -54,36 +65,32 @@ remove (a:as) = do
         [a] ++ remove as
 
 -- Verifica se a carta existe dentro do Array, 
---MODIFICAR ESSE METODO, ELE FUNCIONA COM O NOME DA CARTA MAS DEVE FUNCIONAR COM O (NUM)
---aCartaExiste:: String -> [Cards.Carta] -> Bool
---aCartaExiste nome [] = False
---aCartaExiste nome (a:as) = do
-    --if (Cards.nome a)==nome then
-        --True
-    --else
-        --aCartaExiste nome as
+aCartaExiste:: Int -> [Cards.Carta] -> Bool
+aCartaExiste num [] = False
+aCartaExiste num (a:as) = do
+    if (Cards.num a)==num then
+        True
+    else
+        aCartaExiste num as
 
 -- Metodo responsavel por retorno um bool ao comparar se o num do carta existe dentro do array(uso de compressão para pegar apenas os numeros) de cartas 
-cartaExiste:: Int -> [Cards.Carta] -> Bool
-cartaExiste num lista = num `elem` [x.num | x <- lista]
+--cartaExiste:: Int -> [Cards.Carta] -> Bool
+--cartaExiste num lista = num `elem` [x.num | x <- lista]
 
---Este metodo utiliza o nome da carta (string) mas deve receber o id da carta (NUM) porfavor alterar
---selectCarta:: String -> [Cards.Carta] -> Cards.Carta
---selectCarta nome (a:as) = do
-    --if(Cards.nome a)==nome then
-       -- a
-    --else
-      --  selectCarta nome as
+selectCarta:: Int -> [Cards.Carta] -> Cards.Carta
+selectCarta num (a:as) = do
+    if(Cards.num a)==num then
+        a
+    else
+        selectCarta num as
 
 -- Metodo que primeiro verifica se a carta existe, se sim, retorna o primeiro elemento da lista(Função head) contendo a carta
 -- Se não retorna a função null(deve haver um tratamento no refatoramento do código para o susuario escolher outra carta ao tentar selecionar uma que n existe)
-select:: Int -> [Cards.carta] -> Cards.carta
-select numero lista
- |cartaExiste numero lista = saida
- |otherwise = null
- where saida = head ([x| x <- lista, x.num = numero])
-
-
+-- select:: Int -> [Cards.Carta] -> Cards.Carta
+-- select numero lista
+--  |cartaExiste numero lista = saida
+--  |otherwise = null
+--  where saida = head ([x| x <- lista, x.num = numero])
 
 --Recebe duas cartas, uma carta recebera o ataque e a outra vai realizar o ataque, retornando a nova carta
 --com a vida alterada
@@ -141,37 +148,6 @@ atualizaArray carta (a:as) = do
     else do
         [a] ++ atualizaArray carta as
 
--- Funcao que exibe o modo de jogo, se o usuario digita 1 = singleplayer, se 2 = multiplayer
-
-exibe_modo_jogo :: Bool -> Bool -> IO((Bool, Bool))
-exibe_modo_jogo pl pl2 = do
-    putStrLn("-------------------");
-    putStrLn(" [1] - SINGLEPLAYER  ");
-    putStrLn(" [2] - MULTIPLAYER  ");
-    putStrLn("-------------------");
-    putStrLn("Escolha uma opcao: ");
-    opcao <- readLn :: IO Int
-    if opcao/=1 && opcao /=2 then
-        -- print "OPCAO INVALIDA! TENTE NOVAMENTE."
-        return (False, False)
-    else
-        -- print (select_numero_players pl pl2 opcao)
-        return (select_numero_players pl pl2 opcao)
-
--- Essa funcao altera os valores boleanos de player1 e player2 dependendo da opcao informada pelo usuario
-
-select_numero_players :: Bool -> Bool -> Int -> (Bool, Bool)
-select_numero_players pl pl2 op
-    |op==1 = (True, False)
-    |op==2 = (True, True)
-    |otherwise = (False, False)
-
--- Testando os 2 metodos
-teste pl pl2 = do
-    tupla <- (exibe_modo_jogo True False)
-    pl = fst tupla
-    pl2 = snd tupla
-
 -- funcao princial, executa o loop do jogo até que um jogador perca suas cartas
 jogo:: [Cards.Carta] -> [Cards.Carta] -> Int -> IO()
 jogo [] b c = do
@@ -188,11 +164,14 @@ jogo a b c = do
         putStrLn $ ("Player 1 ATK / Player 2 DEF")
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
+        let num1 = (read cartaAtaca:: Int)
         putStrLn $ ("PLAYER 2| [NUM] Selecione uma carta: ")
         cartaDefende <- getLine
-        if(aCartaExiste cartaAtaca a)&&(aCartaExiste cartaDefende b) then do
-            let carta1 = selectCarta cartaAtaca a
-            let carta2 = selectCarta cartaDefende b
+        let num2 = (read cartaDefende:: Int)
+
+        if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
+            let carta1 = selectCarta num1 a
+            let carta2 = selectCarta num2 b
             let ataq = ataque carta1 carta2
             let array = atualizaArray ataq b
             jogo a (remove array) (c+1)
@@ -210,26 +189,33 @@ jogo a b c = do
         jogo (remove a) b (c+1)
         -- FAZER TODO O PROCESSO DO IF AQUI DENTRO
 
-main::IO()
-main = do 
-    menuOpcao 
-    creditos
-    let play1 = bool
-    let play2 = bool 
-
 creditos:: IO()
 creditos = do
+    clearScreen
     putStrLn "DESENVOLVIDO POR: " 
     putStrLn "Pablwo Araujo" 
     putStrLn "Natan Ataide" 
     putStrLn "Luiz Boas" 
     putStrLn "Almir Crispiniano" 
     putStrLn "Walisson Farias" 
+    threadDelay 2000000
+    voltar
+
+voltar:: IO()
+voltar = do
+    putStrLn ""
+    putStrLn "Digite alguma coisa para voltar"
+    a<- getLine
+    putStrLn ""
+    menuOpcao "0"
 
 
-menuOpcao:: IO()
-menuOpcao = do
-    --Chamar o banner do pixelArt aqui
+menuOpcao:: String-> IO()
+menuOpcao "2" = selecionaModo 
+menuOpcao "3" = instrucoes
+menuOpcao "4" = creditos
+menuOpcao n = do
+    clearScreen
     putStrLn "----------------------------------------------------------------------------------" 
     putStrLn "[1] - INICIAR JOGO " 
     putStrLn "[2] - MODO DE JOGO " 
@@ -237,27 +223,28 @@ menuOpcao = do
     putStrLn "[4] - CREDITOS     " 
     putStrLn "----------------------------------------------------------------------------------" 
     opcao <- getLine
-    if (read opcao) == 4 then {creditos} else do opcaoEscolhida (read opcao)
+    menuOpcao opcao 
 
-opcaoEscolhida :: Int -> IO()
-opcaoEscolhida opcao
-    | opcao == 1 = do {menuOpcaoUm}
-    | opcao == 2 = do {MenuOpcaoDois}
-    | opcao == 3 = do {MenuOpcaoTres}
-    | otherwise =  do {putStrLn "OPCAO INVALIDA, TENTE NOVAMENTE..." ; menuOpcao}
+-- Funcao que exibe o modo de jogo, se o usuario digita 1 = singleplayer, se 2 = multiplayer
+selecionaModo :: IO()
+selecionaModo = do
+    clearScreen
+    putStrLn("--------------------");
+    putStrLn(" [1] - SINGLEPLAYER ");
+    putStrLn(" [2] - MULTIPLAYER  ");
+    putStrLn("--------------------");
+    putStrLn("Escolha uma opcao:  ");
+    opcao <- getLine
+    if (opcao=="1" ) then do
+        setup True
+    else if (opcao == "2") then do
+        setup False
+        else 
+            selecionaModo
 
-menuOpcaoUm :: IO()
-menuOpcaoUm = do
-    play1 = true
-    play2 = false
-
-menuOpcaoDois :: IO()
-menuOpcaoDois = do
-    --clear
-    select_numero_players
-
-menuOpcaoTres :: IO()
-menuOpcaoTres = do
+instrucoes :: IO()
+instrucoes = do
+    clearScreen
     putStrLn "INSTRUÇOES:                                                                                           " 
     putStrLn "                                                                                                      " 
     putStrLn "CADA JOGADOR INICIA COM 5 CARTAS, ESSAS CARTAS SAO ESCOLHIDAS ALEATORIAMENTE DE UM DECK COM 34 CARTAS " 
@@ -287,11 +274,4 @@ menuOpcaoTres = do
     putStrLn "|                 FIRE                           |                    FIRE, BUG, GRASS               |" 
     putStrLn "|                 NORMAL                         |                    NENHUMA VANTAGEM               |" 
     putStrLn "|----------------------------------------------------------------------------------------------------|" 
-    putStrLn "                                                                                                      " 
-    putStrLn "                                                                                                      " 
-    putStrLn " DIGITE {1} PARA VOLTAR A TELA INICIAL :                                                              " 
-
-    opcao <- getLine
-    if (read opcao) == 1 then do {menuOpcao}
-
-
+    voltar
