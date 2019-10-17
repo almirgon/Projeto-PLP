@@ -10,32 +10,21 @@ main::IO()
 main = do
     menuOpcao "0"
 
-    let cartas = Utils.iniciarCartas
-    embaralhadas <- shuffleM cartas
-
-    let lista_1 = take 5 embaralhadas
-    let lista_2 = take 5 (reverse embaralhadas)
-    jogo lista_1 lista_2 0
-    
 setup:: Bool ->IO()
 setup True = do
     let cartas = Utils.iniciarCartas
     embaralhadas <- shuffleM cartas
-
     let lista_1 = take 5 embaralhadas
     let lista_2 = take 5 (reverse embaralhadas)
-    putStrLn "a"
-    threadDelay 2000000
-    putStrLn "a"
+    putStrLn "a";
+    --MODO SINGLEPLAY
 setup False = do
     let cartas = Utils.iniciarCartas
     embaralhadas <- shuffleM cartas
-
     let lista_1 = take 5 embaralhadas
     let lista_2 = take 5 (reverse embaralhadas)
-    putStrLn "b"
-    threadDelay 2000000
-    putStrLn "b"
+    jogo lista_1 lista_2 0
+
 
 imprimeCartas:: [Cards.Carta] -> Int -> String
 imprimeCartas [] b = ""
@@ -49,18 +38,17 @@ imprimeAtributos:: [Cards.Carta] -> Int -> String
 imprimeAtributos [] b = ""
 imprimeAtributos (a:as) 0 = "|Nome: " ++ Cards.nome a ++ imprimeAtributos as 0
 imprimeAtributos (a:as) 1 = "|Tipo: " ++ Cards.tipo a ++ imprimeAtributos as 1
-imprimeAtributos (a:as) 2 = "|ATK : " ++ show(Cards.ataque a) ++ conserta (Cards.ataque a) ++ imprimeAtributos as 2
-imprimeAtributos (a:as) 3 = "|VIDA: " ++ show(Cards.vida a) ++ conserta (Cards.vida a) ++ imprimeAtributos as 3
-imprimeAtributos (a:as) 4 = "|NUM : " ++ show(Cards.num a) ++ conserta (Cards.num a) ++ imprimeAtributos as 4
+imprimeAtributos (a:as) 2 = "|ATK : " ++ show(Cards.ataque a) ++ ajuste (Cards.ataque a) ++ imprimeAtributos as 2
+imprimeAtributos (a:as) 3 = "|VIDA: " ++ show(Cards.vida a) ++ ajuste (Cards.vida a) ++ imprimeAtributos as 3
+imprimeAtributos (a:as) 4 = "|NUM : " ++ show(Cards.num a) ++ ajuste (Cards.num a) ++ imprimeAtributos as 4
 
-conserta:: Int-> String
-conserta n = do
+ajuste:: Int-> String
+ajuste n = do
     if(n<10)then
         "         "
     else 
         "        "
 
---Recebe um array de cartas e elimina do array a carta que tiver com 0 de vida
 remove:: [Cards.Carta] -> [Cards.Carta]
 remove [] = []
 remove (a:as) = do
@@ -69,7 +57,6 @@ remove (a:as) = do
     else 
         [a] ++ remove as
 
--- Verifica se a carta existe dentro do Array, 
 aCartaExiste:: Int -> [Cards.Carta] -> Bool
 aCartaExiste num [] = False
 aCartaExiste num (a:as) = do
@@ -78,10 +65,6 @@ aCartaExiste num (a:as) = do
     else
         aCartaExiste num as
 
--- Metodo responsavel por retorno um bool ao comparar se o num do carta existe dentro do array(uso de compressão para pegar apenas os numeros) de cartas 
---cartaExiste:: Int -> [Cards.Carta] -> Bool
---cartaExiste num lista = num `elem` [x.num | x <- lista]
-
 selectCarta:: Int -> [Cards.Carta] -> Cards.Carta
 selectCarta num (a:as) = do
     if(Cards.num a)==num then
@@ -89,16 +72,6 @@ selectCarta num (a:as) = do
     else
         selectCarta num as
 
--- Metodo que primeiro verifica se a carta existe, se sim, retorna o primeiro elemento da lista(Função head) contendo a carta
--- Se não retorna a função null(deve haver um tratamento no refatoramento do código para o susuario escolher outra carta ao tentar selecionar uma que n existe)
--- select:: Int -> [Cards.Carta] -> Cards.Carta
--- select numero lista
---  |cartaExiste numero lista = saida
---  |otherwise = null
---  where saida = head ([x| x <- lista, x.num = numero])
-
---Recebe duas cartas, uma carta recebera o ataque e a outra vai realizar o ataque, retornando a nova carta
---com a vida alterada
 ataque:: Cards.Carta -> Cards.Carta -> Cards.Carta 
 ataque carta1 carta2= Cards.Carta{
     Cards.nome = Cards.nome carta2,
@@ -132,7 +105,6 @@ vantagem carta1 carta2= do
     else
         False
         
---Impede que a carta atacada tenha pontos de vida negativos ao sofrer um ataque maior que sua defesa
 validaAtaque:: Int -> Int -> Bool -> Int 
 validaAtaque a b c = do
     if(c)then
@@ -145,7 +117,6 @@ validaAtaque a b c = do
         else
             a-b
 
---Recebe uma carta e um array de cartas, esse metodo retorna o array com a carta modificada
 atualizaArray:: Cards.Carta -> [Cards.Carta] -> [Cards.Carta]
 atualizaArray carta (a:as) = do
     if(Cards.nome a)==(Cards.nome carta) then
@@ -153,7 +124,6 @@ atualizaArray carta (a:as) = do
     else do
         [a] ++ atualizaArray carta as
 
--- funcao princial, executa o loop do jogo até que um jogador perca suas cartas
 jogo:: [Cards.Carta] -> [Cards.Carta] -> Int -> IO()
 jogo [] b c = do
     putStrLn ("JOGADOR 2 venceu")
@@ -173,7 +143,6 @@ jogo a b c = do
         putStrLn $ ("PLAYER 2| [NUM] Selecione uma carta: ")
         cartaDefende <- getLine
         let num2 = (read cartaDefende:: Int)
-
         if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
             let carta1 = selectCarta num1 a
             let carta2 = selectCarta num2 b
@@ -226,7 +195,6 @@ voltar = do
     putStrLn ""
     menuOpcao "0"
 
-
 menuOpcao:: String-> IO()
 menuOpcao "2" = selecionaModo 
 menuOpcao "3" = instrucoes
@@ -242,7 +210,6 @@ menuOpcao n = do
     opcao <- getLine
     menuOpcao opcao 
 
--- Funcao que exibe o modo de jogo, se o usuario digita 1 = singleplayer, se 2 = multiplayer
 selecionaModo :: IO()
 selecionaModo = do
     clearScreen
