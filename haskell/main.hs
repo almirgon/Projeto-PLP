@@ -163,6 +163,9 @@ jogo a b c True = do
             threadDelay 2000000
             clearScreen
             let ataq = ataque carta1 carta2
+            imprimePokemon carta1 ataq
+            threadDelay 2000000
+            clearScreen
             let array = atualizaArray ataq b
             jogo a (remove array) (c+1) True
         else do
@@ -187,7 +190,6 @@ jogo a b c True = do
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaDefende <- getLine
         let num2 = (read cartaDefende:: Int)
-        
         if(aCartaExiste num1 b)&&(aCartaExiste num2 a) then do
             let carta1 = selectCarta num1 b
             let carta2 = selectCarta num2 a
@@ -195,6 +197,9 @@ jogo a b c True = do
             threadDelay 2000000
             clearScreen
             let ataq = ataque carta1 carta2
+            imprimePokemon carta1 ataq
+            threadDelay 2000000
+            clearScreen
             let array = atualizaArray ataq a
             jogo (remove array) b (c+1) True
         else do
@@ -226,6 +231,9 @@ jogo a b c False = do
             threadDelay 2000000
             clearScreen
             let ataq = ataque carta1 carta2
+            imprimePokemon carta1 ataq
+            threadDelay 2000000
+            clearScreen
             let array = atualizaArray ataq b
             jogo a (remove array) (c+1) False
         else do
@@ -257,6 +265,9 @@ jogo a b c False = do
             threadDelay 2000000
             clearScreen
             let ataq = ataque carta1 carta2
+            imprimePokemon carta1 ataq
+            threadDelay 2000000
+            clearScreen
             let array = atualizaArray ataq a
             jogo (remove array) b (c+1) False
         else do
