@@ -49,9 +49,16 @@ imprimeAtributos:: [Cards.Carta] -> Int -> String
 imprimeAtributos [] b = ""
 imprimeAtributos (a:as) 0 = "|Nome: " ++ Cards.nome a ++ imprimeAtributos as 0
 imprimeAtributos (a:as) 1 = "|Tipo: " ++ Cards.tipo a ++ imprimeAtributos as 1
-imprimeAtributos (a:as) 2 = "|ATK : " ++ show(Cards.ataque a) ++ "        " ++ imprimeAtributos as 2
-imprimeAtributos (a:as) 3 = "|VIDA: " ++ show(Cards.vida a) ++ "        " ++ imprimeAtributos as 3
-imprimeAtributos (a:as) 4 = "|NUM : " ++ show(Cards.num a) ++ "        " ++ imprimeAtributos as 4
+imprimeAtributos (a:as) 2 = "|ATK : " ++ show(Cards.ataque a) ++ conserta (Cards.ataque a) ++ imprimeAtributos as 2
+imprimeAtributos (a:as) 3 = "|VIDA: " ++ show(Cards.vida a) ++ conserta (Cards.vida a) ++ imprimeAtributos as 3
+imprimeAtributos (a:as) 4 = "|NUM : " ++ show(Cards.num a) ++ conserta (Cards.num a) ++ imprimeAtributos as 4
+
+conserta:: Int-> String
+conserta n = do
+    if(n<10)then
+        "         "
+    else 
+        "        "
 
 --Recebe um array de cartas e elimina do array a carta que tiver com 0 de vida
 remove:: [Cards.Carta] -> [Cards.Carta]
@@ -187,17 +194,17 @@ jogo a b c = do
         cartaDefende <- getLine
         let num2 = (read cartaDefende:: Int)
         
-        if(aCartaExiste num1 a)&&(aCartaExiste num2 b) then do
-            let carta1 = selectCarta num1 a
-            let carta2 = selectCarta num2 b
+        if(aCartaExiste num1 b)&&(aCartaExiste num2 a) then do
+            let carta1 = selectCarta num1 b
+            let carta2 = selectCarta num2 a
             let ataq = ataque carta1 carta2
-            let array = atualizaArray ataq b
-            jogo a (remove array) (c+1)
+            let array = atualizaArray ataq a
+            jogo (remove array) b (c+1)
         else do
             clearScreen
             putStrLn("Erro ao selecionar a carta, tente novamente")
             w <- getLine
-            jogo a (remove b) (c)
+            jogo (remove a) b (c)
 
 creditos:: IO()
 creditos = do
