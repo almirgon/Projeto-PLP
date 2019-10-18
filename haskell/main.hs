@@ -284,7 +284,7 @@ jogo a b c False = do
         clearScreen
         mostraBaralho a b False
 
-        putStrLn $ ("Player 1 ATK / Comp 2 DEF")
+        putStrLn $ ("Player 1 ATK / Comp DEF")
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
         let num1 = (read cartaAtaca:: Int)
