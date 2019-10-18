@@ -27,7 +27,6 @@ setup False = do
     let lista_2 = take 5 (reverse embaralhadas)
     jogo lista_1 lista_2 0 True
 
-
 imprimeCartas:: [Cards.Carta] -> Int -> String
 imprimeCartas [] b = ""
 imprimeCartas (a:as) 0 = "         " ++ imprimeAtributos (a:as) 0 ++ "-" ++ "\n" ++ imprimeCartas(a:as) 1
@@ -133,6 +132,7 @@ atualizaArray carta (a:as) = do
 
 imprimePokemon:: Cards.Carta -> Cards.Carta -> IO()
 imprimePokemon a b = do
+    clearScreen
     putStrLn ((Cards.nome a)++ "/ATK: " ++ show(Cards.ataque a) ++ " /VIDA: " ++ show(Cards.vida a))
     Utils.chamaArt (Cards.nome a)
     putStrLn "\n -------------------------------------------VS------------------------------------------- \n"
@@ -141,6 +141,19 @@ imprimePokemon a b = do
 
 moeda:: IO Int
 moeda = randomRIO(0,1)
+
+mostraBaralho:: [Cards.Carta] -> [Cards.Carta] -> Bool -> IO()
+mostraBaralho a b c= do
+    if(c) then do
+        putStrLn("PLAYER 1:")
+        putStrLn(imprimeCartas a 0)
+        putStrLn("PLAYER 2:")
+        putStrLn(imprimeCartas b 0)
+    else do
+        putStrLn("PLAYER 1:")
+        putStrLn(imprimeCartas a 0)
+        putStrLn("COMP:")
+        putStrLn(imprimeCartas b 0)
 
 jogo:: [Cards.Carta] -> [Cards.Carta] -> Int -> Bool -> IO()
 jogo [] b c True = do
@@ -157,10 +170,8 @@ jogo a b c True = do
         Utils.whoDef 2
         threadDelay 2000000
         clearScreen
-        putStrLn("PLAYER 1")
-        putStrLn(imprimeCartas a 0)
-        putStrLn("PLAYER 2")
-        putStrLn(imprimeCartas b 0)
+        mostraBaralho a b True
+
         putStrLn $ ("Player 1 ATK / Player 2 DEF")
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
@@ -214,10 +225,8 @@ jogo a b c True = do
         Utils.whoDef 1
         threadDelay 2000000
         clearScreen
-        putStrLn("PLAYER 1")
-        putStrLn(imprimeCartas a 0)
-        putStrLn("PLAYER 2")
-        putStrLn(imprimeCartas b 0)
+        mostraBaralho a b True
+
         putStrLn $ ("Player 2 ATK / Player 1 DEF")
         putStrLn $ ("PLAYER 2| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
@@ -273,10 +282,8 @@ jogo a b c False = do
         Utils.whoDef 4
         threadDelay 2000000
         clearScreen
-        putStrLn("PLAYER 1")
-        putStrLn(imprimeCartas a 0)
-        putStrLn("COMP")
-        putStrLn(imprimeCartas b 0)
+        mostraBaralho a b False
+
         putStrLn $ ("Player 1 ATK / Comp 2 DEF")
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
         cartaAtaca <- getLine
@@ -328,10 +335,8 @@ jogo a b c False = do
         Utils.whoDef 1
         threadDelay 2000000
         clearScreen
-        putStrLn("PLAYER 1")
-        putStrLn(imprimeCartas a 0)
-        putStrLn("COMP")
-        putStrLn(imprimeCartas b 0) 
+        mostraBaralho a b False
+
         putStrLn $ ("Comp ATK / Player 1 DEF")
         let num1 = iaAtaque b 0 0
         putStrLn $ ("PLAYER 1| [NUM] Selecione uma carta: ")
@@ -399,7 +404,6 @@ iaDefende (a:as) vida num = do
         iaDefende as (Cards.vida a) (Cards.num a)
     else 
         iaDefende as vida num
-
 
 creditos:: IO()
 creditos = do
