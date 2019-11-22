@@ -1,4 +1,4 @@
-/* classe onde inicizlizaremos e mantemos a estrutura das cartas*/
+/* classe onde inicializaremos e mantemos a estrutura das cartas*/
 
 build_carta(Nome,Tipo,Ataque,Vida,Num,carta(Nome,Tipo,Ataque,Vida,Num)).
 

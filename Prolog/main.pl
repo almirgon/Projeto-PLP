@@ -25,6 +25,26 @@ inicializa :-
     writeln(Deck1),
     writeln(Deck2).
 
+imprimeCartas([],_,"").
+imprimeCartas([H|T], N, Resultado):-
+    N == 0, Resultado is string_concat('         ', imprimeAtributos(H|T, 0, Y), Resultado0), string_concat(Resultado0, '-\n', Resultado1), string_concat(Resultado1, imprimeCartas([H|T], 1, X), Resultado2),
+    N == 1, Resultado is string_concat('         ', imprimeAtributos(H|T, 1, Y), Resultado3), string_concat(Resultado3, '|\n', Resultado4), string_concat(Resultado4, imprimeCartas([H|T], 2, X), Resultado5),
+    N == 2, Resultado is string_concat('         ', imprimeAtributos(H|T, 2, Y), Resultado6), string_concat(Resultado6, '|\n', Resultado7), string_concat(Resultado7, imprimeCartas([H|T], 3, X), Resultado8),
+    N == 3, Resultado is string_concat('         ', imprimeAtributos(H|T, 3, Y), Resultado9), string_concat(Resultado9, '|\n', Resultado10), string_concat(Resultado10, imprimeCartas([H|T], 4, X), Resultado11),
+    N == 4, Resultado is string_concat('         ', imprimeAtributos(H|T, 4, Y), Resultado12), string_concat(Resultado12, '|\n', Resultado13), string_concat(Resultado13, imprimeCartas([H|T], 5, X), Resultado14),
+    N == 5, Resultado is string_concat('         ', imprimeAtributos(H|T, 5, Y), Resultado15), string_concat(Resultado15, '|\n', Resultado16), string_concat(Resultado16, imprimeCartas([H|T], 6, X), Resultado17),
+    N == 6, Resultado is string_concat('         ', imprimeAtributos(H|T, 6, Y), Resultado18), string_concat(Resultado18, '-').
+
+imprimeAtributos([],_,"").
+imprimeAtributos([H|T], N, Resultado):-
+    N == 0, Resultado is string_concat('-----------------', imprimeAtributos(T, 0, X),
+    N == 1, Resultado is get_nome(H, Nome_),string_concat('|Nome: ', Nome_, Nome),string_concat(Nome,' | ', NomeF),writeln(NomeF), imprimeAtributos(T, 1, X),
+    N == 2, Resultado is get_tipo(H, Tipo_),string_concat('|Tipo: ', Tipo_, Tipo),string_concat(Tipo,' | ' , TipoF),writeln(TipoF), imprimeAtributos(T, 2, X),
+    N == 3, Resultado is get_ataque(H, Ataque_),string_concat('|ATK : ', Ataque_, Ataque),string_concat(Ataque,'         | ' , AtaqueF),writeln(AtaqueF), imprimeAtributos(T, 3, X),
+    N == 4, Resultado is get_vida(H, Defesa_),string_concat('|DEF : ', Defesa_, Defesa),string_concat(Defesa,'         | ' , DefesaF),writeln(DefesaF),imprimeAtributos(T, 4, X),
+    N == 5, Resultado is get_num(H, Num_),string_concat('|NUM : ', Num_, Num),string_concat(Num,'         | ' , NumF),writeln(NumF), imprimeAtributos(T, 5, X),
+    N == 6, Resultado is string_concat('-----------------', imprimeAtributos(T, 6, X).
+
 % jogo(a, [], c, '1 ganhou').
 % jogo([], b, c, '2 ganhou').
 % jogo(Deck1, Deck2, Num, String):-
