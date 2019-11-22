@@ -46,22 +46,17 @@ imprimeAtributos([H|T], N, Resultado):-
     N == 5, Resultado is get_num(H, Num_),string_concat('|NUM : ', Num_, Num),string_concat(Num,'         | ' , NumF),writeln(NumF), imprimeAtributos(T, 5, X),
     N == 6, Resultado is string_concat('-----------------', imprimeAtributos(T, 6, X).
 
-% jogo(a, [], c, '1 ganhou').
-% jogo([], b, c, '2 ganhou').
-% jogo(Deck1, Deck2, Num, String):-
-%     X is mod(Num,2), X==0,
-%     shell(clear),
-%     write('\n -------------------------------------------VS------------------------------------------- \n'),
-%     writeln('Player 1 ATK / Player 2 DEF'),
-%     writeln('PLAYER 1| [NUM] Selecione uma carta: '),
-%     read(CartaAtaca),
-%     writeln('PLAYER 2| [NUM] Selecione uma carta: '),
-%     read(CartaDefende),
-
-jogoMult(_,[],_,'1 ganhou').
-jogoMult([],_,_,'2 ganhou').
-jogoMult(A,B,C,String):-
-    X is mod(Num,2), X==0,
+jogoMult(_,[],_).
+jogoMult([],_,_).
+jogoMult(A,B,C):-
+    X is mod(C,2), X==0, 
+    shell(clear),
+    write('\n -------------------------------------------VS------------------------------------------- \n'),
+    writeln('Player 1 ATK / Player 2 DEF'),
+    writeln('PLAYER 1| [NUM] Selecione uma carta: '),
+    read(CartaAtaca),
+    writeln('PLAYER 2| [NUM] Selecione uma carta: '),
+    read(CartaDefende).
 
 setup(1):-
     deck(5,Deck1),
