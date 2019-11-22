@@ -1,6 +1,7 @@
 :- initialization main.
 
 :- include('carta.pl').
+:- dynamic jogoSingle/3.
 
 selecionaCarta(X) :- random(1, 6, X).
 
@@ -57,10 +58,36 @@ imprimeAtributos([H|T], N, Resultado):-
 %     writeln('PLAYER 2| [NUM] Selecione uma carta: '),
 %     read(CartaDefende),
 
-% menuOpcao(1):- setup(1).
-% menuOpcao(2):- selecionaModo().
+jogoMult(_,[],_,'1 ganhou').
+jogoMult([],_,_,'2 ganhou').
+jogoMult(A,B,C,String):-
+    X is mod(Num,2), X==0,
 
-creditos():-
+setup(1):-
+    deck(5,Deck1),
+    deck(5,Deck2),
+    jogoSingle(Deck1, Deck2, 0).
+setup(2):-
+    deck(5,Deck1),
+    deck(5,Deck2),
+    jogoMult(Deck1, Deck2, 0).
+setup(_):-
+    read(Opcao),
+    setupo(Opcao).
+
+selecionaModo(1):-setup(1).
+selecionaModo(2):-setup(2).
+selecionaModo(_):-
+    shell(clear),
+    writeln('--------------------'),
+    writeln(' [1] - SINGLEPLAYER '),
+    writeln(' [2] - MULTIPLAYER  '),
+    writeln('--------------------'),
+    writeln('Escolha uma opcao:  '),
+    read(Opcao),
+    selecionaModo(Opcao).
+
+creditos(_):-
     shell(clear),
     writeln('DESENVOLVIDO POR: '),
     writeln('Pablwo Araujo'),
@@ -105,9 +132,10 @@ instrucoes():-
     read(Saida),
     menuOpcao(5).
 
-menuOpcao(2):- selecionaModo().
+menuOpcao(1):- setup(1).
+menuOpcao(2):- selecionaModo(3).
 menuOpcao(3):- instrucoes().
-menuOpcao(4):- creditos().
+menuOpcao(4):- creditos(1).
 menuOpcao(_):-
     shell(clear),
     writeln('----------------------------------------------------------------------------------'),
