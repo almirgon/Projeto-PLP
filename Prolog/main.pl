@@ -7,7 +7,9 @@ selecionaCarta(X) :- random(1, 6, X).
 
 insere(X, L, [X|L]).
 
-deck(1, X):- random(1,6,Y), get_carta(Y,X).
+parse_lista(X, Y):- insere(X, [], Y). 
+
+deck(1, X):- random(1,6,Y), get_carta(Y,W), parse_lista(W, X).
 deck(A, L):- A > 1, random(1,6,Y), get_carta(Y,C), B is A-1, deck(B, P), insere(C, P, L).
 
 ataque(CartaAtaque, CartaDefesa, CartaResultado):-
@@ -20,31 +22,43 @@ ataque(CartaAtaque, CartaDefesa, CartaResultado):-
     get_num(CartaDefesa, Numero),
     build_carta(Nome,Tipo,Ataque,VidaResultante,Numero,CartaResultado).
 
-inicializa :-
-    deck(5,Deck1),
-    deck(5,Deck2),
-    writeln(Deck1),
-    writeln(Deck2).
-
 imprimeCartas([],_,"").
-imprimeCartas([H|T], N, Resultado):-
-    N == 0, Resultado is string_concat('         ', imprimeAtributos(H|T, 0, Y), Resultado0), string_concat(Resultado0, '-\n', Resultado1), string_concat(Resultado1, imprimeCartas([H|T], 1, X), Resultado2),
-    N == 1, Resultado is string_concat('         ', imprimeAtributos(H|T, 1, Y), Resultado3), string_concat(Resultado3, '|\n', Resultado4), string_concat(Resultado4, imprimeCartas([H|T], 2, X), Resultado5),
-    N == 2, Resultado is string_concat('         ', imprimeAtributos(H|T, 2, Y), Resultado6), string_concat(Resultado6, '|\n', Resultado7), string_concat(Resultado7, imprimeCartas([H|T], 3, X), Resultado8),
-    N == 3, Resultado is string_concat('         ', imprimeAtributos(H|T, 3, Y), Resultado9), string_concat(Resultado9, '|\n', Resultado10), string_concat(Resultado10, imprimeCartas([H|T], 4, X), Resultado11),
-    N == 4, Resultado is string_concat('         ', imprimeAtributos(H|T, 4, Y), Resultado12), string_concat(Resultado12, '|\n', Resultado13), string_concat(Resultado13, imprimeCartas([H|T], 5, X), Resultado14),
-    N == 5, Resultado is string_concat('         ', imprimeAtributos(H|T, 5, Y), Resultado15), string_concat(Resultado15, '|\n', Resultado16), string_concat(Resultado16, imprimeCartas([H|T], 6, X), Resultado17),
-    N == 6, Resultado is string_concat('         ', imprimeAtributos(H|T, 6, Y), Resultado18), string_concat(Resultado18, '-').
+imprimeCartas([H|T], 0, Resultado):- 
+    imprimeAtributos([H|T], 0, R1), string_concat(R1, '| \n', R2),imprimeCartas([H|T], 1, R3), string_concat(R2, R3, Resultado).
+imprimeCartas([H|T], 1, Resultado):-
+    imprimeAtributos([H|T], 1, R1), string_concat(R1, '| \n', R2),imprimeCartas([H|T], 2, R3), string_concat(R2, R3, Resultado).
+imprimeCartas([H|T], 2, Resultado):-
+    imprimeAtributos([H|T], 2, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 3, R3), string_concat(R2, R3, Resultado).
+imprimeCartas([H|T], 3, Resultado):-
+    imprimeAtributos([H|T], 3, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 4, R3), string_concat(R2, R3, Resultado).
+imprimeCartas([H|T], 4, Resultado):-
+    imprimeAtributos([H|T], 4, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 5, R3), string_concat(R2, R3, Resultado).
+imprimeCartas([H|T], 5, Resultado):-
+    imprimeAtributos([H|T], 5, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 6, R3), string_concat(R2, R3, Resultado).
+imprimeCartas([H|T], 6, Resultado):-
+    imprimeAtributos([H|T], 6, R1), string_concat(R1, '| \n', Resultado).
+
 
 imprimeAtributos([],_,"").
-imprimeAtributos([H|T], N, Resultado):-
-    N == 0, Resultado is string_concat('-----------------', imprimeAtributos(T, 0, X),
-    N == 1, Resultado is get_nome(H, Nome_),string_concat('|Nome: ', Nome_, Nome),string_concat(Nome,' | ', NomeF),writeln(NomeF), imprimeAtributos(T, 1, X),
-    N == 2, Resultado is get_tipo(H, Tipo_),string_concat('|Tipo: ', Tipo_, Tipo),string_concat(Tipo,' | ' , TipoF),writeln(TipoF), imprimeAtributos(T, 2, X),
-    N == 3, Resultado is get_ataque(H, Ataque_),string_concat('|ATK : ', Ataque_, Ataque),string_concat(Ataque,'         | ' , AtaqueF),writeln(AtaqueF), imprimeAtributos(T, 3, X),
-    N == 4, Resultado is get_vida(H, Defesa_),string_concat('|DEF : ', Defesa_, Defesa),string_concat(Defesa,'         | ' , DefesaF),writeln(DefesaF),imprimeAtributos(T, 4, X),
-    N == 5, Resultado is get_num(H, Num_),string_concat('|NUM : ', Num_, Num),string_concat(Num,'         | ' , NumF),writeln(NumF), imprimeAtributos(T, 5, X),
-    N == 6, Resultado is string_concat('-----------------', imprimeAtributos(T, 6, X).
+imprimeAtributos([H|T], 0, Resultado):-
+    imprimeAtributos(T,0,R1), string_concat('-----------------', R1, Resultado).
+imprimeAtributos([H|T], 1, Resultado):- 
+    get_nome(H,Nome), string_concat('|Nome: ', Nome, Concatenacao), imprimeAtributos(T, 1, R1), string_concat(Concatenacao, R1, Resultado).
+imprimeAtributos([H|T], 2, Resultado):- 
+    get_tipo(H,Nome), string_concat('|Tipo: ', Nome, Concatenacao), imprimeAtributos(T, 2, R1), string_concat(Concatenacao, R1, Resultado).
+imprimeAtributos([H|T], 3, Resultado):- 
+    get_ataque(H,Nome), string_concat('|ATK : ', Nome, Concatenacao), imprimeAtributos(T, 3, R1), string_concat(Concatenacao, R1, Resultado).
+imprimeAtributos([H|T], 4, Resultado):- 
+    get_vida(H,Nome), string_concat('|DEF : ', Nome, Concatenacao), imprimeAtributos(T, 4, R1), string_concat(Concatenacao, R1, Resultado).
+imprimeAtributos([H|T], 5, Resultado):- 
+    get_num(H,Nome), string_concat('|NUM : ', Nome, Concatenacao), imprimeAtributos(T, 5, R1), string_concat(Concatenacao, R1, Resultado).
+imprimeAtributos([H|T], 6, Resultado):- 
+    imprimeAtributos(T,6,R1), string_concat('-----------------', R1, Resultado).
+
+% [carta(Venusaur,GRASS,50,80,11),carta(Venusaur,GRASS,50,80,11),carta(Charmander,FIRE,31,50,12),carta(Charmander,FIRE,31,50,12)|carta(Bulbasaur,GRASS,30,60,10)]
+% imprimeAtributos([1,2,3],0,X).
+% imprimeAtributos([carta('Charizard', 'FIRE', 70, 70, 13), carta('Bulbasaur', 'GRASS', 30, 60, 10), carta('Charmander', 'FIRE', 31, 50, 12), carta('Charmander', 'FIRE', 31, 50, 12), carta('Charmander', 'FIRE', 31, 50, 12)],0,X).
+% imprimeCartas([carta('Charizard', 'FIRE', 70, 70, 13)],0,X).
 
 jogoMult(_,[],_).
 jogoMult([],_,_).
@@ -68,7 +82,7 @@ setup(2):-
     jogoMult(Deck1, Deck2, 0).
 setup(_):-
     read(Opcao),
-    setupo(Opcao).
+    setup(Opcao).
 
 selecionaModo(1):-setup(1).
 selecionaModo(2):-setup(2).
@@ -144,4 +158,5 @@ menuOpcao(_):-
 
 
 main:-
-    menuOpcao(5).
+    imprimeCartas([carta('Charizard', 'FIRE', 70, 70, 13), carta('Bulbasaur', 'GRASS', 30, 60, 10), carta('Charmander', 'FIRE', 31, 50, 12), carta('Charmander', 'FIRE', 31, 50, 12), carta('Charmander', 'FIRE', 31, 50, 12)],0,X),
+    writeln(X).
