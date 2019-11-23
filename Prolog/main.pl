@@ -64,9 +64,11 @@ jogoMult([],_,_).
 jogoMult(A,B,C):-
     X is mod(C,2), X==0, 
     shell(clear),
-    writeln(A),
-    writeln(B),
-    write('\n -------------------------------------------VS------------------------------------------- \n'),
+    imprimeCartas(A,0,Resposta1),
+    writeln(Resposta1),
+    write('-------------------------------------------VS-------------------------------------------'),
+    imprimeCartas(B,0,Resposta2),
+    writeln(Resposta2),
     writeln('Player 1 ATK / Player 2 DEF'),
     writeln('PLAYER 1| [NUM] Selecione uma carta: '),
     read(CartaAtaca),
@@ -176,6 +178,4 @@ menuOpcao(_):-
 
 main:-
     shell(clear),
-    deck(10,X),
-    imprimeCartas(X,0,Resposta),
-    writeln(Resposta).
+    menuOpcao(5).
