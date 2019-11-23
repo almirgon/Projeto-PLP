@@ -24,7 +24,7 @@ ataque(CartaAtaque, CartaDefesa, CartaResultado):-
 
 imprimeCartas([],_,"").
 imprimeCartas([H|T], 0, Resultado):- 
-    imprimeAtributos([H|T], 0, R1), string_concat(R1, '| \n', R2),imprimeCartas([H|T], 1, R3), string_concat(R2, R3, Resultado).
+    imprimeAtributos([H|T], 0, R1), string_concat(R1, '- \n', R2),imprimeCartas([H|T], 1, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 1, Resultado):-
     imprimeAtributos([H|T], 1, R1), string_concat(R1, '| \n', R2),imprimeCartas([H|T], 2, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 2, Resultado):-
@@ -36,29 +36,28 @@ imprimeCartas([H|T], 4, Resultado):-
 imprimeCartas([H|T], 5, Resultado):-
     imprimeAtributos([H|T], 5, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 6, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 6, Resultado):-
-    imprimeAtributos([H|T], 6, R1), string_concat(R1, '| \n', Resultado).
+    imprimeAtributos([H|T], 6, R1), string_concat(R1, '- \n', Resultado).
 
+setaPreencher(String, Resultado):-atom_length(String, Length), preencheLacunas(String, Length, Resultado).
+
+preencheLacunas(String, 17, String).
+preencheLacunas(String, Len, Saida):- string_concat(String,' ', X), NewLen is Len+1,preencheLacunas(X,NewLen, Saida).
 
 imprimeAtributos([],_,"").
 imprimeAtributos([H|T], 0, Resultado):-
     imprimeAtributos(T,0,R1), string_concat('-----------------', R1, Resultado).
 imprimeAtributos([H|T], 1, Resultado):- 
-    get_nome(H,Nome), string_concat('|Nome: ', Nome, Concatenacao), imprimeAtributos(T, 1, R1), string_concat(Concatenacao, R1, Resultado).
+    get_nome(H,Nome), string_concat('|Nome: ', Nome, Concatenacao), setaPreencher(Concatenacao, Y), imprimeAtributos(T, 1, R1), string_concat(Y, R1, Resultado).
 imprimeAtributos([H|T], 2, Resultado):- 
-    get_tipo(H,Nome), string_concat('|Tipo: ', Nome, Concatenacao), imprimeAtributos(T, 2, R1), string_concat(Concatenacao, R1, Resultado).
+    get_tipo(H,Nome), string_concat('|Tipo: ', Nome, Concatenacao), setaPreencher(Concatenacao, Y), imprimeAtributos(T, 2, R1), string_concat(Y, R1, Resultado).
 imprimeAtributos([H|T], 3, Resultado):- 
-    get_ataque(H,Nome), string_concat('|ATK : ', Nome, Concatenacao), imprimeAtributos(T, 3, R1), string_concat(Concatenacao, R1, Resultado).
+    get_ataque(H,Nome), string_concat('|ATK : ', Nome, Concatenacao), setaPreencher(Concatenacao, Y), imprimeAtributos(T, 3, R1), string_concat(Y, R1, Resultado).
 imprimeAtributos([H|T], 4, Resultado):- 
-    get_vida(H,Nome), string_concat('|DEF : ', Nome, Concatenacao), imprimeAtributos(T, 4, R1), string_concat(Concatenacao, R1, Resultado).
+    get_vida(H,Nome), string_concat('|DEF : ', Nome, Concatenacao), setaPreencher(Concatenacao, Y), imprimeAtributos(T, 4, R1), string_concat(Y, R1, Resultado).
 imprimeAtributos([H|T], 5, Resultado):- 
-    get_num(H,Nome), string_concat('|NUM : ', Nome, Concatenacao), imprimeAtributos(T, 5, R1), string_concat(Concatenacao, R1, Resultado).
+    get_num(H,Nome), string_concat('|NUM : ', Nome, Concatenacao), setaPreencher(Concatenacao, Y), imprimeAtributos(T, 5, R1), string_concat(Y, R1, Resultado).
 imprimeAtributos([H|T], 6, Resultado):- 
     imprimeAtributos(T,6,R1), string_concat('-----------------', R1, Resultado).
-
-% [carta(Venusaur,GRASS,50,80,11),carta(Venusaur,GRASS,50,80,11),carta(Charmander,FIRE,31,50,12),carta(Charmander,FIRE,31,50,12)|carta(Bulbasaur,GRASS,30,60,10)]
-% imprimeAtributos([1,2,3],0,X).
-% imprimeAtributos([carta('Charizard', 'FIRE', 70, 70, 13), carta('Bulbasaur', 'GRASS', 30, 60, 10), carta('Charmander', 'FIRE', 31, 50, 12), carta('Charmander', 'FIRE', 31, 50, 12), carta('Charmander', 'FIRE', 31, 50, 12)],0,X).
-% imprimeCartas([carta('Charizard', 'FIRE', 70, 70, 13)],0,X).
 
 jogoMult(_,[],_).
 jogoMult([],_,_).
@@ -82,7 +81,6 @@ jogoMult(A,B,C):-
     writeln('Uma das cartas e invalida, tente novamente!'),
     jogoMult(A,B,C);
     writeln('Se entrar aqui o fumo foi grande!').
-
 
 existeNoDeck(_,[], 0).
 existeNoDeck(A, [H|T], C):-
@@ -177,5 +175,7 @@ menuOpcao(_):-
 
 
 main:-
-    imprimeCartas([carta('Charizard', 'FIRE', 70, 70, 13), carta('Bulbasaur', 'GRASS', 30, 60, 10), carta('Charmander', 'FIRE', 31, 50, 12), carta('Charmander', 'FIRE', 31, 50, 12), carta('Charmander', 'FIRE', 31, 50, 12)],0,X),
-    writeln(X).
+    shell(clear),
+    deck(10,X),
+    imprimeCartas(X,0,Resposta),
+    writeln(Resposta).
