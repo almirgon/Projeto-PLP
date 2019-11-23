@@ -65,12 +65,31 @@ jogoMult([],_,_).
 jogoMult(A,B,C):-
     X is mod(C,2), X==0, 
     shell(clear),
+    writeln(A),
+    writeln(B),
     write('\n -------------------------------------------VS------------------------------------------- \n'),
     writeln('Player 1 ATK / Player 2 DEF'),
     writeln('PLAYER 1| [NUM] Selecione uma carta: '),
     read(CartaAtaca),
     writeln('PLAYER 2| [NUM] Selecione uma carta: '),
-    read(CartaDefende).
+    read(CartaDefende),
+    existeNoDeck(CartaDefende, B, ResultadoDefesa),
+    existeNoDeck(CartaAtaca, A, ResultadoAtaque),
+    ResultadoAtaque == 1,
+    ResultadoDefesa == 1,
+    writeln('Carta de ataque/defesa validas, porem ainda precisamos terminar os metodos de ataque!'),
+    halt(0);
+    writeln('Uma das cartas e invalida, tente novamente!'),
+    jogoMult(A,B,C);
+    writeln('Se entrar aqui o fumo foi grande!').
+
+
+existeNoDeck(_,[], 0).
+existeNoDeck(A, [H|T], C):-
+    get_num(H, Num),
+    Num == A,
+    C is 1;
+    existeNoDeck(A, T, C).
 
 setup(1):-
     deck(5,Deck1),
