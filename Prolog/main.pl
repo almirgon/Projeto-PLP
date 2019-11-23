@@ -36,7 +36,7 @@ imprimeCartas([H|T], 4, Resultado):-
 imprimeCartas([H|T], 5, Resultado):-
     imprimeAtributos([H|T], 5, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 6, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 6, Resultado):-
-    imprimeAtributos([H|T], 6, R1), string_concat(R1, '- \n', Resultado).
+    imprimeAtributos([H|T], 6, R1), string_concat(R1, '-', Resultado).
 
 setaPreencher(String, Resultado):-atom_length(String, Length), preencheLacunas(String, Length, Resultado).
 
@@ -59,6 +59,33 @@ imprimeAtributos([H|T], 5, Resultado):-
 imprimeAtributos([H|T], 6, Resultado):- 
     imprimeAtributos(T,6,R1), string_concat('-----------------', R1, Resultado).
 
+% isso eu sei que funfa
+duplica(X, X).
+
+% isso eu sei que funfa
+pegaCarta([], _, "").
+pegaCarta([H|T], Num, Carta):-
+    (get_num(H, X), X=:=Num-> duplica(H, Carta);
+    pegaCarta(T, Num, Carta)).
+    
+
+% carta(Venusaur,GRASS,50,800,2)
+% [carta(Bulbasaur,GRASS,38,4,54241),carta(Bulbasaur,GRASS,30,60,1),carta(Bulbasaur,GRASS,30,60,1),carta(Charizard,FIRE,70,70,4),carta(Venusaur,GRASS,50,800,2)]
+% carta(Venusaur,GRASS,50,400,2)
+% atualizaArray([carta(Bulbasaur,GRASS,38,4,54241),carta(Bulbasaur,GRASS,30,60,1),carta(Bulbasaur,GRASS,30,60,1),carta(Charizard,FIRE,70,70,4),carta(Venusaur,GRASS,50,800,2)],carta(Venusaur,GRASS,50,800,2),carta(Venusaur,GRASS,50,400,2),[], C).
+%
+atualizaArray([],_,_,_,B,C):-duplica(B,C).
+atualizaArray([H|T],Carta1,CartaResultante,'false',B,C):-
+    insere(H,B,X),atualizaArray(T,Carta1,CartaResultante,'false',X,C).
+atualizaArray([H|T],Carta1,CartaResultante,'true',B, C):-
+    (H==Carta1-> 
+        insere(CartaResultante,B,X), atualizaArray(T, Carta1, CartaResultante,'false',X,C); 
+        insere(H,B,X),atualizaArray(T, Carta1, CartaResultante,'true',X,C)).
+        
+        
+realizaAtaque(A, Num1, B, Num2, C):-
+    pegaCarta(A, Num1, Carta1), pegaCarta(B,Num2, Carta2), ataque(Carta1, Carta2, Carta), atualizaArray(B,Carta2,Carta,'true',[], C).
+
 jogoMult(_,[],_).
 jogoMult([],_,_).
 jogoMult(A,B,C):-
@@ -66,7 +93,7 @@ jogoMult(A,B,C):-
     shell(clear),
     imprimeCartas(A,0,Resposta1),
     writeln(Resposta1),
-    write('-------------------------------------------VS-------------------------------------------'),
+    writeln('-----------------------------------------VS-------------------------------------------'),
     imprimeCartas(B,0,Resposta2),
     writeln(Resposta2),
     writeln('Player 1 ATK / Player 2 DEF'),
@@ -76,13 +103,15 @@ jogoMult(A,B,C):-
     read(CartaDefende),
     existeNoDeck(CartaDefende, B, ResultadoDefesa),
     existeNoDeck(CartaAtaca, A, ResultadoAtaque),
-    ResultadoAtaque == 1,
-    ResultadoDefesa == 1,
+    (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->
     writeln('Carta de ataque/defesa validas, porem ainda precisamos terminar os metodos de ataque!'),
-    halt(0);
-    writeln('Uma das cartas e invalida, tente novamente!'),
-    jogoMult(A,B,C);
-    writeln('Se entrar aqui o fumo foi grande!').
+    realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), jogoMult(A,DeckResultante,C); /*aqyu e a condicao ideal*/
+    writeln('Carta Inválida, tente novamente!'),
+    sleep(3),
+    jogoMult(A,B,C)), /*aqui e a condicao de erro, dar o loop novamente*/
+    writeln('entrara aqui independente'),halt(0). /*continua a execucao independente*/
+
+
 
 existeNoDeck(_,[], 0).
 existeNoDeck(A, [H|T], C):-
@@ -177,5 +206,20 @@ menuOpcao(_):-
 
 
 main:-
-    shell(clear),
     menuOpcao(5).
+
+    % Bateria de Testes/Nao apagar
+    % X = [carta('Bulbasaur','GRASS',38,4,54241),carta('Venusaur','GRASS',50,800,2)], resultado ok
+    % X = [carta('Bulbasaur','GRASS',38,4,54241)], resultado ok
+    % X = [carta('Venusaur','GRASS',50,800,2), carta('Bulbasaur','GRASS',38,4,54241)], resultado ok
+    % X = [carta(Bulbasaur,GRASS,38,4,54241),carta(Bulbasaur,GRASS,30,60,1),carta(Bulbasaur,GRASS,30,60,1),carta(Charizard,FIRE,70,70,4),carta(Venusaur,GRASS,50,800,2)], resultado ok
+    % atualizaArray(X,carta('Venusaur','GRASS',50,800,2),carta('Venusaur','GRASS',50,400,2),'true',[], C),
+
+    % atualizaArray([H|T],Carta1,CartaResultante,'true',B, C):-
+    % atualizaArray([carta(Bulbasaur,GRASS,38,4,54241),carta(Bulbasaur,GRASS,30,60,1),carta(Bulbasaur,GRASS,30,60,1),carta(Charizard,FIRE,70,70,4),carta(Venusaur,GRASS,50,800,2)],carta(Venusaur,GRASS,50,800,2),carta(Venusaur,GRASS,50,400,2),[], C).
+    % deck(5,X),
+    % writeln(X),
+    % pegaCarta(X, 2, Y),
+    % writeln(Y).
+    % shell(clear),
+    % menuOpcao(5).
