@@ -3,15 +3,20 @@
 :- include('carta.pl').
 :- dynamic jogoSingle/3.
 
+% nem sei se to usando mas blz
 selecionaCarta(X) :- random(1, 6, X).
 
+% insere um elemento em uma lista
 insere(X, L, [X|L]).
 
+% auxilia o metodo deck(A,B)
 parse_lista(X, Y):- insere(X, [], Y). 
 
+% Gera o deck de forma randomica
 deck(1, X):- random(1,6,Y), get_carta(Y,W), parse_lista(W, X).
 deck(A, L):- A > 1, random(1,6,Y), get_carta(Y,C), B is A-1, deck(B, P), insere(C, P, L).
 
+% retorna a carta apos sofrer o ataque
 ataque(CartaAtaque, CartaDefesa, CartaResultado):-
     get_ataque(CartaAtaque, AtaqueCarta),
     get_vida(CartaDefesa, VidaCarta),
@@ -22,6 +27,7 @@ ataque(CartaAtaque, CartaDefesa, CartaResultado):-
     get_num(CartaDefesa, Numero),
     build_carta(Nome,Tipo,Ataque,VidaResultante,Numero,CartaResultado).
 
+% imprime um baralho
 imprimeCartas([],_,"").
 imprimeCartas([H|T], 0, Resultado):- 
     imprimeAtributos([H|T], 0, R1), string_concat(R1, '- \n', R2),imprimeCartas([H|T], 1, R3), string_concat(R2, R3, Resultado).
@@ -38,11 +44,14 @@ imprimeCartas([H|T], 5, Resultado):-
 imprimeCartas([H|T], 6, Resultado):-
     imprimeAtributos([H|T], 6, R1), string_concat(R1, '-', Resultado).
 
+% auxilia o metodo preencheLacunas
 setaPreencher(String, Resultado):-atom_length(String, Length), preencheLacunas(String, Length, Resultado).
 
+% preenche os espaços vazios da formatacao, pra sair tudo com a msm quantidade de caracteres no print
 preencheLacunas(String, 17, String).
 preencheLacunas(String, Len, Saida):- string_concat(String,' ', X), NewLen is Len+1,preencheLacunas(X,NewLen, Saida).
 
+% imprime em linha os atributos 1 a 1 do array
 imprimeAtributos([],_,"").
 imprimeAtributos([H|T], 0, Resultado):-
     imprimeAtributos(T,0,R1), string_concat('-----------------', R1, Resultado).
@@ -59,10 +68,10 @@ imprimeAtributos([H|T], 5, Resultado):-
 imprimeAtributos([H|T], 6, Resultado):- 
     imprimeAtributos(T,6,R1), string_concat('-----------------', R1, Resultado).
 
-% isso eu sei que funfa
+% metodo auxiliar que ecebe X e Retorna X
 duplica(X, X).
 
-% isso eu sei que funfa
+% pega a carta de um baralho
 pegaCarta([], _, "").
 pegaCarta([H|T], Num, Carta):-
     (get_num(H, X), X=:=Num-> duplica(H, Carta);
@@ -74,6 +83,9 @@ pegaCarta([H|T], Num, Carta):-
 % carta(Venusaur,GRASS,50,400,2)
 % atualizaArray([carta(Bulbasaur,GRASS,38,4,54241),carta(Bulbasaur,GRASS,30,60,1),carta(Bulbasaur,GRASS,30,60,1),carta(Charizard,FIRE,70,70,4),carta(Venusaur,GRASS,50,800,2)],carta(Venusaur,GRASS,50,800,2),carta(Venusaur,GRASS,50,400,2),[], C).
 %
+
+% recebe o baralho, a carta original, a carta dps da alteracao e adiciona a carta alterada no baralho, 
+% infelizmente ele inverte o array mas nao e problema
 atualizaArray([],_,_,_,B,C):-duplica(B,C).
 atualizaArray([H|T],Carta1,CartaResultante,'false',B,C):-
     insere(H,B,X),atualizaArray(T,Carta1,CartaResultante,'false',X,C).
@@ -82,10 +94,11 @@ atualizaArray([H|T],Carta1,CartaResultante,'true',B, C):-
         insere(CartaResultante,B,X), atualizaArray(T, Carta1, CartaResultante,'false',X,C); 
         insere(H,B,X),atualizaArray(T, Carta1, CartaResultante,'true',X,C)).
         
-        
+% Recebe os 2 baralhos e os numeros das cartas envolvidas no ataque, C é o baralho resultante depois do ataque da carta Num1 em Num2 
 realizaAtaque(A, Num1, B, Num2, C):-
     pegaCarta(A, Num1, Carta1), pegaCarta(B,Num2, Carta2), ataque(Carta1, Carta2, Carta), atualizaArray(B,Carta2,Carta,'true',[], C).
 
+% Modo de jogo player Vs player
 jogoMult(_,[],_).
 jogoMult([],_,_).
 jogoMult(A,B,C):-
@@ -112,7 +125,7 @@ jogoMult(A,B,C):-
     writeln('entrara aqui independente'),halt(0). /*continua a execucao independente*/
 
 
-
+% Ce se a carta A está no Array de Cartas, 0 para Nao e 1 para Sim
 existeNoDeck(_,[], 0).
 existeNoDeck(A, [H|T], C):-
     get_num(H, Num),
@@ -120,6 +133,7 @@ existeNoDeck(A, [H|T], C):-
     C is 1;
     existeNoDeck(A, T, C).
 
+% Inicializa o jogo a partir da escolha do Usuario, falta implementar os metodos jogoSingle e jogoMult
 setup(1):-
     deck(5,Deck1),
     deck(5,Deck2),
@@ -189,6 +203,7 @@ instrucoes():-
     read(Saida),
     menuOpcao(5).
 
+% menu de opcaoes
 menuOpcao(1):- setup(1).
 menuOpcao(2):- selecionaModo(3).
 menuOpcao(3):- instrucoes().
@@ -204,7 +219,7 @@ menuOpcao(_):-
     read(Opcao),
     menuOpcao(Opcao).
 
-
+% chama o menu
 main:-
     menuOpcao(5).
 
