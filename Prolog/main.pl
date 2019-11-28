@@ -5,6 +5,8 @@
 
 :- dynamic jogoSingle/3.
 
+
+
 % nem sei se to usando mas blz
 selecionaCarta(X) :- random(1, 6, X).
 
@@ -23,11 +25,12 @@ ataque(CartaAtaque, CartaDefesa, CartaResultado):-
     get_ataque(CartaAtaque, AtaqueCarta),
     get_vida(CartaDefesa, VidaCarta),
     VidaResultante is (VidaCarta - AtaqueCarta),
+    (VidaResultante =< 0 -> X is 0; duplica(VidaResultante,X)),
     get_nome(CartaDefesa, Nome),
     get_tipo(CartaDefesa, Tipo),
     get_ataque(CartaDefesa, Ataque),
     get_num(CartaDefesa, Numero),
-    build_carta(Nome,Tipo,Ataque,VidaResultante,Numero,CartaResultado).
+    build_carta(Nome,Tipo,Ataque,X,Numero,CartaResultado).
 
 % imprime um baralho
 imprimeCartas([],_,"").
@@ -101,8 +104,8 @@ realizaAtaque(A, Num1, B, Num2, C):-
     pegaCarta(A, Num1, Carta1), pegaCarta(B,Num2, Carta2), ataque(Carta1, Carta2, Carta), atualizaArray(B,Carta2,Carta,'true',[], C).
 
 % Modo de jogo player Vs player
-jogoMult(_,[],_)./*Player 1 wins*/
-jogoMult([],_,_)./*Player 2 wins*/
+jogoMult(_,[],_).
+jogoMult([],_,_).
 jogoMult(A,B,C):-
     X is mod(C,2),  
     shell(clear),
@@ -149,10 +152,12 @@ jogoMult(A,B,C):-
         halt(0).
 
 
+
+
 /*Mode de jogo Player Vs Bot*/
 /*AINDA NAO TESTADO*/
-jogoSingle([],_,_)./*Bot wins*/
-jogoSingle(_,[],_)./*Player1 wins*/
+jogoSingle([],_,_).
+jogoSingle(_,[],_).
 jogoSingle(A,B,C):-
     X is mod(C,2),  
     shell(clear),
@@ -198,6 +203,8 @@ jogoSingle(A,B,C):-
         writeln('CONTINUA O CODIGO'),
         halt(0).
 
+
+
 % Ce se a carta A está no Array de Cartas, 0 para Nao e 1 para Sim
 existeNoDeck(_,[], 0).
 existeNoDeck(A, [H|T], C):-
@@ -231,7 +238,8 @@ selecionaModo(_):-
     read(Opcao),
     selecionaModo(Opcao).
 
-creditos(_):-
+creditos():-
+    writeln(X),
     shell(clear),
     writeln('DESENVOLVIDO POR: '),
     writeln('Pablwo Araujo'),
@@ -294,8 +302,9 @@ menuOpcao(_):-
 
 % chama o menu
 main:-
+    % ataque(carta('Venusaur','GRASS',500,400,2), carta('Venusaur','GRASS',50,400,2), CartaResultado), 
+    % writeln(CartaResultado).
     menuOpcao(5).
-
     % Bateria de Testes/Nao apagar
     % X = [carta('Bulbasaur','GRASS',38,4,54241),carta('Venusaur','GRASS',50,800,2)], resultado ok
     % X = [carta('Bulbasaur','GRASS',38,4,54241)], resultado ok
