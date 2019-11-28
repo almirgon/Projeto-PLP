@@ -1,6 +1,8 @@
 :- initialization main.
 
 :- include('carta.pl').
+:- include('util.pl').
+
 :- dynamic jogoSingle/3.
 
 % nem sei se to usando mas blz
@@ -99,31 +101,102 @@ realizaAtaque(A, Num1, B, Num2, C):-
     pegaCarta(A, Num1, Carta1), pegaCarta(B,Num2, Carta2), ataque(Carta1, Carta2, Carta), atualizaArray(B,Carta2,Carta,'true',[], C).
 
 % Modo de jogo player Vs player
-jogoMult(_,[],_).
-jogoMult([],_,_).
+jogoMult(_,[],_)./*Player 1 wins*/
+jogoMult([],_,_)./*Player 2 wins*/
 jogoMult(A,B,C):-
-    X is mod(C,2), X==0, 
+    X is mod(C,2),  
     shell(clear),
     imprimeCartas(A,0,Resposta1),
     writeln(Resposta1),
     writeln('-----------------------------------------VS-------------------------------------------'),
     imprimeCartas(B,0,Resposta2),
     writeln(Resposta2),
-    writeln('Player 1 ATK / Player 2 DEF'),
-    writeln('PLAYER 1| [NUM] Selecione uma carta: '),
-    read(CartaAtaca),
-    writeln('PLAYER 2| [NUM] Selecione uma carta: '),
-    read(CartaDefende),
-    existeNoDeck(CartaDefende, B, ResultadoDefesa),
-    existeNoDeck(CartaAtaca, A, ResultadoAtaque),
-    (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->
-    writeln('Carta de ataque/defesa validas, porem ainda precisamos terminar os metodos de ataque!'),
-    realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), jogoMult(A,DeckResultante,C); /*aqyu e a condicao ideal*/
-    writeln('Carta Inválida, tente novamente!'),
-    sleep(3),
-    jogoMult(A,B,C)), /*aqui e a condicao de erro, dar o loop novamente*/
-    writeln('entrara aqui independente'),halt(0). /*continua a execucao independente*/
+    (X =:=0->                                                                                                               /*if*/
+        writeln('Player 1 ATK / Player 2 DEF'),
+        writeln('PLAYER 1| [NUM] Selecione uma carta: '),
+        read(CartaAtaca),
+        writeln('PLAYER 2| [NUM] Selecione uma carta: '),
+        read(CartaDefende),
+        existeNoDeck(CartaDefende, B, ResultadoDefesa),
+        existeNoDeck(CartaAtaca, A, ResultadoAtaque),
+        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
+            /*PRINT POKEMONS*/
+            writeln('Print pokemons'),
+            realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), D is C+1,
+            /*METODO DE REMOVER CARTAS COM VIDA MENOR IGUAL A 0*/
+            jogoMult(A,DeckResultante,D);                                                                                   /*else*/
+            writeln('Carta Inválida, tente novamente!'),                                                                    
+            sleep(3),
+            jogoMult(A,B,C));                                                                                               /*condicao onde x=:=1*/
+        writeln('Player 2 ATK / Player 1 DEF'),
+        writeln('PLAYER 2| [NUM] Selecione uma carta: '),
+        read(CartaAtaca),
+        writeln('PLAYER 1| [NUM] Selecione uma carta: '),
+        read(CartaDefende),
+        existeNoDeck(CartaDefende, A, ResultadoDefesa),
+        existeNoDeck(CartaAtaca, B, ResultadoAtaque),
+        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
+            /*PRINT POKEMONS*/
+            writeln('Print pokemons'),
+            realizaAtaque(B,CartaAtaca,A,CartaDefende,DeckResultante), D is C+1,
+            /*METODO DE REMOVER CARTAS COM VIDA MENOR IGUAL A 0*/
+            jogoMult(DeckResultante,B,D);                                                                                   /*else*/
+            writeln('Carta Inválida, tente novamente!'),                                                                    
+            sleep(3),
+            jogoMult(A,B,C))
+        ), 
+        writeln('CONTINUA O CODIGO'),
+        halt(0).
 
+
+/*Mode de jogo Player Vs Bot*/
+/*AINDA NAO TESTADO*/
+jogoSingle([],_,_)./*Bot wins*/
+jogoSingle(_,[],_)./*Player1 wins*/
+jogoSingle(A,B,C):-
+    X is mod(C,2),  
+    shell(clear),
+    imprimeCartas(A,0,Resposta1),
+    writeln(Resposta1),
+    writeln('-----------------------------------------VS-------------------------------------------'),
+    imprimeCartas(B,0,Resposta2),
+    writeln(Resposta2),
+    (X =:=0->                                                                                                               /*if*/
+        writeln('Player 1 ATK / COMP DEF'),
+        writeln('PLAYER 1| [NUM] Selecione uma carta: '),
+        read(CartaAtaca),
+        /*BOT seleciona carta para defender*/
+        read(CartaDefende),
+        existeNoDeck(CartaDefende, B, ResultadoDefesa),
+        existeNoDeck(CartaAtaca, A, ResultadoAtaque),
+        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
+            /*PRINT POKEMONS*/
+            writeln('Print pokemons'),
+            realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), D is C+1,
+            /*METODO DE REMOVER CARTAS COM VIDA MENOR IGUAL A 0*/
+            jogoMult(A,DeckResultante,D);                                                                                   /*else*/
+            writeln('Carta Inválida, tente novamente!'),                                                                    
+            sleep(3),
+            jogoMult(A,B,C));                                                                                               /*condicao onde x=:=1*/
+        writeln('BOT ATK / Player 1 DEF'),
+        /*BOT seleciona carta para atacar*/
+        read(CartaAtaca),
+        writeln('PLAYER 1| [NUM] Selecione uma carta: '),
+        read(CartaDefende),
+        existeNoDeck(CartaDefende, A, ResultadoDefesa),
+        existeNoDeck(CartaAtaca, B, ResultadoAtaque),
+        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
+            /*PRINT POKEMONS*/
+            writeln('Print pokemons'),
+            realizaAtaque(B,CartaAtaca,A,CartaDefende,DeckResultante), D is C+1,
+            /*METODO DE REMOVER CARTAS COM VIDA MENOR IGUAL A 0*/
+            jogoMult(DeckResultante,B,D);                                                                                   /*else*/
+            writeln('Carta Inválida, tente novamente!'),                                                                    
+            sleep(3),
+            jogoMult(A,B,C))
+        ), 
+        writeln('CONTINUA O CODIGO'),
+        halt(0).
 
 % Ce se a carta A está no Array de Cartas, 0 para Nao e 1 para Sim
 existeNoDeck(_,[], 0).
