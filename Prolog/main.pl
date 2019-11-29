@@ -23,7 +23,8 @@ ataque(CartaAtaque, CartaDefesa, CartaResultado):-
     get_tipo(CartaDefesa, TipoCartaDefende),
     get_vida(CartaDefesa, VidaCarta),
     vantagem(TipoCartaAtaque, TipoCartaDefende, ResultadoVantagem),
-    (ResultadoVantagem = 1 -> VidaResultante is (VidaCarta - AtaqueCarta - 10); VidaResultante is (VidaCarta - AtaqueCarta)),
+    (ResultadoVantagem = 1 -> VidaResultante is (VidaCarta - AtaqueCarta - 10), shell(clear), imagens('superEfetivo'), sleep(3)
+    ;VidaResultante is (VidaCarta - AtaqueCarta), shell(clear),  imagens('ataqueRealizado'), sleep(3)),
     (VidaResultante =< 0 -> X is 0; duplica(VidaResultante,X)),
     get_nome(CartaDefesa, Nome),
     get_tipo(CartaDefesa, Tipo),
@@ -102,8 +103,8 @@ realizaAtaque(A, Num1, B, Num2, C):-
 moeda(X):-random(0, 2, X).
 
 % Modo de jogo player Vs player
-jogoMult(_,[],_).
-jogoMult([],_,_).
+jogoMult(_,[],_):- imagens('player1Wins').
+jogoMult([],_,_):- imagens('player2Wins').
 jogoMult(A,B,C):-
     X is mod(C,2),  
     shell(clear),
@@ -130,7 +131,8 @@ jogoMult(A,B,C):-
                 removeCartas(DeckResultante, [], NovoDeckB),
                 jogoMult(A,NovoDeckB,D);
                 D is C+1,
-                writeln('O pokemon desviou o ataque, tente novamente'),
+                shell(clear),
+                imagens('desvio'),
                 sleep(3),
                 jogoMult(A,B,D)
             );
@@ -155,7 +157,8 @@ jogoMult(A,B,C):-
                 removeCartas(DeckResultante, [], NovoDeckA),                                                                   
                 jogoMult(NovoDeckA,B,D);
                 D is C+1,
-                writeln('O pokemon desviou o ataque, tente novamente'),
+                shell(clear),
+                imagens('desvio'),
                 sleep(3),
                 jogoMult(A,B,D) 
             );                                                                       
@@ -196,8 +199,8 @@ mostraBatalha(Num1, Num2):-
 
 /*Mode de jogo Player Vs Bot*/
 /*AINDA NAO TESTADO*/
-jogoSingle([],_,_).
-jogoSingle(_,[],_).
+jogoSingle([],_,_):- imagens('compWins').
+jogoSingle(_,[],_):- imagens('player1Wins').
 jogoSingle(A,B,C):-
     X is mod(C,2),  
     shell(clear),
@@ -222,7 +225,8 @@ jogoSingle(A,B,C):-
                 removeCartas(DeckResultante, [], NovoDeckB),
                 jogoSingle(A,NovoDeckB,D);
                 D is C+1,
-                writeln('O pokemon desviou o ataque, tente novamente'),
+                shell(clear),
+                imagens('desvio'),
                 sleep(3),
                 jogoSingle(A,B,D)
             );
@@ -245,7 +249,8 @@ jogoSingle(A,B,C):-
                 removeCartas(DeckResultante, [], NovoDeckA),                                                                   
                 jogoSingle(NovoDeckA,B,D);
                 D is C+1,
-                writeln('O pokemon desviou o ataque, tente novamente'),
+                shell(clear),
+                imagens('desvio'),
                 sleep(3),
                 jogoSingle(A,B,D) 
             );                                                                       
