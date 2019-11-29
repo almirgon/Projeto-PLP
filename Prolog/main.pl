@@ -93,11 +93,11 @@ pegaCarta([H|T], Num, Carta):-
 % infelizmente ele inverte o array mas nao e problema
 atualizaArray([],_,_,_,B,C):-duplica(B,C).
 atualizaArray([H|T],Carta1,CartaResultante,'false',B,C):-
-    insere(H,B,X),atualizaArray(T,Carta1,CartaResultante,'false',X,C).
+    insereFim(H,B,X),atualizaArray(T,Carta1,CartaResultante,'false',X,C).
 atualizaArray([H|T],Carta1,CartaResultante,'true',B, C):-
     (H==Carta1-> 
-        insere(CartaResultante,B,X), atualizaArray(T, Carta1, CartaResultante,'false',X,C); 
-        insere(H,B,X),atualizaArray(T, Carta1, CartaResultante,'true',X,C)).
+        insereFim(CartaResultante,B,X), atualizaArray(T, Carta1, CartaResultante,'false',X,C); 
+        insereFim(H,B,X),atualizaArray(T, Carta1, CartaResultante,'true',X,C)).
         
 % Recebe os 2 baralhos e os numeros das cartas envolvidas no ataque, C é o baralho resultante depois do ataque da carta Num1 em Num2 
 realizaAtaque(A, Num1, B, Num2, C):-
@@ -126,8 +126,8 @@ jogoMult(A,B,C):-
             /*PRINT POKEMONS*/
             writeln('Print pokemons'),
             realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), D is C+1,
-            /*METODO DE REMOVER CARTAS COM VIDA MENOR IGUAL A 0*/
-            jogoMult(A,DeckResultante,D);                                                                                   /*else*/
+            removeCartas(DeckResultante, [], NovoDeckB),
+            jogoMult(A,NovoDeckB,D);                                                                                    /*else*/
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
             jogoMult(A,B,C));                                                                                               /*condicao onde x=:=1*/
@@ -142,8 +142,8 @@ jogoMult(A,B,C):-
             /*PRINT POKEMONS*/
             writeln('Print pokemons'),
             realizaAtaque(B,CartaAtaca,A,CartaDefende,DeckResultante), D is C+1,
-            /*METODO DE REMOVER CARTAS COM VIDA MENOR IGUAL A 0*/
-            jogoMult(DeckResultante,B,D);                                                                                   /*else*/
+            removeCartas(DeckResultante, [], NovoDeckA),
+            jogoMult(NovoDeckA,B,D);                                                                                   /*else*/
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
             jogoMult(A,B,C))
@@ -203,7 +203,28 @@ jogoSingle(A,B,C):-
         writeln('CONTINUA O CODIGO'),
         halt(0).
 
+selecionaCartaAtaque([], A, _, A).
+selecionaCartaAtaque([H|T], A, Atk, Saida):- 
+    get_ataque(H, Ataque),
+    Ataque > Atk,
+    AtkNovo is Ataque,
+    ANovo is H,
+    selecionaCartaAtaque(T, ANovo, AtkNovo, Saida);
+    % X is Ataque, C is H, selecionaCartaAtaque(T, C, X, Saida); 
+    % duplica(Atk,X), duplica(A, C),
+    selecionaCartaAtaque(T, A, Atk, Saida).
 
+removeCartas([],X, X).
+removeCartas([H|T], X, R):-
+    get_vida(H, VidaCabeca),
+    VidaCabeca > 0,
+    insereFim(H, X, X1),
+    removeCartas(T, X1, R);
+    removeCartas(T, X, R).
+
+insereFim(N, [],[N]).
+insereFim(N, [H|T], L):- insereFim(N, T, X),
+insere(H, X, L).
 
 % Ce se a carta A está no Array de Cartas, 0 para Nao e 1 para Sim
 existeNoDeck(_,[], 0).
