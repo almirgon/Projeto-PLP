@@ -341,3 +341,10 @@ main:-
     % writeln(Y).
     % shell(clear),
     % menuOpcao(5).
+
+mostraCartas(Carta1,Carta2):- 
+	get_nome(Carta1,Nome1),
+	get_nome(Carta2,Nome2),
+	imagens(Nome1),
+	imagens(Nome2).
+
