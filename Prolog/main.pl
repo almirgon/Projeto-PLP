@@ -106,6 +106,7 @@ moeda(X):-random(0, 2, X).
 jogoMult(_,[],_):- shell(clear), imagens('player1Wins').
 jogoMult([],_,_):- shell(clear), imagens('player2Wins').
 jogoMult(A,B,C):-
+    shell(clear),
     X is mod(C,2),  
     (X =:=0-> 
         imagens('player1Atk'),
@@ -113,9 +114,11 @@ jogoMult(A,B,C):-
         imagens('player2Def'),
         sleep(3),
         shell(clear),
+        writeln('PLAYER 1: '),
         imprimeCartas(A,0,Resposta1),
         writeln(Resposta1),
-        writeln('-----------------------------------------VS-------------------------------------------'),
+        writeln(''),
+        writeln('PLAYER 2: '),
         imprimeCartas(B,0,Resposta2),
         writeln(Resposta2),
 
@@ -153,9 +156,11 @@ jogoMult(A,B,C):-
         imagens('player1Def'),
         sleep(3),
         shell(clear),
+        writeln('PLAYER 1: '),
         imprimeCartas(A,0,Resposta1),
         writeln(Resposta1),
-        writeln('-----------------------------------------VS-------------------------------------------'),
+        writeln(''),
+        writeln('PLAYER 2: '),
         imprimeCartas(B,0,Resposta2),
         writeln(Resposta2),
 
@@ -221,10 +226,10 @@ mostraBatalha(Num1, Num2):-
     imagens(Nome2).
 
 /*Mode de jogo Player Vs Bot*/
-/*AINDA NAO TESTADO*/
 jogoSingle([],_,_):- shell(clear), imagens('compWins').
 jogoSingle(_,[],_):- shell(clear), imagens('player1Wins').
 jogoSingle(A,B,C):-
+    shell(clear),
     X is mod(C,2),  
     (X =:=0-> 
         imagens('player1Atk'),
@@ -232,9 +237,11 @@ jogoSingle(A,B,C):-
         imagens('compDef'),
         sleep(3),
         shell(clear),
+        writeln('PLAYER 1: '),
         imprimeCartas(A,0,Resposta1),
         writeln(Resposta1),
-        writeln('-----------------------------------------VS-------------------------------------------'),
+        writeln(''),
+        writeln('COMP: '),
         imprimeCartas(B,0,Resposta2),
         writeln(Resposta2),
 
@@ -270,9 +277,11 @@ jogoSingle(A,B,C):-
         imagens('player1Def'),
         sleep(3),
         shell(clear),
+        writeln('PLAYER 1: '),
         imprimeCartas(A,0,Resposta1),
         writeln(Resposta1),
-        writeln('-----------------------------------------VS-------------------------------------------'),
+        writeln(''),
+        writeln('COMP: '),
         imprimeCartas(B,0,Resposta2),
         writeln(Resposta2),
 
@@ -446,6 +455,7 @@ selecionaModo(_):-
     writeln('--------------------'),
     writeln('Escolha uma opcao:  '),
     read(Opcao),
+    shell(clear),
     selecionaModo(Opcao).
 
 creditos():-
@@ -457,6 +467,8 @@ creditos():-
     writeln('Luiz Boas'), 
     writeln('Almir Crispiniano'), 
     writeln('Walisson Farias'),
+    writeln(''),
+    writeln('Digite algo para voltar ao menu principal: '), 
     read(Saida),
     menuOpcao(5).
 
@@ -490,7 +502,9 @@ instrucoes():-
     writeln('|                 FLY                            |                       BUG, GRASS                  |'), 
     writeln('|                 FIRE                           |                    FIRE, BUG, GRASS               |'), 
     writeln('|                 NORMAL                         |                    NENHUMA VANTAGEM               |'), 
-    writeln('|----------------------------------------------------------------------------------------------------|'), 
+    writeln('|----------------------------------------------------------------------------------------------------|'),
+    writeln(''),
+    writeln('Digite algo para voltar ao menu principal: '), 
     read(Saida),
     menuOpcao(5).
 
@@ -498,9 +512,11 @@ instrucoes():-
 menuOpcao(1):- setup(1).
 menuOpcao(2):- selecionaModo(3).
 menuOpcao(3):- instrucoes().
-menuOpcao(4):- creditos(1).
+menuOpcao(4):- creditos().
 menuOpcao(_):-
     shell(clear),
+    imagens('banner'),
+    sleep(3),
     writeln('----------------------------------------------------------------------------------'),
     writeln('[1] - INICIAR JOGO '),
     writeln('[2] - MODO DE JOGO '),
@@ -512,24 +528,7 @@ menuOpcao(_):-
 
 % chama o menu
 main:-
-    % ataque(carta('Venusaur','GRASS',500,400,2), carta('Venusaur','GRASS',50,400,2), CartaResultado), 
-    % writeln(CartaResultado).
     menuOpcao(5).
-    % Bateria de Testes/Nao apagar
-    % X = [carta('Bulbasaur','GRASS',38,4,54241),carta('Venusaur','GRASS',50,800,2)], resultado ok
-    % X = [carta('Bulbasaur','GRASS',38,4,54241)], resultado ok
-    % X = [carta('Venusaur','GRASS',50,800,2), carta('Bulbasaur','GRASS',38,4,54241)], resultado ok
-    % X = [carta(Bulbasaur,GRASS,38,4,54241),carta(Bulbasaur,GRASS,30,60,1),carta(Bulbasaur,GRASS,30,60,1),carta(Charizard,FIRE,70,70,4),carta(Venusaur,GRASS,50,800,2)], resultado ok
-    % atualizaArray(X,carta('Venusaur','GRASS',50,800,2),carta('Venusaur','GRASS',50,400,2),'true',[], C),
-
-    % atualizaArray([H|T],Carta1,CartaResultante,'true',B, C):-
-    % atualizaArray([carta(Bulbasaur,GRASS,38,4,54241),carta(Bulbasaur,GRASS,30,60,1),carta(Bulbasaur,GRASS,30,60,1),carta(Charizard,FIRE,70,70,4),carta(Venusaur,GRASS,50,800,2)],carta(Venusaur,GRASS,50,800,2),carta(Venusaur,GRASS,50,400,2),[], C).
-    % deck(5,X),
-    % writeln(X),
-    % pegaCarta(X, 2, Y),
-    % writeln(Y).
-    % shell(clear),
-    % menuOpcao(5).
 
 mostraCartas(Carta1,Carta2):- 
 	get_nome(Carta1,Nome1),
