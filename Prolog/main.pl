@@ -76,6 +76,11 @@ imprimeAtributos([H|T], 6, Resultado):-
 % metodo auxiliar que ecebe X e Retorna X
 duplica(X, X).
 
+% metodo que verifica se a carta existe na lista
+
+acartaexiste(X, [X|_]).
+acartaexiste(X, [_|T]) :- acartaexiste(X, T).
+
 % pega a carta de um baralho
 pegaCarta([], _, "").
 pegaCarta([H|T], Num, Carta):-
