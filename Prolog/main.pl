@@ -3,10 +3,6 @@
 :- include('carta.pl').
 :- include('util.pl').
 
-:- dynamic jogoSingle/3.
-
-
-
 % nem sei se to usando mas blz
 selecionaCarta(X) :- random(1, 6, X).
 
@@ -77,7 +73,6 @@ imprimeAtributos([H|T], 6, Resultado):-
 duplica(X, X).
 
 % metodo que verifica se a carta existe na lista
-
 acartaexiste(X, [X|_]).
 acartaexiste(X, [_|T]) :- acartaexiste(X, T).
 
@@ -87,13 +82,6 @@ pegaCarta([H|T], Num, Carta):-
     (get_num(H, X), X=:=Num-> duplica(H, Carta);
     pegaCarta(T, Num, Carta)).
     
-
-% carta(Venusaur,GRASS,50,800,2)
-% [carta(Bulbasaur,GRASS,38,4,54241),carta(Bulbasaur,GRASS,30,60,1),carta(Bulbasaur,GRASS,30,60,1),carta(Charizard,FIRE,70,70,4),carta(Venusaur,GRASS,50,800,2)]
-% carta(Venusaur,GRASS,50,400,2)
-% atualizaArray([carta(Bulbasaur,GRASS,38,4,54241),carta(Bulbasaur,GRASS,30,60,1),carta(Bulbasaur,GRASS,30,60,1),carta(Charizard,FIRE,70,70,4),carta(Venusaur,GRASS,50,800,2)],carta(Venusaur,GRASS,50,800,2),carta(Venusaur,GRASS,50,400,2),[], C).
-%
-
 % recebe o baralho, a carta original, a carta dps da alteracao e adiciona a carta alterada no baralho, 
 % infelizmente ele inverte o array mas nao e problema
 atualizaArray([],_,_,_,B,C):-duplica(B,C).
@@ -107,6 +95,8 @@ atualizaArray([H|T],Carta1,CartaResultante,'true',B, C):-
 % Recebe os 2 baralhos e os numeros das cartas envolvidas no ataque, C é o baralho resultante depois do ataque da carta Num1 em Num2 
 realizaAtaque(A, Num1, B, Num2, C):-
     pegaCarta(A, Num1, Carta1), pegaCarta(B,Num2, Carta2), ataque(Carta1, Carta2, Carta), atualizaArray(B,Carta2,Carta,'true',[], C).
+
+moeda(X):-random(0, 2, X).
 
 % Modo de jogo player Vs player
 jogoMult(_,[],_).
@@ -130,12 +120,21 @@ jogoMult(A,B,C):-
         (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
             /*PRINT POKEMONS*/
             writeln('Print pokemons'),
-            realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), D is C+1,
-            removeCartas(DeckResultante, [], NovoDeckB),
-            jogoMult(A,NovoDeckB,D);                                                                                    /*else*/
+            moeda(M), 
+            Y is mod(M,2),
+            (Y=:=0 ->
+                realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), D is C+1,
+                removeCartas(DeckResultante, [], NovoDeckB),
+                jogoMult(A,NovoDeckB,D);
+                D is C+1,
+                writeln('O pokemon desviou o ataque, tente novamente'),
+                sleep(3),
+                jogoMult(A,B,D)
+            );
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
-            jogoMult(A,B,C));                                                                                               /*condicao onde x=:=1*/
+            jogoMult(A,B,C)
+        );                                                                                               /*condicao onde x=:=1*/
         writeln('Player 2 ATK / Player 1 DEF'),
         writeln('PLAYER 2| [NUM] Selecione uma carta: '),
         read(CartaAtaca),
@@ -146,9 +145,17 @@ jogoMult(A,B,C):-
         (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
             /*PRINT POKEMONS*/
             writeln('Print pokemons'),
-            realizaAtaque(B,CartaAtaca,A,CartaDefende,DeckResultante), D is C+1,
-            removeCartas(DeckResultante, [], NovoDeckA),
-            jogoMult(NovoDeckA,B,D);                                                                                   /*else*/
+            moeda(M), 
+            Y is mod(M,2),
+            (Y=:=0 -> 
+                realizaAtaque(B,CartaAtaca,A,CartaDefende,DeckResultante), D is C+1,
+                removeCartas(DeckResultante, [], NovoDeckA),                                                                   
+                jogoMult(NovoDeckA,B,D);
+                D is C+1,
+                writeln('O pokemon desviou o ataque, tente novamente'),
+                sleep(3),
+                jogoMult(A,B,D) 
+            );                                                                       
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
             jogoMult(A,B,C))
@@ -156,8 +163,21 @@ jogoMult(A,B,C):-
         writeln('CONTINUA O CODIGO'),
         halt(0).
 
+/*seleciona o numero da carta com maior ataque*/
+selecionaCartaAtaque([],A, _, A).
+selecionaCartaAtaque([H|T], Num, Atk, Saida):- 
+    get_ataque(H, Ataque),
+    Ataque > Atk, get_num(H, Numero),
+    selecionaCartaAtaque(T, Numero, Ataque, Saida); 
+    selecionaCartaAtaque(T, Num, Atk, Saida).
 
-
+/*seleciona o numero da carta com maior defesa*/
+selecionaCartaDefende([],A, _, A).
+selecionaCartaDefende([H|T], Num, Hp, Saida):- 
+    get_vida(H, Vida),
+    Vida > Hp, get_num(H, Numero),
+    selecionaCartaDefende(T, Numero, Vida, Saida); 
+    selecionaCartaDefende(T, Num, Hp, Saida).
 
 /*Mode de jogo Player Vs Bot*/
 /*AINDA NAO TESTADO*/
@@ -175,35 +195,48 @@ jogoSingle(A,B,C):-
         writeln('Player 1 ATK / COMP DEF'),
         writeln('PLAYER 1| [NUM] Selecione uma carta: '),
         read(CartaAtaca),
-        /*BOT seleciona carta para defender*/
-        read(CartaDefende),
-        existeNoDeck(CartaDefende, B, ResultadoDefesa),
+        selecionaCartaDefende(B,0,0,CartaDefende),                                                                          /*Seleciona automaticamente*/
         existeNoDeck(CartaAtaca, A, ResultadoAtaque),
-        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
+        (ResultadoAtaque =:= 1->                                                                                            /*if*/
             /*PRINT POKEMONS*/
             writeln('Print pokemons'),
-            realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), D is C+1,
-            /*METODO DE REMOVER CARTAS COM VIDA MENOR IGUAL A 0*/
-            jogoMult(A,DeckResultante,D);                                                                                   /*else*/
+            moeda(M), 
+            Y is mod(M,2),
+            (Y=:=0 ->
+                realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), D is C+1,
+                removeCartas(DeckResultante, [], NovoDeckB),
+                jogoSingle(A,NovoDeckB,D);
+                D is C+1,
+                writeln('O pokemon desviou o ataque, tente novamente'),
+                sleep(3),
+                jogoSingle(A,B,D)
+            );
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
-            jogoMult(A,B,C));                                                                                               /*condicao onde x=:=1*/
+            jogoSingle(A,B,C)
+        );                                                                                                                   /*condicao onde x=:=1*/
         writeln('BOT ATK / Player 1 DEF'),
-        /*BOT seleciona carta para atacar*/
-        read(CartaAtaca),
+        selecionaCartaAtaque(B,0,0,CartaAtaca),                                                                             /*BOT seleciona carta para atacar*/
         writeln('PLAYER 1| [NUM] Selecione uma carta: '),
         read(CartaDefende),
         existeNoDeck(CartaDefende, A, ResultadoDefesa),
-        existeNoDeck(CartaAtaca, B, ResultadoAtaque),
-        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
+        (ResultadoDefesa =:= 1->                                                                                            /*if*/
             /*PRINT POKEMONS*/
             writeln('Print pokemons'),
-            realizaAtaque(B,CartaAtaca,A,CartaDefende,DeckResultante), D is C+1,
-            /*METODO DE REMOVER CARTAS COM VIDA MENOR IGUAL A 0*/
-            jogoMult(DeckResultante,B,D);                                                                                   /*else*/
+            moeda(M), 
+            Y is mod(M,2),
+            (Y=:=0 -> 
+                realizaAtaque(B,CartaAtaca,A,CartaDefende,DeckResultante), D is C+1,
+                removeCartas(DeckResultante, [], NovoDeckA),                                                                   
+                jogoSingle(NovoDeckA,B,D);
+                D is C+1,
+                writeln('O pokemon desviou o ataque, tente novamente'),
+                sleep(3),
+                jogoSingle(A,B,D) 
+            );                                                                       
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
-            jogoMult(A,B,C))
+            jogoSingle(A,B,C))
         ), 
         writeln('CONTINUA O CODIGO'),
         halt(0).
@@ -215,8 +248,6 @@ selecionaCartaAtaque([H|T], A, Atk, Saida):-
     AtkNovo is Ataque,
     ANovo is H,
     selecionaCartaAtaque(T, ANovo, AtkNovo, Saida);
-    % X is Ataque, C is H, selecionaCartaAtaque(T, C, X, Saida); 
-    % duplica(Atk,X), duplica(A, C),
     selecionaCartaAtaque(T, A, Atk, Saida).
 
 removeCartas([],X, X).
