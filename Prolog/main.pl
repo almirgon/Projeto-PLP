@@ -4,7 +4,7 @@
 :- include('util.pl').
 
 % nem sei se to usando mas blz
-selecionaCarta(X) :- random(1, 6, X).
+selecionaCarta(X) :- random(1, 35, X).
 
 % insere um elemento em uma lista
 insere(X, L, [X|L]).
@@ -13,8 +13,8 @@ insere(X, L, [X|L]).
 parse_lista(X, Y):- insere(X, [], Y). 
 
 % Gera o deck de forma randomica
-deck(1, X):- random(1,6,Y), get_carta(Y,W), parse_lista(W, X).
-deck(A, L):- A > 1, random(1,6,Y), get_carta(Y,C), B is A-1, deck(B, P), insere(C, P, L).
+deck(1, X):- random(1,35,Y), get_carta(Y,W), parse_lista(W, X).
+deck(A, L):- A > 1, random(1,35,Y), get_carta(Y,C), B is A-1, deck(B, P), insere(C, P, L).
 
 % retorna a carta apos sofrer o ataque
 ataque(CartaAtaque, CartaDefesa, CartaResultado):-
