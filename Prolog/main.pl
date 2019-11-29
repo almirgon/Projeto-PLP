@@ -23,8 +23,8 @@ ataque(CartaAtaque, CartaDefesa, CartaResultado):-
     get_tipo(CartaDefesa, TipoCartaDefende),
     get_vida(CartaDefesa, VidaCarta),
     vantagem(TipoCartaAtaque, TipoCartaDefende, ResultadoVantagem),
-    (ResultadoVantagem = 1 -> VidaResultante is (VidaCarta - AtaqueCarta - 10), shell(clear), imagens('superEfetivo'), sleep(3)
-    ;VidaResultante is (VidaCarta - AtaqueCarta), shell(clear),  imagens('ataqueRealizado'), sleep(3)),
+    (ResultadoVantagem = 1 -> VidaResultante is (VidaCarta - AtaqueCarta - 10), shell(clear), imagens('superEfetivo'), sleep(3), shell(clear);
+    VidaResultante is (VidaCarta - AtaqueCarta), shell(clear),  imagens('ataqueRealizado'), sleep(3), shell(clear)),
     (VidaResultante =< 0 -> X is 0; duplica(VidaResultante,X)),
     get_nome(CartaDefesa, Nome),
     get_tipo(CartaDefesa, Tipo),
@@ -103,17 +103,22 @@ realizaAtaque(A, Num1, B, Num2, C):-
 moeda(X):-random(0, 2, X).
 
 % Modo de jogo player Vs player
-jogoMult(_,[],_):- imagens('player1Wins').
-jogoMult([],_,_):- imagens('player2Wins').
+jogoMult(_,[],_):- shell(clear), imagens('player1Wins').
+jogoMult([],_,_):- shell(clear), imagens('player2Wins').
 jogoMult(A,B,C):-
     X is mod(C,2),  
-    shell(clear),
-    imprimeCartas(A,0,Resposta1),
-    writeln(Resposta1),
-    writeln('-----------------------------------------VS-------------------------------------------'),
-    imprimeCartas(B,0,Resposta2),
-    writeln(Resposta2),
-    (X =:=0->                                                                                                               
+    (X =:=0-> 
+        imagens('player1Atk'),
+        writeln('-----------------------------------------VS-------------------------------------------'),
+        imagens('player2Def'),
+        sleep(3),
+        shell(clear),
+        imprimeCartas(A,0,Resposta1),
+        writeln(Resposta1),
+        writeln('-----------------------------------------VS-------------------------------------------'),
+        imprimeCartas(B,0,Resposta2),
+        writeln(Resposta2),
+
         writeln('Player 1 ATK / Player 2 DEF'),
         writeln('PLAYER 1| [NUM] Selecione uma carta: '),
         read(CartaAtaca),
@@ -128,18 +133,32 @@ jogoMult(A,B,C):-
             Y is mod(M,2),
             (Y=:=0 ->
                 realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), D is C+1,
+                % mostraBatalha(CartaAtaca, CartaDefende),
+                % sleep(3),
                 removeCartas(DeckResultante, [], NovoDeckB),
                 jogoMult(A,NovoDeckB,D);
                 D is C+1,
                 shell(clear),
                 imagens('desvio'),
                 sleep(3),
+                shell(clear),
                 jogoMult(A,B,D)
             );
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
             jogoMult(A,B,C)
-        );                                                                                               
+        );
+        imagens('player2Atk'),
+        writeln('-----------------------------------------VS-------------------------------------------'),
+        imagens('player1Def'),
+        sleep(3),
+        shell(clear),
+        imprimeCartas(A,0,Resposta1),
+        writeln(Resposta1),
+        writeln('-----------------------------------------VS-------------------------------------------'),
+        imprimeCartas(B,0,Resposta2),
+        writeln(Resposta2),
+
         writeln('Player 2 ATK / Player 1 DEF'),
         writeln('PLAYER 2| [NUM] Selecione uma carta: '),
         read(CartaAtaca),
@@ -154,19 +173,21 @@ jogoMult(A,B,C):-
             Y is mod(M,2),
             (Y=:=0 -> 
                 realizaAtaque(B,CartaAtaca,A,CartaDefende,DeckResultante), D is C+1,
+                % mostraBatalha(CartaAtaca, CartaDefende),
+                % sleep(3),
                 removeCartas(DeckResultante, [], NovoDeckA),                                                                   
                 jogoMult(NovoDeckA,B,D);
                 D is C+1,
                 shell(clear),
                 imagens('desvio'),
                 sleep(3),
+                shell(clear),
                 jogoMult(A,B,D) 
             );                                                                       
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
             jogoMult(A,B,C))
         ), 
-        writeln('CONTINUA O CODIGO'),
         halt(0).
 
 /*seleciona o numero da carta com maior ataque*/
@@ -189,76 +210,99 @@ mostraBatalha(Num1, Num2):-
     shell(clear),
     get_carta(Num1, Carta1), get_carta(Num2, Carta2),
     get_nome(Carta1, Nome1), get_nome(Carta2, Nome2),
-    get_vida(Carta1, Vida1), get_vida(Carta2, Vida2),
-    get_ataque(Carta1, Ataque1), get_ataque(Carta2, Ataque2),
-    write(Nome1), write(' Ataque: '), write(Ataque1), write(' Vida: '), writeln(Vida1),
+    % get_vida(Carta1, Vida1), get_vida(Carta2, Vida2),
+    % get_ataque(Carta1, Ataque1), get_ataque(Carta2, Ataque2),
+    writeln(Nome1), 
+    % write(' Ataque: '), write(Ataque1), write(' Vida: '), writeln(Vida1),
     imagens(Nome1),
     writeln('-----------------------------------------VS-------------------------------------------'),
-    write(Nome2), write(' Ataque: '), write(Ataque2), write(' Vida: '), writeln(Vida2),
+    writeln(Nome2), 
+    % write(' Ataque: '), write(Ataque2), write(' Vida: '), writeln(Vida2),
     imagens(Nome2).
 
 /*Mode de jogo Player Vs Bot*/
 /*AINDA NAO TESTADO*/
-jogoSingle([],_,_):- imagens('compWins').
-jogoSingle(_,[],_):- imagens('player1Wins').
+jogoSingle([],_,_):- shell(clear), imagens('compWins').
+jogoSingle(_,[],_):- shell(clear), imagens('player1Wins').
 jogoSingle(A,B,C):-
     X is mod(C,2),  
-    shell(clear),
-    imprimeCartas(A,0,Resposta1),
-    writeln(Resposta1),
-    writeln('-----------------------------------------VS-------------------------------------------'),
-    imprimeCartas(B,0,Resposta2),
-    writeln(Resposta2),
-    (X =:=0->                                                                                                               /*if*/
+    (X =:=0-> 
+        imagens('player1Atk'),
+        writeln('-----------------------------------------VS-------------------------------------------'),
+        imagens('compDef'),
+        sleep(3),
+        shell(clear),
+        imprimeCartas(A,0,Resposta1),
+        writeln(Resposta1),
+        writeln('-----------------------------------------VS-------------------------------------------'),
+        imprimeCartas(B,0,Resposta2),
+        writeln(Resposta2),
+
         writeln('Player 1 ATK / COMP DEF'),
         writeln('PLAYER 1| [NUM] Selecione uma carta: '),
         read(CartaAtaca),
-        selecionaCartaDefende(B,0,0,CartaDefende),                                                                          /*Seleciona automaticamente*/
+        selecionaCartaDefende(B,0,0,CartaDefende),                                                                          
         existeNoDeck(CartaAtaca, A, ResultadoAtaque),
-        (ResultadoAtaque =:= 1->                                                                                            /*if*/
+        (ResultadoAtaque =:= 1->                                                                                            
             mostraBatalha(CartaAtaca, CartaDefende),
             sleep(3),
             moeda(M), 
             Y is mod(M,2),
             (Y=:=0 ->
                 realizaAtaque(A,CartaAtaca,B,CartaDefende,DeckResultante), D is C+1,
+                % mostraBatalha(CartaAtaca, CartaDefende),
+                % sleep(3),
                 removeCartas(DeckResultante, [], NovoDeckB),
                 jogoSingle(A,NovoDeckB,D);
                 D is C+1,
                 shell(clear),
                 imagens('desvio'),
                 sleep(3),
+                shell(clear),
                 jogoSingle(A,B,D)
             );
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
             jogoSingle(A,B,C)
-        );                                                                                                                   /*condicao onde x=:=1*/
+        );   
+        imagens('compAtk'),
+        writeln('-----------------------------------------VS-------------------------------------------'),
+        imagens('player1Def'),
+        sleep(3),
+        shell(clear),
+        imprimeCartas(A,0,Resposta1),
+        writeln(Resposta1),
+        writeln('-----------------------------------------VS-------------------------------------------'),
+        imprimeCartas(B,0,Resposta2),
+        writeln(Resposta2),
+
         writeln('BOT ATK / Player 1 DEF'),
-        selecionaCartaAtaque(B,0,0,CartaAtaca),                                                                             /*BOT seleciona carta para atacar*/
+        selecionaCartaAtaque(B,0,0,CartaAtaca),                                                                             
         writeln('PLAYER 1| [NUM] Selecione uma carta: '),
         read(CartaDefende),
         existeNoDeck(CartaDefende, A, ResultadoDefesa),
-        (ResultadoDefesa =:= 1->                                                                                            /*if*/
+        (ResultadoDefesa =:= 1->                                                                                            
             mostraBatalha(CartaAtaca, CartaDefende),
             sleep(3),
             moeda(M), 
             Y is mod(M,2),
             (Y=:=0 -> 
                 realizaAtaque(B,CartaAtaca,A,CartaDefende,DeckResultante), D is C+1,
+                % mostraBatalha(CartaAtaca, CartaDefende),
+                % sleep(3),
                 removeCartas(DeckResultante, [], NovoDeckA),                                                                   
                 jogoSingle(NovoDeckA,B,D);
                 D is C+1,
                 shell(clear),
                 imagens('desvio'),
                 sleep(3),
+                shell(clear),
                 jogoSingle(A,B,D) 
             );                                                                       
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
             jogoSingle(A,B,C))
         ), 
-        writeln('CONTINUA O CODIGO'),
         halt(0).
 
 vantagem(TipoCartaAtaque, TipoCartaDefende, R):-
@@ -361,6 +405,10 @@ removeCartas([H|T], X, R):-
     VidaCabeca > 0,
     insereFim(H, X, X1),
     removeCartas(T, X1, R);
+    shell(clear),
+    imagens('foraDeCombate'),
+    sleep(3),
+    shell(clear),
     removeCartas(T, X, R).
 
 insereFim(N, [],[N]).
