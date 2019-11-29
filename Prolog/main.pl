@@ -18,9 +18,12 @@ deck(A, L):- A > 1, random(1,35,Y), get_carta(Y,C), B is A-1, deck(B, P), insere
 
 % retorna a carta apos sofrer o ataque
 ataque(CartaAtaque, CartaDefesa, CartaResultado):-
+    get_tipo(CartaAtaque, TipoCartaAtaque),
     get_ataque(CartaAtaque, AtaqueCarta),
+    get_tipo(CartaDefesa, TipoCartaDefende),
     get_vida(CartaDefesa, VidaCarta),
-    VidaResultante is (VidaCarta - AtaqueCarta),
+    vantagem(TipoCartaAtaque, TipoCartaDefende, ResultadoVantagem),
+    (ResultadoVantagem = 1 -> VidaResultante is (VidaCarta - AtaqueCarta - 10); VidaResultante is (VidaCarta - AtaqueCarta)),
     (VidaResultante =< 0 -> X is 0; duplica(VidaResultante,X)),
     get_nome(CartaDefesa, Nome),
     get_tipo(CartaDefesa, Tipo),
