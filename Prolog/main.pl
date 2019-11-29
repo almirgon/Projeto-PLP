@@ -76,6 +76,22 @@ duplica(X, X).
 acartaexiste(X, [X|_]).
 acartaexiste(X, [_|T]) :- acartaexiste(X, T).
 
+% verifica se deu cara ou coroa
+sorte(n) :- n mod 2 =:= 0.
+sorte(n) :- n mode 2 =:= 1.
+
+mostraBaralho([],[],1) :-
+    writeln("PLAYER 1:")
+    writeln(imprimeCartas(A,0))
+    writeln("PLAYER 2:")
+    writeln(imprimeCartas(B,0))
+
+mostraBaralho([],[],2) :-
+    writeln("PLAYER 1:")
+    writeln(imprimeCartas A,0)
+    writeln("COMP:")
+    writeln(imprimeCartas B,0)
+
 % pega a carta de um baralho
 pegaCarta([], _, "").
 pegaCarta([H|T], Num, Carta):-
