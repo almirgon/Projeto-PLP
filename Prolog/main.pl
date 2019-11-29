@@ -35,19 +35,19 @@ ataque(CartaAtaque, CartaDefesa, CartaResultado):-
 % imprime um baralho
 imprimeCartas([],_,"").
 imprimeCartas([H|T], 0, Resultado):- 
-    imprimeAtributos([H|T], 0, R1), string_concat(R1, '- \n', R2),imprimeCartas([H|T], 1, R3), string_concat(R2, R3, Resultado).
+    imprimeAtributos([H|T], 0, R1),string_concat('           ', R1, R4), string_concat(R4, '- \n', R2),imprimeCartas([H|T], 1, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 1, Resultado):-
-    imprimeAtributos([H|T], 1, R1), string_concat(R1, '| \n', R2),imprimeCartas([H|T], 2, R3), string_concat(R2, R3, Resultado).
+    imprimeAtributos([H|T], 1, R1), string_concat('           ', R1, R4), string_concat(R4, '| \n', R2),imprimeCartas([H|T], 2, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 2, Resultado):-
-    imprimeAtributos([H|T], 2, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 3, R3), string_concat(R2, R3, Resultado).
+    imprimeAtributos([H|T], 2, R1), string_concat('           ', R1, R4), string_concat(R4, '| \n', R2), imprimeCartas([H|T], 3, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 3, Resultado):-
-    imprimeAtributos([H|T], 3, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 4, R3), string_concat(R2, R3, Resultado).
+    imprimeAtributos([H|T], 3, R1), string_concat('           ', R1, R4), string_concat(R4, '| \n', R2), imprimeCartas([H|T], 4, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 4, Resultado):-
-    imprimeAtributos([H|T], 4, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 5, R3), string_concat(R2, R3, Resultado).
+    imprimeAtributos([H|T], 4, R1), string_concat('           ', R1, R4), string_concat(R4, '| \n', R2), imprimeCartas([H|T], 5, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 5, Resultado):-
-    imprimeAtributos([H|T], 5, R1), string_concat(R1, '| \n', R2), imprimeCartas([H|T], 6, R3), string_concat(R2, R3, Resultado).
+    imprimeAtributos([H|T], 5, R1), string_concat('           ', R1, R4), string_concat(R4, '| \n', R2), imprimeCartas([H|T], 6, R3), string_concat(R2, R3, Resultado).
 imprimeCartas([H|T], 6, Resultado):-
-    imprimeAtributos([H|T], 6, R1), string_concat(R1, '-', Resultado).
+    imprimeAtributos([H|T], 6, R1), string_concat('           ', R1, R4), string_concat(R4, '-', Resultado).
 
 % auxilia o metodo preencheLacunas
 setaPreencher(String, Resultado):-atom_length(String, Length), preencheLacunas(String, Length, Resultado).
