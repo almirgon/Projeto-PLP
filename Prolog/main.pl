@@ -112,7 +112,7 @@ jogoMult(A,B,C):-
     writeln('-----------------------------------------VS-------------------------------------------'),
     imprimeCartas(B,0,Resposta2),
     writeln(Resposta2),
-    (X =:=0->                                                                                                               /*if*/
+    (X =:=0->                                                                                                               
         writeln('Player 1 ATK / Player 2 DEF'),
         writeln('PLAYER 1| [NUM] Selecione uma carta: '),
         read(CartaAtaca),
@@ -120,9 +120,9 @@ jogoMult(A,B,C):-
         read(CartaDefende),
         existeNoDeck(CartaDefende, B, ResultadoDefesa),
         existeNoDeck(CartaAtaca, A, ResultadoAtaque),
-        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
-            /*PRINT POKEMONS*/
-            writeln('Print pokemons'),
+        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     
+            mostraBatalha(CartaAtaca, CartaDefende),
+            sleep(3),
             moeda(M), 
             Y is mod(M,2),
             (Y=:=0 ->
@@ -137,7 +137,7 @@ jogoMult(A,B,C):-
             writeln('Carta Inválida, tente novamente!'),                                                                    
             sleep(3),
             jogoMult(A,B,C)
-        );                                                                                               /*condicao onde x=:=1*/
+        );                                                                                               
         writeln('Player 2 ATK / Player 1 DEF'),
         writeln('PLAYER 2| [NUM] Selecione uma carta: '),
         read(CartaAtaca),
@@ -145,9 +145,9 @@ jogoMult(A,B,C):-
         read(CartaDefende),
         existeNoDeck(CartaDefende, A, ResultadoDefesa),
         existeNoDeck(CartaAtaca, B, ResultadoAtaque),
-        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     /*if*/
-            /*PRINT POKEMONS*/
-            writeln('Print pokemons'),
+        (ResultadoAtaque =:= 1, ResultadoDefesa =:= 1->                                                                     
+            mostraBatalha(CartaAtaca, CartaDefende),
+            sleep(3),
             moeda(M), 
             Y is mod(M,2),
             (Y=:=0 -> 
@@ -182,6 +182,18 @@ selecionaCartaDefende([H|T], Num, Hp, Saida):-
     selecionaCartaDefende(T, Numero, Vida, Saida); 
     selecionaCartaDefende(T, Num, Hp, Saida).
 
+mostraBatalha(Num1, Num2):-
+    shell(clear),
+    get_carta(Num1, Carta1), get_carta(Num2, Carta2),
+    get_nome(Carta1, Nome1), get_nome(Carta2, Nome2),
+    get_vida(Carta1, Vida1), get_vida(Carta2, Vida2),
+    get_ataque(Carta1, Ataque1), get_ataque(Carta2, Ataque2),
+    write(Nome1), write(' Ataque: '), write(Ataque1), write(' Vida: '), writeln(Vida1),
+    imagens(Nome1),
+    writeln('-----------------------------------------VS-------------------------------------------'),
+    write(Nome2), write(' Ataque: '), write(Ataque2), write(' Vida: '), writeln(Vida2),
+    imagens(Nome2).
+
 /*Mode de jogo Player Vs Bot*/
 /*AINDA NAO TESTADO*/
 jogoSingle([],_,_).
@@ -201,8 +213,8 @@ jogoSingle(A,B,C):-
         selecionaCartaDefende(B,0,0,CartaDefende),                                                                          /*Seleciona automaticamente*/
         existeNoDeck(CartaAtaca, A, ResultadoAtaque),
         (ResultadoAtaque =:= 1->                                                                                            /*if*/
-            /*PRINT POKEMONS*/
-            writeln('Print pokemons'),
+            mostraBatalha(CartaAtaca, CartaDefende),
+            sleep(3),
             moeda(M), 
             Y is mod(M,2),
             (Y=:=0 ->
@@ -224,8 +236,8 @@ jogoSingle(A,B,C):-
         read(CartaDefende),
         existeNoDeck(CartaDefende, A, ResultadoDefesa),
         (ResultadoDefesa =:= 1->                                                                                            /*if*/
-            /*PRINT POKEMONS*/
-            writeln('Print pokemons'),
+            mostraBatalha(CartaAtaca, CartaDefende),
+            sleep(3),
             moeda(M), 
             Y is mod(M,2),
             (Y=:=0 -> 
@@ -471,4 +483,3 @@ mostraCartas(Carta1,Carta2):-
 	get_nome(Carta2,Nome2),
 	imagens(Nome1),
 	imagens(Nome2).
-
